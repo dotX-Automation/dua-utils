@@ -8,17 +8,17 @@
 # ROS 2 message header (with timestamp from ROS 2 clock)
 std_msgs/Header header
 
-# Indicates whether setpoints are in NED or ENU
-bool ned
+# Indicates the coordinate system used.
+dua_interfaces/CoordinateSystem coordinate_system
 
 # Roll angle setpoint [-PI +PI] (radians)
-float32 roll_sp
+float64 roll_sp
 
 # Pitch angle setpoint [-PI +PI] (radians)
-float32 pitch_sp
+float64 pitch_sp
 
 # Yaw angle setpoint [-PI +PI] (radians)
-float32 yaw_sp
+float64 yaw_sp
 
 # Thrust setpoint [0 1]
-float32 thrust_sp
+float64 thrust_sp

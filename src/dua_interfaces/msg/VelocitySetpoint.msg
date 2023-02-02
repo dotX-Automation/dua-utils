@@ -8,17 +8,11 @@
 # ROS 2 message header (with timestamp from ROS 2 clock)
 std_msgs/Header header
 
-# Indicates whether setpoints are in NED or ENU
-bool ned
+# Indicates the coordinate system used.
+dua_interfaces/CoordinateSystem coordinate_system
 
-# X velocity setpoint (meters/sec)
-float32 vx_sp
-
-# Y velocity setpoint (meters/sec)
-float32 vy_sp
-
-# Z velocity setpoint (meters/sec)
-float32 vz_sp
+# Velocity setpoint (meters/sec)
+geometry_msgs/Vector3 v_sp
 
 # Yaw velocity setpoint [-PI +PI] (radians/sec)
-float32 vyaw_sp
+float64 vyaw_sp

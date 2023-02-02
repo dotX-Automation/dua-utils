@@ -8,17 +8,11 @@
 # ROS 2 message header (with timestamp from ROS 2 clock)
 std_msgs/Header header
 
-# Indicates whether setpoints are in NED or ENU
-bool ned
+# Indicates the coordinate system used.
+dua_interfaces/CoordinateSystem coordinate_system
 
-# X position setpoint (meters)
-float32 x_sp
-
-# Y position setpoint (meters)
-float32 y_sp
-
-# Z position setpoint (meters)
-float32 z_sp
+# Position setpoint (meters)
+geometry_msgs/Point position_sp
 
 # Yaw angle setpoint [-PI +PI] (radians)
-float32 yaw_sp
+float64 yaw_sp

@@ -8,35 +8,17 @@
 # ROS 2 message header (with timestamp from ROS 2 clock)
 std_msgs/Header header
 
-# Indicates whether coordinates are in NED or ENU
-bool ned
+# Indicates the coordinate system used.
+dua_interfaces/CoordinateSystem coordinate_system
 
-# X coordinate (meters)
-float32 x
-
-# Y coordinate (meters)
-float32 y
-
-# Z coordinate (meters)
-float32 z
-
-# Linear velocity along X (meters/sec)
-float32 vx
-
-# Linear velocity along Y (meters/sec)
-float32 vy
-
-# Linear velocity along Z (meters/sec)
-float32 vz
-
-# Attitude quaternion (w, x, y, z)
-float32[4] q
+# Pose, intended as a 3D point in space plus an orientation quaternion
+geometry_msgs/Pose pose
 
 # Roll angle [-PI +PI] (radians)
-float32 roll
+float64 roll
 
 # Pitch angle [-PI +PI] (radians)
-float32 pitch
+float64 pitch
 
 # Yaw angle [-PI +PI] (radians)
-float32 yaw
+float64 yaw

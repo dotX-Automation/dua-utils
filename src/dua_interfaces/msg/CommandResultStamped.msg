@@ -1,9 +1,12 @@
-# Generic command result message.
+# Generic command result message with header.
 #
 # Roberto Masocco <robmasocco@gmail.com>
 # Intelligent Systems Lab <isl.torvergata@gmail.com>
 #
 # January 31, 2023
+
+# Header
+std_msgs/Header header
 
 # Operation result code
 uint8 SUCCESS=0 # Task completed successfully
