@@ -7,6 +7,7 @@ Common utilities for software packages based on the Distributed Unified Architec
 This repository contains the following ROS 2 utilities:
 
 - [x] [`dua_interfaces`](dua_interfaces/README.md): ROS 2 interfaces for the Distributed Unified Architecture.
+- [x] [`dua_app_management`](dua_app_management/README.md): Collection of software modules and source files for the management of applications and processes.
 - [x] [`drone_state`](drone_state/README.md): C++ library to store and manipulate the state of a drone as a rigid body in 2D/3D space.
 
 It is organized as a ROS 2 workspace for development, and can be built as such.
