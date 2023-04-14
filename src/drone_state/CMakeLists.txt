@@ -57,19 +57,37 @@ ament_target_dependencies(
   dua_interfaces
   geometry_msgs)
 
+# Dynamic Pose library configuration
+add_library(dynamicpose SHARED
+  src/dynamic_pose/dynamic_pose.cpp)
+target_compile_features(dynamicpose PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
+target_compile_definitions(dynamicpose PRIVATE "DYNAMIC_POSE_BUILDING_LIBRARY")
+target_include_directories(dynamicpose PUBLIC
+  ${EIGEN3_INCLUDE_DIR}
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>)
+target_link_libraries(dynamicpose
+  kinematicpose
+  Eigen3::Eigen)
+ament_target_dependencies(
+  dynamicpose
+  dua_interfaces
+  geometry_msgs)
+
 # Libraries installation
 install(
   DIRECTORY include/
   DESTINATION include)
 install(
-  TARGETS pose kinematicpose
+  TARGETS pose kinematicpose dynamicpose
   EXPORT export_${PROJECT_NAME}
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin)
 ament_export_libraries(
   pose
-  kinematicpose)
+  kinematicpose
+  dynamicpose)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
