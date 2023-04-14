@@ -172,6 +172,8 @@ KinematicPose & KinematicPose::operator=(KinematicPose && kp)
  * @brief Convetrs from NWU to NED.
  *
  * @return NED pose.
+ *
+ * @throws std::runtime_error if the coordinate frame is not NWU.
  */
 KinematicPose KinematicPose::nwu_to_ned()
 {
@@ -215,6 +217,8 @@ KinematicPose KinematicPose::nwu_to_ned()
  * @brief Convetrs from NED to NWU.
  *
  * @return NWU pose.
+ *
+ * @throws std::runtime_error if the coordinate frame is not NED.
  */
 KinematicPose KinematicPose::ned_to_nwu()
 {
@@ -299,6 +303,8 @@ void KinematicPose::set_angular_velocity(const Eigen::Vector3d & angular_vel)
  *
  * @param kp Pose to be added.
  * @return Roto-translated pose.
+ *
+ * @throws std::runtime_error if the coordinate frame is not coherent.
  */
 KinematicPose KinematicPose::operator*(const KinematicPose & kp) const
 {

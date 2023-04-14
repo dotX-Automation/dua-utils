@@ -212,6 +212,8 @@ geometry_msgs::msg::PoseStamped Pose::to_pose_stamped()
  * @brief Converts from NWU to NED.
  *
  * @return NED pose.
+ *
+ * @throws std::runtime_error if the coordinate frame is not NWU.
  */
 Pose Pose::nwu_to_ned()
 {
@@ -245,6 +247,8 @@ Pose Pose::nwu_to_ned()
  * @brief Converts from NED to NWU.
  *
  * @return NWU pose.
+ *
+ * @throws std::runtime_error if the coordinate frame is not NED.
  */
 Pose Pose::ned_to_nwu()
 {
@@ -348,6 +352,8 @@ Eigen::Transform<double, 3, Eigen::Affine> Pose::get_roto_translation() const
  * @brief Coordinate frame setter.
  *
  * @param frame Coordinate frame.
+ *
+ * @throws std::invalid_argument if the coordinate frame is invalid.
  */
 void Pose::set_frame(CoordinateFrame frame)
 {
@@ -396,6 +402,8 @@ void Pose::set_rpy(const Eigen::EulerAnglesXYZd & rpy_angles)
  *
  * @param p Pose to be added.
  * @return Roto-translated pose.
+ *
+ * @throws std::runtime_error if the coordinate frame is not coherent.
  */
 Pose Pose::operator*(const Pose & p) const
 {

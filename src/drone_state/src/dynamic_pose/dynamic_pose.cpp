@@ -189,6 +189,8 @@ DynamicPose & DynamicPose::operator=(DynamicPose && dp)
  * @brief Convetrs from NWU to NED.
  *
  * @return NED pose.
+ *
+ * @throws std::runtime_error if the coordinate frame is not NWU.
  */
 DynamicPose DynamicPose::nwu_to_ned()
 {
@@ -242,6 +244,8 @@ DynamicPose DynamicPose::nwu_to_ned()
  * @brief Convetrs from NED to NWU.
  *
  * @return NWU pose.
+ *
+ * @throws std::runtime_error if the coordinate frame is not NED.
  */
 DynamicPose DynamicPose::ned_to_nwu()
 {
@@ -336,6 +340,8 @@ void DynamicPose::set_angular_acceleration(const Eigen::Vector3d & angular_accel
  *
  * @param dp Pose to be added.
  * @return Roto-translated pose.
+ *
+ * @throws std::runtime_error if the coordinate frame is not coherent.
  */
 DynamicPose DynamicPose::operator*(const DynamicPose & dp) const
 {
