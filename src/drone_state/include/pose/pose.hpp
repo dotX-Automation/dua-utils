@@ -69,6 +69,9 @@ public:
   Eigen::Vector3d get_position() const;
   Eigen::Quaterniond get_attitude() const;
   Eigen::EulerAnglesXYZd get_rpy() const;
+  Eigen::AngleAxisd get_rotation() const;
+  Eigen::Translation3d get_translation() const;
+  Eigen::Transform<double, 3, Eigen::Affine> get_roto_translation() const;
 
   /* Setters */
   void set_frame(CoordinateFrame frame);

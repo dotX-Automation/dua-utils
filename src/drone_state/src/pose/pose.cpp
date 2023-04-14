@@ -315,6 +315,36 @@ Eigen::EulerAnglesXYZd Pose::get_rpy() const
 }
 
 /**
+ * @brief Rotation getter.
+ *
+ * @return Rotation (as Eigen transformation).
+ */
+Eigen::AngleAxisd Pose::get_rotation() const
+{
+  return Eigen::AngleAxisd(attitude_);
+}
+
+/**
+ * @brief Translation getter.
+ *
+ * @return Translation (as Eigen transformation).
+ */
+Eigen::Translation3d Pose::get_translation() const
+{
+  return Eigen::Translation3d(position_);
+}
+
+/**
+ * @brief Roto-translation getter.
+ *
+ * @return Roto-translation (as Eigen transformation).
+ */
+Eigen::Transform<double, 3, Eigen::Affine> Pose::get_roto_translation() const
+{
+  return get_translation() * get_rotation();
+}
+
+/**
  * @brief Coordinate frame setter.
  *
  * @param frame Coordinate frame.
@@ -375,9 +405,8 @@ Pose Pose::operator*(const Pose & p) const
   }
 
   // Compute the roto-translation using Eigen transformations
-  Eigen::AngleAxisd r(p.attitude_);
-  Eigen::Translation3d t(p.position_);
-  Eigen::Transform<double, 3, Eigen::Affine> rt = t * r;
+  Eigen::AngleAxisd r = p.get_rotation();
+  Eigen::Transform<double, 3, Eigen::Affine> rt = p.get_roto_translation();
   Eigen::Vector3d new_position = rt * position_;
   Eigen::Quaterniond new_attitude = r * attitude_;
 
