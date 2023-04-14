@@ -378,7 +378,7 @@ void Pose::set_position(const Eigen::Vector3d & pos)
  */
 void Pose::set_attitude(const Eigen::Quaterniond & q)
 {
-  attitude_ = q;
+  attitude_ = q.normalized();
 }
 
 /**
