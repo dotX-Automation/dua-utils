@@ -33,7 +33,7 @@ class KINEMATIC_POSE_EXPORT KinematicPose : public Pose
 {
 public:
   /* Constructors */
-  KinematicPose();
+  KinematicPose() {}
   KinematicPose(const KinematicPose & kp);
   KinematicPose(
     double x, double y, double z,
@@ -60,9 +60,11 @@ public:
     const Eigen::Vector3d & angular_vel,
     CoordinateFrame frame);
   KinematicPose(const EulerPoseStamped & msg);
+  KinematicPose(Pose p)
+  : Pose(std::move(p)) {}
 
   /* Destructor */
-  virtual ~KinematicPose();
+  virtual ~KinematicPose() {}
 
   /* Coordinate frame conversions */
   KinematicPose nwu_to_ned();
@@ -75,6 +77,9 @@ public:
   /* Setters */
   void set_velocity(const Eigen::Vector3d & vel);
   void set_angular_velocity(const Eigen::Vector3d & angular_vel);
+
+  /* Geometric operations */
+  KinematicPose operator*(const KinematicPose & kp) const;
 
   /* Assignment operators */
   KinematicPose & operator=(const KinematicPose & kp);

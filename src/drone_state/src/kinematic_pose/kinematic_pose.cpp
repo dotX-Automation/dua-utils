@@ -13,18 +13,12 @@ namespace DroneState
 {
 
 /**
- * @brief Default constructor.
- */
-KinematicPose::KinematicPose()
-{}
-
-/**
  * @brief Copy constructor.
  *
  * @param kp Pose to copy.
  */
 KinematicPose::KinematicPose(const KinematicPose & kp)
-: Pose(kp)
+: Pose(dynamic_cast<const Pose &>(kp))
 {
   set_velocity(kp.get_velocity());
   set_angular_velocity(kp.get_angular_velocity());
@@ -175,12 +169,6 @@ KinematicPose & KinematicPose::operator=(KinematicPose && kp)
 }
 
 /**
- * @brief Default destructor.
- */
-KinematicPose::~KinematicPose()
-{}
-
-/**
  * @brief Convetrs from NWU to NED.
  *
  * @return NED pose.
@@ -304,6 +292,28 @@ void KinematicPose::set_velocity(const Eigen::Vector3d & vel)
 void KinematicPose::set_angular_velocity(const Eigen::Vector3d & angular_vel)
 {
   angular_velocity_ = angular_vel;
+}
+
+/**
+ * @brief Roto-translates a pose by a given pose.
+ *
+ * @param kp Pose to be added.
+ * @return Roto-translated pose.
+ */
+KinematicPose KinematicPose::operator*(const KinematicPose & kp) const
+{
+  // Check that the coordinate frame is coherent
+  if (frame_ != kp.frame_) {
+    throw std::runtime_error("KinematicPose::operator*: coordinate frames are not coherent");
+  }
+
+  // Build a new pose
+  Eigen::AngleAxisd r = kp.get_rotation();
+  KinematicPose new_pose =
+    dynamic_cast<const Pose &>(*this).operator*(dynamic_cast<const Pose &>(kp));
+  new_pose.set_velocity(r * velocity_);
+  new_pose.set_angular_velocity(r * angular_velocity_);
+  return new_pose;
 }
 
 } // namespace DroneState

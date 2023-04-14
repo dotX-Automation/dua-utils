@@ -33,7 +33,7 @@ class DYNAMIC_POSE_EXPORT DynamicPose : public KinematicPose
 {
 public:
   /* Constructors */
-  DynamicPose();
+  DynamicPose() {}
   DynamicPose(const DynamicPose & dp);
   DynamicPose(
     double x, double y, double z,
@@ -66,9 +66,13 @@ public:
     const Eigen::Vector3d & angular_accel,
     CoordinateFrame frame);
   DynamicPose(const EulerPoseStamped & msg);
+  DynamicPose(Pose p)
+  : KinematicPose(std::move(p)) {}
+  DynamicPose(KinematicPose kp)
+  : KinematicPose(std::move(kp)) {}
 
   /* Destructor */
-  virtual ~DynamicPose();
+  virtual ~DynamicPose() {}
 
   /* Coordinate frame conversions */
   DynamicPose nwu_to_ned();
@@ -85,6 +89,9 @@ public:
   /* Assignment operators */
   DynamicPose & operator=(const DynamicPose & dp);
   DynamicPose & operator=(DynamicPose && dp);
+
+  /* Geometric operations */
+  DynamicPose operator*(const DynamicPose & dp) const;
 
 protected:
   /* Internal data */
