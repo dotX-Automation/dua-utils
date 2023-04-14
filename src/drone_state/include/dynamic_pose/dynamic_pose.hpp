@@ -32,7 +32,7 @@ namespace DroneState
 class DYNAMIC_POSE_EXPORT DynamicPose : public KinematicPose
 {
 public:
-  /* Constructors */
+  /* Constructors. */
   DynamicPose() {}
   DynamicPose(const DynamicPose & dp);
   DynamicPose(
@@ -71,30 +71,30 @@ public:
   DynamicPose(KinematicPose kp)
   : KinematicPose(std::move(kp)) {}
 
-  /* Destructor */
+  /* Destructor. */
   virtual ~DynamicPose() {}
 
-  /* Coordinate frame conversions */
+  /* Coordinate frame conversions. */
   DynamicPose nwu_to_ned();
   DynamicPose ned_to_nwu();
 
-  /* Getters */
+  /* Getters. */
   Eigen::Vector3d get_acceleration() const;
   Eigen::Vector3d get_angular_acceleration() const;
 
-  /* Setters */
+  /* Setters. */
   void set_acceleration(const Eigen::Vector3d & accel);
   void set_angular_acceleration(const Eigen::Vector3d & angular_accel);
 
-  /* Assignment operators */
+  /* Assignment operators. */
   DynamicPose & operator=(const DynamicPose & dp);
   DynamicPose & operator=(DynamicPose && dp);
 
-  /* Geometric operations */
+  /* Geometric operations. */
   DynamicPose operator*(const DynamicPose & dp) const;
 
 protected:
-  /* Internal data */
+  /* Internal data. */
   Eigen::Vector3d acceleration_ = {0.0, 0.0, 0.0}; // [m/s^2]
   Eigen::Vector3d angular_acceleration_ = {0.0, 0.0, 0.0}; // [rad/s^2]
 };

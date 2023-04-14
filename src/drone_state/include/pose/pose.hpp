@@ -39,7 +39,7 @@ enum CoordinateFrame
 class POSE_EXPORT Pose
 {
 public:
-  /* Constructors */
+  /* Constructors. */
   Pose();
   Pose(const Pose & p);
   Pose(double x, double y, double z, CoordinateFrame frame);
@@ -53,18 +53,18 @@ public:
     CoordinateFrame frame);
   Pose(const EulerPoseStamped & msg);
 
-  /* Destructor */
+  /* Destructor. */
   virtual ~Pose();
 
-  /* ROS interfaces conversion methods */
+  /* ROS interfaces conversion methods. */
   EulerPoseStamped to_euler_pose_stamped();
   geometry_msgs::msg::PoseStamped to_pose_stamped();
 
-  /* Coordinate frame conversions */
+  /* Coordinate frame conversions. */
   Pose nwu_to_ned();
   Pose ned_to_nwu();
 
-  /* Getters */
+  /* Getters. */
   CoordinateFrame get_frame() const;
   Eigen::Vector3d get_position() const;
   Eigen::Quaterniond get_attitude() const;
@@ -73,21 +73,21 @@ public:
   Eigen::Translation3d get_translation() const;
   Eigen::Transform<double, 3, Eigen::Affine> get_roto_translation() const;
 
-  /* Setters */
+  /* Setters. */
   void set_frame(CoordinateFrame frame);
   void set_position(const Eigen::Vector3d & pos);
   void set_attitude(const Eigen::Quaterniond & q);
   void set_rpy(const Eigen::EulerAnglesXYZd & rpy_angles);
 
-  /* Geometric operations */
+  /* Geometric operations. */
   Pose operator*(const Pose & p) const;
 
-  /* Assignment operators */
+  /* Assignment operators. */
   Pose & operator=(const Pose & p);
   Pose & operator=(Pose && p);
 
 protected:
-  /* Internal data */
+  /* Internal data. */
   CoordinateFrame frame_ = CoordinateFrame::NWU;
   Eigen::Vector3d position_ = {0.0, 0.0, 0.0}; // [m]
   Eigen::Quaterniond attitude_ = Eigen::Quaterniond::Identity();
