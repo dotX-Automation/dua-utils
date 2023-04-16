@@ -29,7 +29,7 @@ namespace DroneState
 /**
  * Represents position, orientation, velocity, and acceleration of an autonomous agent.
  */
-class DYNAMIC_POSE_EXPORT DynamicPose : public KinematicPose
+class DYNAMIC_POSE_PUBLIC DynamicPose : public KinematicPose
 {
 public:
   /* Constructors. */

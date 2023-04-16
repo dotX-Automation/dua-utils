@@ -36,7 +36,7 @@ enum CoordinateFrame
 /**
  * Represents position and orientation of an autonomous agent.
  */
-class POSE_EXPORT Pose
+class POSE_PUBLIC Pose
 {
 public:
   /* Constructors. */
