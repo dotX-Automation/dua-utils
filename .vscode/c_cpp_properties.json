@@ -16,6 +16,7 @@
         "${workspaceFolder}/src/dua_app_management/include/**",
         "${workspaceFolder}/src/filters/filters_base/include/**",
         "${workspaceFolder}/src/filters/filters_plugins/include/**",
+        "${workspaceFolder}/src/params_manager/include/**",
         "/usr/local/**",
         "/usr/local/include"
       ],
