@@ -25,7 +25,7 @@
 #include <rclcpp/rclcpp.hpp>
 
 /* Function used to define a custom parameter validation procedure. */
-using Validator = std::function<bool (const rcl_interfaces::msg::Parameter &)>;
+using Validator = std::function<bool (const rclcpp::Parameter &)>;
 
 namespace ParamsManager
 {

@@ -59,8 +59,6 @@ PManager::~PManager()
  */
 std::shared_ptr<ParamData> PManager::get_param_data_(const std::string & name)
 {
-  std::scoped_lock<std::mutex> lock(params_set_lock_);
-
   auto it = params_set_.find(std::pair<std::string, ParamData>(name, ParamData{}));
   if (it != params_set_.end()) {
     return std::make_shared<ParamData>(ParamData(it->second));
@@ -73,17 +71,72 @@ std::shared_ptr<ParamData> PManager::get_param_data_(const std::string & name)
  *
  * @param name Parameter name.
  * @param type Parameter type.
- * @param validator Parameter validation routine.
+ * @param validator External parameter validation routine.
  */
 void PManager::add_to_set_(
   const std::string & name,
   PType type,
   const Validator & validator)
 {
-  std::scoped_lock<std::mutex> lock(params_set_lock_);
-
   ParamData data(name, type, validator);
   params_set_.insert(std::pair<std::string, ParamData>(name, data));
+}
+
+/**
+ * @brief Callback routine for parameter setting.
+ *
+ * @param params Parameters to be set.
+ *
+ * @return SetParametersResult object to be forwarded to the ROS 2 parameters subsystem.
+ */
+rcl_interfaces::msg::SetParametersResult PManager::on_set_parameters_callback_(
+  const std::vector<rclcpp::Parameter> & params)
+{
+  std::scoped_lock<std::mutex> lock(params_set_lock_);
+
+  // Initialize result object
+  rcl_interfaces::msg::SetParametersResult res{};
+  res.set__successful(true);
+  res.set__reason("");
+
+  // Check and update parameters
+  for (const rclcpp::Parameter & p : params) {
+    // Check if the parameter is declared and get its data
+    std::shared_ptr<ParamData> data = get_param_data_(p.get_name());
+    if (!data) {
+      RCLCPP_ERROR(
+        node_->get_logger(),
+        "PManager::on_set_parameters_callback_: parameter '%s' not declared",
+        p.get_name().c_str());
+      res.set__successful(false);
+      res.set__reason("Parameter '" + p.get_name() + "' not declared");
+      return res;
+    }
+
+    // Check type
+    if (static_cast<PType>(p.get_type()) != data->type_) {
+      RCLCPP_ERROR(
+        node_->get_logger(),
+        "PManager::on_set_parameters_callback_: parameter '%s' type mismatch",
+        p.get_name().c_str());
+      res.set__successful(false);
+      res.set__reason("Parameter '" + p.get_name() + "' type mismatch");
+      return res;
+    }
+
+    // Run validator, if present
+    if (data->validator_ && !data->validator_(p)) {
+      RCLCPP_ERROR(
+        node_->get_logger(),
+        "PManager::on_set_parameters_callback_: parameter '%s' validation failed",
+        p.get_name().c_str());
+      res.set__successful(false);
+      res.set__reason("Parameter '" + p.get_name() + "' validation failed");
+      return res;
+    }
+  }
+
+  return res;
 }
 
 /**
