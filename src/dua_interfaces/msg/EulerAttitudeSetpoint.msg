@@ -20,5 +20,5 @@ float64 pitch_sp
 # Yaw angle setpoint [-PI +PI] (radians)
 float64 yaw_sp
 
-# Thrust setpoint [0 1]
+# Thrust setpoint [-1 +1]
 float64 thrust_sp

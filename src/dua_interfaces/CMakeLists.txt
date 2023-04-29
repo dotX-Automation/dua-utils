@@ -11,14 +11,11 @@ find_package(rosidl_default_generators REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
 
+set(MSG_DIR "${CMAKE_CURRENT_SOURCE_DIR}/msg")
+file(GLOB MSG_FILES RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" "${MSG_DIR}/*.msg")
+
 rosidl_generate_interfaces(${PROJECT_NAME}
-  msg/CommandResult.msg
-  msg/CommandResultStamped.msg
-  msg/CoordinateSystem.msg
-  msg/EulerAttitudeSetpoint.msg
-  msg/EulerPoseStamped.msg
-  msg/PositionSetpoint.msg
-  msg/VelocitySetpoint.msg
+  ${MSG_FILES}
   DEPENDENCIES geometry_msgs std_msgs)
 
 ament_package()
