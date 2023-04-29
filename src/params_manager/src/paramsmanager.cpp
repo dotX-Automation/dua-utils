@@ -51,6 +51,42 @@ PManager::~PManager()
 }
 
 /**
+ * @brief Returns the parameter metadata for the given paramenter name, if present.
+ *
+ * @param name Parameter name.
+ *
+ * @return Pointer to the parameter metadata, or null if not present.
+ */
+std::shared_ptr<ParamData> PManager::get_param_data_(const std::string & name)
+{
+  std::scoped_lock<std::mutex> lock(params_set_lock_);
+
+  auto it = params_set_.find(std::pair<std::string, ParamData>(name, ParamData{}));
+  if (it != params_set_.end()) {
+    return std::make_shared<ParamData>(ParamData(it->second));
+  }
+  return nullptr;
+}
+
+/**
+ * @brief Adds a parameter to the parameter set.
+ *
+ * @param name Parameter name.
+ * @param type Parameter type.
+ * @param validator Parameter validation routine.
+ */
+void PManager::add_to_set_(
+  const std::string & name,
+  PType type,
+  const Validator & validator)
+{
+  std::scoped_lock<std::mutex> lock(params_set_lock_);
+
+  ParamData data(name, type, validator);
+  params_set_.insert(std::pair<std::string, ParamData>(name, data));
+}
+
+/**
  * @brief Routine to declare a boolean node parameter.
  *
  * @param name Parameter name.
@@ -294,7 +330,8 @@ void PManager::declare_double_array_parameter(
 
   // Check if the parameter is not already present
   if (get_param_data_(name) != nullptr) {
-    throw std::invalid_argument("PManager::declare_double_array_parameter: parameter already declared");
+    throw std::invalid_argument(
+            "PManager::declare_double_array_parameter: parameter already declared");
   }
 
   // Declare parameter
@@ -377,7 +414,8 @@ void PManager::declare_string_array_parameter(
 
   // Check if the parameter is not already present
   if (get_param_data_(name) != nullptr) {
-    throw std::invalid_argument("PManager::declare_string_array_parameter: parameter already declared");
+    throw std::invalid_argument(
+            "PManager::declare_string_array_parameter: parameter already declared");
   }
 
   // Declare parameter
