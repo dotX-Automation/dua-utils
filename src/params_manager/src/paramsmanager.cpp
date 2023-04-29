@@ -108,14 +108,17 @@ void PManager::log_update_(const rclcpp::Parameter & p)
       msg += "\'";
       break;
     case PType::PARAMETER_BYTE_ARRAY:
+      char first[9], last[9];
+      for (unsigned long int i = 0, j = p.as_byte_array().size() - 8; i < 8; i++, j++) {
+        first[i] = p.as_byte_array()[i];
+        last[i] = p.as_byte_array()[j];
+      }
+      first[8] = '\0';
+      last[8] = '\0';
       msg += "[ ";
-      for (unsigned long int i = 0; i < 8; i++) {
-        msg += std::to_string(p.as_byte_array()[i]);
-      }
+      msg += std::string(first);
       msg += " ... ";
-      for (unsigned long int i = p.as_byte_array().size() - 8; i < p.as_byte_array().size(); i++) {
-        msg += std::to_string(p.as_byte_array()[i]);
-      }
+      msg += std::string(last);
       msg += " ]";
       break;
     case PType::PARAMETER_BOOL_ARRAY:
