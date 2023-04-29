@@ -104,13 +104,11 @@ rcl_interfaces::msg::SetParametersResult PManager::on_set_parameters_callback_(
     // Check if the parameter is declared and get its data
     std::shared_ptr<ParamData> data = get_param_data_(p.get_name());
     if (!data) {
-      RCLCPP_ERROR(
+      RCLCPP_INFO(
         node_->get_logger(),
-        "PManager::on_set_parameters_callback_: parameter '%s' not declared",
+        "PManager::on_set_parameters_callback_: parameter '%s' unknown to this manager",
         p.get_name().c_str());
-      res.set__successful(false);
-      res.set__reason("Parameter '" + p.get_name() + "' not declared");
-      return res;
+      continue;
     }
 
     // Check type
