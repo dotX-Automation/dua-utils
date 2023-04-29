@@ -17,11 +17,13 @@ namespace ParamsManager
  * Constructor.
  *
  * @param node Pointer to the node to which this manager is attached.
+ * @param verbose Activates event logging.
  *
  * @throws InvalidArgument if the node pointer is null.
  * @throws RuntimeError if callback setting fails.
  */
-PManager::PManager(rclcpp::Node * node)
+PManager::PManager(rclcpp::Node * node, bool verbose)
+: verbose_(verbose)
 {
   // Attach to node
   if (!node) {
@@ -83,6 +85,81 @@ void PManager::add_to_set_(
 }
 
 /**
+ * @brief Logs a parameter update event.
+ *
+ * @param p Parameter to be logged.
+ */
+void PManager::log_update_(const rclcpp::Parameter & p)
+{
+  std::string msg = "PManager::log_update_: '" + p.get_name() + "': ";
+  switch (static_cast<PType>(p.get_type())) {
+    case PType::PARAMETER_BOOL:
+      msg += p.as_bool() ? "true" : "false";
+      break;
+    case PType::PARAMETER_INTEGER:
+      msg += std::to_string(p.as_int());
+      break;
+    case PType::PARAMETER_DOUBLE:
+      msg += std::to_string(p.as_double());
+      break;
+    case PType::PARAMETER_STRING:
+      msg += "\'";
+      msg += p.as_string();
+      msg += "\'";
+      break;
+    case PType::PARAMETER_BYTE_ARRAY:
+      msg += "[ ";
+      for (unsigned long int i = 0; i < 8; i++) {
+        msg += std::to_string(p.as_byte_array()[i]);
+      }
+      msg += " ... ";
+      for (unsigned long int i = p.as_byte_array().size() - 8; i < p.as_byte_array().size(); i++) {
+        msg += std::to_string(p.as_byte_array()[i]);
+      }
+      msg += " ]";
+      break;
+    case PType::PARAMETER_BOOL_ARRAY:
+      msg += "[ ";
+      for (bool b : p.as_bool_array()) {
+        msg += b ? "true" : "false";
+        msg += ", ";
+      }
+      msg += "]";
+      break;
+    case PType::PARAMETER_INTEGER_ARRAY:
+      msg += "[ ";
+      for (int i : p.as_integer_array()) {
+        msg += std::to_string(i);
+        msg += ", ";
+      }
+      msg += "]";
+      break;
+    case PType::PARAMETER_DOUBLE_ARRAY:
+      msg += "[ ";
+      for (double d : p.as_double_array()) {
+        msg += std::to_string(d);
+        msg += ", ";
+      }
+      msg += "]";
+      break;
+    case PType::PARAMETER_STRING_ARRAY:
+      msg += "[ ";
+      for (std::string s : p.as_string_array()) {
+        msg += "\'";
+        msg += s;
+        msg += "\'";
+        msg += ", ";
+      }
+      msg += "]";
+      break;
+    default:
+      msg += "unknown type";
+      break;
+  }
+  RCLCPP_INFO(node_->get_logger(), msg.c_str());
+}
+
+/**
  * @brief Callback routine for parameter setting.
  *
  * @param params Parameters to be set.
@@ -131,6 +208,11 @@ rcl_interfaces::msg::SetParametersResult PManager::on_set_parameters_callback_(
       res.set__successful(false);
       res.set__reason("Parameter '" + p.get_name() + "' validation failed");
       return res;
+    }
+
+    // Log update
+    if (verbose_) {
+      log_update_(p);
     }
   }
 

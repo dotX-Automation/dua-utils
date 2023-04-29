@@ -84,7 +84,7 @@ class PARAMS_MANAGER_PUBLIC PManager
 {
 public:
   /* Constructors. */
-  PManager(rclcpp::Node * node);
+  PManager(rclcpp::Node * node, bool verbose = false);
 
   /* Destructor. */
   virtual ~PManager();
@@ -139,6 +139,9 @@ public:
   typedef std::shared_ptr<PManager> SharedPtr;
 
 private:
+  /* Operational flags. */
+  bool verbose_ = false;
+
   /* Reference to node using this object. */
   rclcpp::Node * node_ = nullptr;
 
@@ -159,6 +162,7 @@ private:
     PType type,
     const Validator & validator);
   std::shared_ptr<ParamData> PARAMS_MANAGER_LOCAL get_param_data_(const std::string & name);
+  void PARAMS_MANAGER_LOCAL log_update_(const rclcpp::Parameter & param);
 };
 
 } // namespace ParamsManager
