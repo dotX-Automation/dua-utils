@@ -35,8 +35,7 @@ target_include_directories(pose PUBLIC
   $<INSTALL_INTERFACE:include>)
 target_link_libraries(pose
   Eigen3::Eigen)
-ament_target_dependencies(
-  pose
+ament_target_dependencies(pose
   dua_interfaces
   geometry_msgs)
 
@@ -52,8 +51,7 @@ target_include_directories(kinematicpose PUBLIC
 target_link_libraries(kinematicpose
   pose
   Eigen3::Eigen)
-ament_target_dependencies(
-  kinematicpose
+ament_target_dependencies(kinematicpose
   dua_interfaces
   geometry_msgs)
 
@@ -69,8 +67,7 @@ target_include_directories(dynamicpose PUBLIC
 target_link_libraries(dynamicpose
   kinematicpose
   Eigen3::Eigen)
-ament_target_dependencies(
-  dynamicpose
+ament_target_dependencies(dynamicpose
   dua_interfaces
   geometry_msgs)
 

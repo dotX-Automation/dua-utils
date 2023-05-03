@@ -29,8 +29,7 @@ target_compile_definitions(medianfilter PRIVATE "FILTERS_BUILDING_LIBRARY")
 target_include_directories(medianfilter PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
-ament_target_dependencies(
-  medianfilter
+ament_target_dependencies(medianfilter
   filters_base
   pluginlib)
 

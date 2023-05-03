@@ -30,8 +30,7 @@ target_compile_definitions(paramsmanager PRIVATE "PARAMS_MANAGER_BUILDING_LIBRAR
 target_include_directories(paramsmanager PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
-ament_target_dependencies(
-  paramsmanager
+ament_target_dependencies(paramsmanager
   rclcpp)
 
 # Libraries installation
