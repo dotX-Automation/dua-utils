@@ -27,7 +27,7 @@ namespace DroneState
 {
 
 /* Keeps this library coherent with the CoordinateSystem ROS message */
-enum CoordinateFrame
+enum class POSE_PUBLIC CoordinateFrame : uint8_t
 {
   NWU = CoordinateSystem::COORDINATE_SYSTEM_NWU,
   NED = CoordinateSystem::COORDINATE_SYSTEM_NED

@@ -178,7 +178,7 @@ Pose::~Pose()
 EulerPoseStamped Pose::to_euler_pose_stamped()
 {
   EulerPoseStamped msg{};
-  msg.coordinate_system.coordinate_system = frame_;
+  msg.coordinate_system.coordinate_system = static_cast<uint8_t>(frame_);
   msg.pose.position.x = position_(0);
   msg.pose.position.y = position_(1);
   msg.pose.position.z = position_(2);

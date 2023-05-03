@@ -31,7 +31,7 @@ namespace ParamsManager
 {
 
 /* Keeps this library coherent with the ParameterType ROS message. */
-enum PARAMS_MANAGER_LOCAL PType
+enum class PARAMS_MANAGER_LOCAL PType : uint8_t
 {
   PARAMETER_NOT_SET = rcl_interfaces::msg::ParameterType::PARAMETER_NOT_SET,
   PARAMETER_BOOL = rcl_interfaces::msg::ParameterType::PARAMETER_BOOL,

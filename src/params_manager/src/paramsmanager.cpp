@@ -250,7 +250,7 @@ void PManager::declare_bool_parameter(
   // Declare parameter
   rcl_interfaces::msg::ParameterDescriptor descriptor;
   descriptor.set__name(name);
-  descriptor.set__type(PType::PARAMETER_BOOL);
+  descriptor.set__type(static_cast<uint8_t>(PType::PARAMETER_BOOL));
   descriptor.set__description(desc);
   descriptor.set__additional_constraints(constraints);
   descriptor.set__read_only(read_only);
@@ -289,7 +289,7 @@ void PManager::declare_bool_array_parameter(
   // Declare parameter
   rcl_interfaces::msg::ParameterDescriptor descriptor;
   descriptor.set__name(name);
-  descriptor.set__type(PType::PARAMETER_BOOL_ARRAY);
+  descriptor.set__type(static_cast<uint8_t>(PType::PARAMETER_BOOL_ARRAY));
   descriptor.set__description(desc);
   descriptor.set__additional_constraints(constraints);
   descriptor.set__read_only(read_only);
@@ -335,7 +335,7 @@ void PManager::declare_int_parameter(
   param_range.set__to_value(to);
   param_range.set__step(step);
   descriptor.set__name(name);
-  descriptor.set__type(PType::PARAMETER_INTEGER);
+  descriptor.set__type(static_cast<uint8_t>(PType::PARAMETER_INTEGER));
   descriptor.set__description(desc);
   descriptor.set__additional_constraints(constraints);
   descriptor.set__read_only(read_only);
@@ -382,7 +382,7 @@ void PManager::declare_int_array_parameter(
   param_range.set__to_value(to);
   param_range.set__step(step);
   descriptor.set__name(name);
-  descriptor.set__type(PType::PARAMETER_INTEGER_ARRAY);
+  descriptor.set__type(static_cast<uint8_t>(PType::PARAMETER_INTEGER_ARRAY));
   descriptor.set__description(desc);
   descriptor.set__additional_constraints(constraints);
   descriptor.set__read_only(read_only);
@@ -429,7 +429,7 @@ void PManager::declare_double_parameter(
   param_range.set__to_value(to);
   param_range.set__step(step);
   descriptor.set__name(name);
-  descriptor.set__type(PType::PARAMETER_DOUBLE);
+  descriptor.set__type(static_cast<uint8_t>(PType::PARAMETER_DOUBLE));
   descriptor.set__description(desc);
   descriptor.set__additional_constraints(constraints);
   descriptor.set__read_only(read_only);
@@ -477,7 +477,7 @@ void PManager::declare_double_array_parameter(
   param_range.set__to_value(to);
   param_range.set__step(step);
   descriptor.set__name(name);
-  descriptor.set__type(PType::PARAMETER_DOUBLE_ARRAY);
+  descriptor.set__type(static_cast<uint8_t>(PType::PARAMETER_DOUBLE_ARRAY));
   descriptor.set__description(desc);
   descriptor.set__additional_constraints(constraints);
   descriptor.set__read_only(read_only);
@@ -517,7 +517,7 @@ void PManager::declare_string_parameter(
   // Declare parameter
   rcl_interfaces::msg::ParameterDescriptor descriptor;
   descriptor.set__name(name);
-  descriptor.set__type(PType::PARAMETER_STRING);
+  descriptor.set__type(static_cast<uint8_t>(PType::PARAMETER_STRING));
   descriptor.set__description(desc);
   descriptor.set__additional_constraints(constraints);
   descriptor.set__read_only(read_only);
@@ -557,7 +557,7 @@ void PManager::declare_string_array_parameter(
   // Declare parameter
   rcl_interfaces::msg::ParameterDescriptor descriptor;
   descriptor.set__name(name);
-  descriptor.set__type(PType::PARAMETER_STRING_ARRAY);
+  descriptor.set__type(static_cast<uint8_t>(PType::PARAMETER_STRING_ARRAY));
   descriptor.set__description(desc);
   descriptor.set__additional_constraints(constraints);
   descriptor.set__read_only(read_only);
@@ -596,7 +596,7 @@ void PManager::declare_byte_array_parameter(
   // Declare parameter
   rcl_interfaces::msg::ParameterDescriptor descriptor;
   descriptor.set__name(name);
-  descriptor.set__type(PType::PARAMETER_BYTE_ARRAY);
+  descriptor.set__type(static_cast<uint8_t>(PType::PARAMETER_BYTE_ARRAY));
   descriptor.set__description(desc);
   descriptor.set__additional_constraints(constraints);
   descriptor.set__read_only(read_only);
