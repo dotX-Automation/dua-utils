@@ -315,7 +315,7 @@ void PManager::declare_bool_array_parameter(
  *
  * @throws InvalidArgument if the parameter is already declared.
  */
-void PManager::declare_int_parameter(
+void PManager::declare_integer_parameter(
   std::string && name,
   int64_t default_val, int64_t from, int64_t to, int64_t step,
   std::string && desc, std::string && constraints, bool read_only,
@@ -362,7 +362,7 @@ void PManager::declare_int_parameter(
  *
  * @throws InvalidArgument if the parameter is already declared.
  */
-void PManager::declare_int_array_parameter(
+void PManager::declare_integer_array_parameter(
   std::string && name,
   std::vector<int64_t> && default_val, int64_t from, int64_t to, int64_t step,
   std::string && desc, std::string && constraints, bool read_only,

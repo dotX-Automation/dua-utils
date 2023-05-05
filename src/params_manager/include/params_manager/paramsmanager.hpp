@@ -100,12 +100,12 @@ public:
     std::vector<bool> && default_val,
     std::string && desc, std::string && constraints, bool read_only,
     Validator && validator = nullptr);
-  void declare_int_parameter(
+  void declare_integer_parameter(
     std::string && name,
     int64_t default_val, int64_t from, int64_t to, int64_t step,
     std::string && desc, std::string && constraints, bool read_only,
     Validator && validator = nullptr);
-  void declare_int_array_parameter(
+  void declare_integer_array_parameter(
     std::string && name,
     std::vector<int64_t> && default_val, int64_t from, int64_t to, int64_t step,
     std::string && desc, std::string && constraints, bool read_only,
