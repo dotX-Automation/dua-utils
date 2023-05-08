@@ -38,8 +38,14 @@ params_decl = """\
 
 """
 
+validator_bind = """\
+std::bind(
+      &{{node_class_name}}::{{validator}},
+      this,
+      std::placeholders::_1)"""
+
 cpp_code = """\
-# include <{{header_include_path}}>
+#include <{{header_include_path}}>
 {{namespace1}}
 /**
  * @brief Routine to initialize node parameters.
@@ -48,8 +54,7 @@ void {{node_class_name}}::init_parameters()
 {
 {{params_declarations}}
 }
-{{namespace2}}
-"""
+{{namespace2}}"""
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -129,6 +134,14 @@ if __name__ == '__main__':
                     defaults[values['type']].replace('{{default_value}}', str(values['default_value'])) if is_string\
                     else defaults[values['type']].replace('{{default_value}}', str(values['default_value']).lower())
 
+            # Get parameter validator, if present
+            validator_name = str(values.get('validator', ''))
+            if validator_name != '':
+                validator_subst = validator_bind.replace('{{node_class_name}}', node_class_name)\
+                    .replace('{{validator}}', validator_name)
+            else:
+                validator_subst = 'nullptr'
+
             params_decls_cpp += params_decl.replace('{{description}}', values['description'])\
                 .replace('{{type}}', values['type'])\
                 .replace('{{param_name}}', param_name)\
@@ -136,7 +149,7 @@ if __name__ == '__main__':
                 .replace('{{description}}', values['description'])\
                 .replace('{{constraints}}', values['constraints'])\
                 .replace('{{manager_name}}', manager_name)\
-                .replace('{{validator}}', values.get('validator', 'nullptr'))\
+                .replace('{{validator}}', validator_subst)\
                 .replace('{{read_only}}', str(values['read_only']).lower())
 
         except Exception as e:
