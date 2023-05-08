@@ -24,7 +24,7 @@ function(generate_init_parameters yaml_file out_file)
       "${CMAKE_CURRENT_BINARY_DIR}/${out_file}"
     MAIN_DEPENDENCY "${yaml_file}"
     WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
-    COMMENT "Generating parameters declaration source file ${out_file} from ${yaml_file} ..."
+    COMMENT "Generating parameters declaration source file ${out_file} from ${yaml_file}"
     VERBATIM
     USES_TERMINAL)
 endfunction()
