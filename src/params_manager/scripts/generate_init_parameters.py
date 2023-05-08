@@ -1,10 +1,19 @@
-import argparse
-import yaml
-import sys
+"""
+Parameters manager init_parameters.cpp generator.
 
-##################################################################
-# cpp
-##################################################################
+Lorenzo Bianchi <lnz.bnc@gmail.com>
+Roberto Masocco <robmasocco@gmail.com>
+Intelligent Systems Lab <isl.torvergata@gmail.com>
+
+May 5, 2023
+"""
+
+import argparse
+import os
+import sys
+import yaml
+
+# C++ code templates and text substitutions
 
 defaults = {
     'bool': '{{default_value}}',
@@ -14,11 +23,11 @@ defaults = {
     'bool_array': '{{{default_value}}}',
     'double_array': '{{{default_value}}}, {{min_value}}, {{max_value}}, {{step}}',
     'integer_array': '{{{default_value}}}, {{min_value}}, {{max_value}}, {{step}}',
-    'string_array': '{"{{default_value}}"}'
+    'string_array': '{{{default_value}}}'
 }
 
 params_decl = """\
-  // {{description}}
+  // {{param_name}}
   {{manager_name}}->declare_{{type}}_parameter(
     "{{param_name}}",
     {{param_values}},
@@ -29,10 +38,8 @@ params_decl = """\
 
 """
 
-##################################################################
-
 cpp_code = """\
-#include <{{header_include_path}}>
+# include <{{header_include_path}}>
 {{namespace1}}
 /**
  * @brief Routine to initialize node parameters.
@@ -41,77 +48,102 @@ void {{node_class_name}}::init_parameters()
 {
 {{params_declarations}}
 }
-{{namespace2}}"""
-
-##################################################################
-# Script
-##################################################################
+{{namespace2}}
+"""
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('config_file', type=str, help='Configuration file absolute path', default='')
+    parser.add_argument('config_file',
+                        type=str,
+                        help='Configuration file path',
+                        default='')
     if len(sys.argv) != 2:
         parser.print_usage()
         exit(-1)
     args = parser.parse_args()
     yaml_file = args.config_file
 
-    # Open yaml file and read data
+    # Open YAML file and read data
     try:
         with open(yaml_file) as f:
-            yaml_data = yaml.load(f)
+            yaml_data = yaml.load(f, Loader=yaml.SafeLoader)
     except:
-        print('Failed to parse yaml file. Terminating.')
+        print('ERROR: Failed to parse YAML file')
         exit(-1)
 
     # Get general configuration
     header_include_path = yaml_data.get('header_include_path')
     if header_include_path == None:
-        print('Invalid header_include_path')
+        print('ERROR: Invalid header_include_path')
         exit(-1)
-
     manager_name = yaml_data.get('manager_name', 'pmanager_')
-
     namespace = yaml_data.get('namespace', '')
-
     node_class_name = yaml_data.get('node_class_name')
     if node_class_name == None:
-        print('Invalid node_class_name')
+        print('ERROR: Invalid node_class_name')
         exit(-1)
-
     output_dir = yaml_data.get('output_dir')
     if output_dir == None:
-        print('Invalid output_dir')
+        print('ERROR: Invalid output_dir')
         exit(-1)
 
     # Get ordered params dictionary
     params_dict = dict(sorted(yaml_data['params'].items()))
-
     params_decls_cpp = ''
-    
     for (param_name, values) in params_dict.items():
         try:
-            # Parameters declarations
-            if values['type'] in ['integer', 'double', 'integer_array', 'double_array']:
+            # Generate parameter metadata
+            # This highly depends on the parameter type and YAML parsing
+            if values['type'] in ['integer', 'double']:
                 param_values = defaults[values['type']].replace('{{default_value}}', str(values['default_value']))\
-                                                    .replace('{{min_value}}', str(values['min_value']))\
-                                                    .replace('{{max_value}}', str(values['max_value']))\
-                                                    .replace('{{step}}', str(values['step']))
-            else:
-                param_values = defaults[values['type']].replace(
-                    '{{default_value}}', str(values['default_value']).lower())
+                    .replace('{{min_value}}', str(values['min_value']))\
+                    .replace('{{max_value}}', str(values['max_value']))\
+                    .replace('{{step}}', str(values['step']))
+            elif values['type'] in ['integer_array', 'double_array']:
+                param_values = defaults[values['type']].replace('{{min_value}}', str(values['min_value']))\
+                    .replace('{{max_value}}', str(values['max_value']))\
+                    .replace('{{step}}', str(values['step']))
+                default_values = ''
+                for i in range(0, len(list(values['default_value'])) - 1):
+                    default_values += str(list(values['default_value'])[i]) + ', '
+                default_values += str(list(values['default_value'])[-1])
+                param_values = param_values.replace('{{default_value}}', default_values)
+            elif values['type'] in ['bool_array', 'string_array']:
+                default_values = ''
+                is_string = values['type'] == 'string_array'
+                for i in range(0, len(list(values['default_value'])) - 1):
+                    default_values += '"' if is_string else ''
+                    default_values +=\
+                        str(list(values['default_value'])[i]) if is_string\
+                        else str(list(values['default_value'])[i]).lower()
+                    default_values += '", ' if is_string else ', '
+                default_values += '"' if is_string else ''
+                default_values +=\
+                    str(list(values['default_value'])[-1]) if is_string\
+                    else str(list(values['default_value'])[-1]).lower()
+                default_values += '"' if is_string else ''
+                param_values = defaults[values['type']].replace('{{default_value}}', default_values)
+            else:  # bool, string
+                is_string = values['type'] == 'string'
+                param_values =\
+                    defaults[values['type']].replace('{{default_value}}', str(values['default_value'])) if is_string\
+                    else defaults[values['type']].replace('{{default_value}}', str(values['default_value']).lower())
 
             params_decls_cpp += params_decl.replace('{{description}}', values['description'])\
-                                        .replace('{{type}}', values['type'])\
-                                        .replace('{{param_name}}', param_name)\
-                                        .replace('{{param_values}}', param_values)\
-                                        .replace('{{description}}', values['description'])\
-                                        .replace('{{constraints}}', values['constraints'])\
-                                        .replace('{{manager_name}}', manager_name)\
-                                        .replace('{{validator}}', values.get('validator', 'nullptr'))\
-                                        .replace('{{read_only}}', str(values['read_only']).lower())
-        except:
-            print(f'Invalid configuration for parameter: {param_name}')
+                .replace('{{type}}', values['type'])\
+                .replace('{{param_name}}', param_name)\
+                .replace('{{param_values}}', param_values)\
+                .replace('{{description}}', values['description'])\
+                .replace('{{constraints}}', values['constraints'])\
+                .replace('{{manager_name}}', manager_name)\
+                .replace('{{validator}}', values.get('validator', 'nullptr'))\
+                .replace('{{read_only}}', str(values['read_only']).lower())
+
+        except Exception as e:
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            print(f'ERROR: {exc_type} at {fname}::{exc_tb.tb_lineno}')
+            print(f'Failed to parse configuration of parameter: {param_name}')
             exit(-1)
 
     cpp_code = cpp_code.replace('{{params_declarations}}', params_decls_cpp[:-2])
@@ -126,6 +158,6 @@ if __name__ == '__main__':
         cpp_code = cpp_code.replace('{{namespace1}}', namespace)
         cpp_code = cpp_code.replace('{{namespace2}}', namespace)
 
-    # Create cpp file
+    # Write C++ source file
     with open(f'{output_dir}/init_parameters.cpp', 'w') as f:
         f.write(cpp_code)

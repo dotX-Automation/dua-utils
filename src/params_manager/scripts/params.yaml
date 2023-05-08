@@ -1,9 +1,9 @@
+# TODO Help comments
 header_include_path: prova/prova.hpp
 manager_name: pmanager_name
-# namespace: Uwb
-node_class_name: UwbLocalizationNode
-output_dir: /home/lorenzo/Scrivania/Params2
-
+namespace: UWB
+node_class_name: UWBLocalizationNode
+output_dir: /home/robm114/Downloads
 
 params:
   camera_offset:
@@ -12,28 +12,29 @@ params:
     min_value: 0.0
     max_value: 0.5
     step: 0.0
-    description: 'Distance between camera and drone center.'
-    constraints: 'Can be zero, must be in meters.'
+    description: "Distance between camera and drone center."
+    constraints: "Can be zero, must be in meters."
     read_only: false
     validator: function_name3
 
   hsv_from:
-    len: 5
     type: integer_array
-    default_value: 0
+    default_value:
+      - 0
+      - 1
     min_value: 0
     max_value: 255
     step: 1
-    description: 'HSV color lower range.'
-    constraints: 'Can be changed.'
+    description: "HSV color lower range."
+    constraints: "Can be changed."
     read_only: false
     validator: function_name2
 
   pub_cv_images:
     type: bool
     default_value: true
-    description: 'Activates publishers to CV images topic.'
-    constraints: 'Only for testing.'
+    description: "Activates publishers to CV images topic."
+    constraints: "Only for testing."
     read_only: true
     validator: function_name1
 
@@ -43,45 +44,50 @@ params:
     min_value: 1000
     max_value: 300000
     step: 1
-    description: 'Area threshold.'
-    constraints: 'Cannot be zero.'
+    description: "Area threshold."
+    constraints: "Cannot be zero."
     read_only: false
     validator: function_name7
 
   covariances:
-    len: 4
     type: double_array
-    default_value: 0.0
+    default_value:
+      - 0.0
+      - 1.0
+      - 2.0
     min_value: 0.0
     max_value: 1000.0
     step: 0.0
-    description: 'Covariance matrix.'
-    constraints: 'Cannot be changed.'
+    description: "Covariance matrix."
+    constraints: "Cannot be changed."
     read_only: true
     validator: function_name6
 
   bottom_camera_topic_name:
     type: string
     default_value: /usb_camera_driver/bottom_camera/image_rect_color
-    description: 'Bottom camera topic name.'
-    constraints: 'Cannot be changed.'
+    description: "Bottom camera topic name."
+    constraints: "Cannot be changed."
     read_only: true
 
   names:
-    len: 6
     type: string_array
-    default_value: prova
-    description: 'Covariance matrix.'
-    constraints: 'Cannot be changed.'
+    default_value:
+      - prova1
+      - prova2
+      - prova3
+    description: "Covariance matrix."
+    constraints: "Cannot be changed."
     read_only: true
     validator: function_name99
 
   bools:
-    len: 7
     type: bool_array
-    default_value: true
-    description: 'Covariance matrix.'
-    constraints: 'Cannot be changed.'
+    default_value:
+      - true
+      - false
+      - false
+    description: "Covariance matrix."
+    constraints: "Cannot be changed."
     read_only: true
     validator: function_name
-    
