@@ -5,10 +5,8 @@
 #
 # May 8, 2023
 
-function(generate_init_parameters yaml_file)
+function(generate_init_parameters yaml_file out_file)
   find_package(PythonInterp 3 REQUIRED)
-
-  message("Generating init_parameters.cpp source file...")
 
   ament_index_has_resource(
     PARAMS_MANAGER_PREFIX
@@ -18,8 +16,15 @@ function(generate_init_parameters yaml_file)
     message(FATAL_ERROR "Could not find params_manager package")
   endif()
 
-  execute_process(COMMAND ${PYTHON_EXECUTABLE}
-    "${PARAMS_MANAGER_PREFIX}/share/params_manager/scripts/generate_init_parameters.py"
-    "${yaml_file}"
-    COMMAND_ERROR_IS_FATAL ANY)
+  add_custom_command(
+    OUTPUT "${out_file}"
+    COMMAND ${PYTHON_EXECUTABLE}
+      "${PARAMS_MANAGER_PREFIX}/share/params_manager/scripts/generate_init_parameters.py"
+      "${yaml_file}"
+      "${CMAKE_CURRENT_BINARY_DIR}/${out_file}"
+    MAIN_DEPENDENCY "${yaml_file}"
+    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+    COMMENT "Generating parameters declaration source file ${out_file} from ${yaml_file} ..."
+    VERBATIM
+    USES_TERMINAL)
 endfunction()

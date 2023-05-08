@@ -14,7 +14,6 @@ import sys
 import yaml
 
 # C++ code templates and text substitutions
-
 defaults = {
     'bool': '{{default_value}}',
     'double': '{{default_value}}, {{min_value}}, {{max_value}}, {{step}}',
@@ -62,11 +61,16 @@ if __name__ == '__main__':
                         type=str,
                         help='Configuration file path',
                         default='')
-    if len(sys.argv) != 2:
+    parser.add_argument('out_file',
+                        type=str,
+                        help='Output file path',
+                        default='')
+    if len(sys.argv) != 3:
         parser.print_usage()
         exit(-1)
     args = parser.parse_args()
     yaml_file = args.config_file
+    out_file = args.out_file
 
     # Open YAML file and read data
     try:
@@ -86,10 +90,6 @@ if __name__ == '__main__':
     node_class_name = yaml_data.get('node_class_name')
     if node_class_name == None:
         print('ERROR: Invalid node_class_name')
-        exit(-1)
-    output_dir = yaml_data.get('output_dir')
-    if output_dir == None:
-        print('ERROR: Invalid output_dir')
         exit(-1)
 
     # Get ordered params dictionary
@@ -172,5 +172,5 @@ if __name__ == '__main__':
         cpp_code = cpp_code.replace('{{namespace2}}', namespace)
 
     # Write C++ source file
-    with open(f'{output_dir}/init_parameters.cpp', 'w') as f:
+    with open(out_file, 'w') as f:
         f.write(cpp_code)

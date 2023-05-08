@@ -3,7 +3,6 @@ header_include_path: prova/prova.hpp
 manager_name: pmanager_name
 namespace: UWB
 node_class_name: UWBLocalizationNode
-output_dir: /home/robm114/Downloads
 
 params:
   camera_offset:
