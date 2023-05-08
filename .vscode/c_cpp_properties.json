@@ -14,6 +14,7 @@
         "${workspaceFolder}/install/dua_interfaces/**",
         "${workspaceFolder}/src/drone_state/include/**",
         "${workspaceFolder}/src/dua_app_management/include/**",
+        "${workspaceFolder}/src/dua_node/include/**",
         "${workspaceFolder}/src/filters/filters_base/include/**",
         "${workspaceFolder}/src/filters/filters_plugins/include/**",
         "${workspaceFolder}/src/params_manager/include/**",
