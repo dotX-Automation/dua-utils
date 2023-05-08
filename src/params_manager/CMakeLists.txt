@@ -46,6 +46,16 @@ install(
 ament_export_libraries(
   paramsmanager)
 
+# CMake files installation
+install(
+  DIRECTORY cmake
+  DESTINATION share/${PROJECT_NAME})
+
+# Python scripts installation
+install(
+  DIRECTORY scripts
+  DESTINATION share/${PROJECT_NAME})
+
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   # the following line skips the linter which checks for copyrights
@@ -62,4 +72,6 @@ endif()
 ament_export_include_directories(include)
 ament_export_targets(export_${PROJECT_NAME})
 
-ament_package()
+# Configure package with ament extesions
+ament_package(CONFIG_EXTRAS
+  "${CMAKE_CURRENT_SOURCE_DIR}/cmake/GenerateInitParameters.cmake")
