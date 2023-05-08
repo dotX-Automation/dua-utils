@@ -8,7 +8,7 @@
  * April 28, 2023
  */
 
-#include <params_manager/paramsmanager.hpp>
+#include <params_manager/params_manager.hpp>
 
 namespace ParamsManager
 {
@@ -61,6 +61,8 @@ PManager::~PManager()
  */
 std::shared_ptr<ParamData> PManager::get_param_data_(const std::string & name)
 {
+  std::scoped_lock<std::mutex> lock(params_set_lock_);
+
   auto it = params_set_.find(std::pair<std::string, ParamData>(name, ParamData{}));
   if (it != params_set_.end()) {
     return std::make_shared<ParamData>(ParamData(it->second));
@@ -80,6 +82,8 @@ void PManager::add_to_set_(
   PType type,
   const Validator & validator)
 {
+  std::scoped_lock<std::mutex> lock(params_set_lock_);
+
   ParamData data(name, type, validator);
   params_set_.insert(std::pair<std::string, ParamData>(name, data));
 }
@@ -172,8 +176,6 @@ void PManager::log_update_(const rclcpp::Parameter & p)
 rcl_interfaces::msg::SetParametersResult PManager::on_set_parameters_callback_(
   const std::vector<rclcpp::Parameter> & params)
 {
-  std::scoped_lock<std::mutex> lock(params_set_lock_);
-
   // Initialize result object
   rcl_interfaces::msg::SetParametersResult res{};
   res.set__successful(true);
@@ -240,12 +242,13 @@ void PManager::declare_bool_parameter(
   std::string && desc, std::string && constraints, bool read_only,
   Validator && validator)
 {
-  std::scoped_lock<std::mutex> lock(params_set_lock_);
-
   // Check if the parameter is not already present
   if (get_param_data_(name) != nullptr) {
     throw std::invalid_argument("PManager::declare_bool_parameter: parameter already declared");
   }
+
+  // Add parameter to the set
+  add_to_set_(name, PType::PARAMETER_BOOL, validator);
 
   // Declare parameter
   rcl_interfaces::msg::ParameterDescriptor descriptor;
@@ -256,9 +259,6 @@ void PManager::declare_bool_parameter(
   descriptor.set__read_only(read_only);
   descriptor.set__dynamic_typing(false);
   node_->declare_parameter(name, default_val, descriptor);
-
-  // Add parameter to the set
-  add_to_set_(name, PType::PARAMETER_BOOL, validator);
 }
 
 /**
@@ -279,12 +279,13 @@ void PManager::declare_bool_array_parameter(
   std::string && desc, std::string && constraints, bool read_only,
   Validator && validator)
 {
-  std::scoped_lock<std::mutex> lock(params_set_lock_);
-
   // Check if the parameter is not already present
   if (get_param_data_(name) != nullptr) {
     throw std::invalid_argument("PManager::declare_bool_array_parameter: parameter already declared");
   }
+
+  // Add parameter to the set
+  add_to_set_(name, PType::PARAMETER_BOOL_ARRAY, validator);
 
   // Declare parameter
   rcl_interfaces::msg::ParameterDescriptor descriptor;
@@ -295,9 +296,6 @@ void PManager::declare_bool_array_parameter(
   descriptor.set__read_only(read_only);
   descriptor.set__dynamic_typing(false);
   node_->declare_parameter(name, default_val, descriptor);
-
-  // Add parameter to the set
-  add_to_set_(name, PType::PARAMETER_BOOL_ARRAY, validator);
 }
 
 /**
@@ -321,12 +319,13 @@ void PManager::declare_integer_parameter(
   std::string && desc, std::string && constraints, bool read_only,
   Validator && validator)
 {
-  std::scoped_lock<std::mutex> lock(params_set_lock_);
-
   // Check if the parameter is not already present
   if (get_param_data_(name) != nullptr) {
     throw std::invalid_argument("PManager::declare_int_parameter: parameter already declared");
   }
+
+  // Add parameter to the set
+  add_to_set_(name, PType::PARAMETER_INTEGER, validator);
 
   // Declare parameter
   rcl_interfaces::msg::ParameterDescriptor descriptor;
@@ -342,9 +341,6 @@ void PManager::declare_integer_parameter(
   descriptor.set__dynamic_typing(false);
   descriptor.set__integer_range({param_range});
   node_->declare_parameter(name, default_val, descriptor);
-
-  // Add parameter to the set
-  add_to_set_(name, PType::PARAMETER_INTEGER, validator);
 }
 
 /**
@@ -368,12 +364,13 @@ void PManager::declare_integer_array_parameter(
   std::string && desc, std::string && constraints, bool read_only,
   Validator && validator)
 {
-  std::scoped_lock<std::mutex> lock(params_set_lock_);
-
   // Check if the parameter is not already present
   if (get_param_data_(name) != nullptr) {
     throw std::invalid_argument("PManager::declare_int_array_parameter: parameter already declared");
   }
+
+  // Add parameter to the set
+  add_to_set_(name, PType::PARAMETER_INTEGER_ARRAY, validator);
 
   // Declare parameter
   rcl_interfaces::msg::ParameterDescriptor descriptor;
@@ -389,9 +386,6 @@ void PManager::declare_integer_array_parameter(
   descriptor.set__dynamic_typing(false);
   descriptor.set__integer_range({param_range});
   node_->declare_parameter(name, default_val, descriptor);
-
-  // Add parameter to the set
-  add_to_set_(name, PType::PARAMETER_INTEGER_ARRAY, validator);
 }
 
 /**
@@ -415,12 +409,13 @@ void PManager::declare_double_parameter(
   std::string && desc, std::string && constraints, bool read_only,
   Validator && validator)
 {
-  std::scoped_lock<std::mutex> lock(params_set_lock_);
-
   // Check if the parameter is not already present
   if (get_param_data_(name) != nullptr) {
     throw std::invalid_argument("PManager::declare_double_parameter: parameter already declared");
   }
+
+  // Add parameter to the set
+  add_to_set_(name, PType::PARAMETER_DOUBLE, validator);
 
   // Declare parameter
   rcl_interfaces::msg::ParameterDescriptor descriptor;
@@ -436,9 +431,6 @@ void PManager::declare_double_parameter(
   descriptor.set__dynamic_typing(false);
   descriptor.set__floating_point_range({param_range});
   node_->declare_parameter(name, default_val, descriptor);
-
-  // Add parameter to the set
-  add_to_set_(name, PType::PARAMETER_DOUBLE, validator);
 }
 
 /**
@@ -462,13 +454,14 @@ void PManager::declare_double_array_parameter(
   std::string && desc, std::string && constraints, bool read_only,
   Validator && validator)
 {
-  std::scoped_lock<std::mutex> lock(params_set_lock_);
-
   // Check if the parameter is not already present
   if (get_param_data_(name) != nullptr) {
     throw std::invalid_argument(
             "PManager::declare_double_array_parameter: parameter already declared");
   }
+
+  // Add parameter to the set
+  add_to_set_(name, PType::PARAMETER_DOUBLE_ARRAY, validator);
 
   // Declare parameter
   rcl_interfaces::msg::ParameterDescriptor descriptor;
@@ -484,9 +477,6 @@ void PManager::declare_double_array_parameter(
   descriptor.set__dynamic_typing(false);
   descriptor.set__floating_point_range({param_range});
   node_->declare_parameter(name, default_val, descriptor);
-
-  // Add parameter to the set
-  add_to_set_(name, PType::PARAMETER_DOUBLE_ARRAY, validator);
 }
 
 /**
@@ -507,12 +497,13 @@ void PManager::declare_string_parameter(
   std::string && desc, std::string && constraints, bool read_only,
   Validator && validator)
 {
-  std::scoped_lock<std::mutex> lock(params_set_lock_);
-
   // Check if the parameter is not already present
   if (get_param_data_(name) != nullptr) {
     throw std::invalid_argument("PManager::declare_string_parameter: parameter already declared");
   }
+
+  // Add parameter to the set
+  add_to_set_(name, PType::PARAMETER_STRING, validator);
 
   // Declare parameter
   rcl_interfaces::msg::ParameterDescriptor descriptor;
@@ -523,9 +514,6 @@ void PManager::declare_string_parameter(
   descriptor.set__read_only(read_only);
   descriptor.set__dynamic_typing(false);
   node_->declare_parameter(name, default_val, descriptor);
-
-  // Add parameter to the set
-  add_to_set_(name, PType::PARAMETER_STRING, validator);
 }
 
 /**
@@ -546,13 +534,14 @@ void PManager::declare_string_array_parameter(
   std::string && desc, std::string && constraints, bool read_only,
   Validator && validator)
 {
-  std::scoped_lock<std::mutex> lock(params_set_lock_);
-
   // Check if the parameter is not already present
   if (get_param_data_(name) != nullptr) {
     throw std::invalid_argument(
             "PManager::declare_string_array_parameter: parameter already declared");
   }
+
+  // Add parameter to the set
+  add_to_set_(name, PType::PARAMETER_STRING_ARRAY, validator);
 
   // Declare parameter
   rcl_interfaces::msg::ParameterDescriptor descriptor;
@@ -563,9 +552,6 @@ void PManager::declare_string_array_parameter(
   descriptor.set__read_only(read_only);
   descriptor.set__dynamic_typing(false);
   node_->declare_parameter(name, default_val, descriptor);
-
-  // Add parameter to the set
-  add_to_set_(name, PType::PARAMETER_STRING_ARRAY, validator);
 }
 
 /**
@@ -586,12 +572,13 @@ void PManager::declare_byte_array_parameter(
   std::string && desc, std::string && constraints, bool read_only,
   Validator && validator)
 {
-  std::scoped_lock<std::mutex> lock(params_set_lock_);
-
   // Check if the parameter is not already present
   if (get_param_data_(name) != nullptr) {
     throw std::invalid_argument("PManager::declare_byte_array_parameter: parameter already declared");
   }
+
+  // Add parameter to the set
+  add_to_set_(name, PType::PARAMETER_BYTE_ARRAY, validator);
 
   // Declare parameter
   rcl_interfaces::msg::ParameterDescriptor descriptor;
@@ -602,9 +589,6 @@ void PManager::declare_byte_array_parameter(
   descriptor.set__read_only(read_only);
   descriptor.set__dynamic_typing(false);
   node_->declare_parameter(name, default_val, descriptor);
-
-  // Add parameter to the set
-  add_to_set_(name, PType::PARAMETER_BYTE_ARRAY, validator);
 }
 
 } // namespace ParamsManager
