@@ -9,13 +9,16 @@
 
 #include <dua_node/dua_node.hpp>
 
+namespace DUANode
+{
+
 /**
  * Constructor.
  *
  * @param node_name Name of the node.
  * @param opts Node options.
  */
-DUANode::DUANode(std::string && node_name, rclcpp::NodeOptions && opts)
+NodeBase::NodeBase(std::string && node_name, rclcpp::NodeOptions && opts)
 : Node(node_name, opts)
 {
   // Create and initialize Parameter Manager object
@@ -25,8 +28,10 @@ DUANode::DUANode(std::string && node_name, rclcpp::NodeOptions && opts)
 /**
  * Destructor.
  */
-DUANode::~DUANode()
+NodeBase::~NodeBase()
 {
   // Destroy Parameter Manager object
   pmanager_.reset();
 }
+
+} // namespace DUANode
