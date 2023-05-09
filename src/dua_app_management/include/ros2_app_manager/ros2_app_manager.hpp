@@ -45,7 +45,7 @@ public:
     // Disable I/O buffering
     if (setvbuf(stdout, NULL, _IONBF, 0)) {
       RCLCPP_FATAL(
-        rclcpp::get_logger(logger_name),
+        rclcpp::get_logger(logger_name_),
         "Failed to disable I/O buffering");
       throw std::runtime_error("Failed to disable I/O buffering.");
     }
@@ -71,7 +71,7 @@ public:
     is_valid_ = true;
 
     RCLCPP_WARN(
-      rclcpp::get_logger(logger_name),
+      rclcpp::get_logger(logger_name_),
       "Process started (%d)",
       getpid());
   }
@@ -110,6 +110,7 @@ public:
     RCLCPP_WARN(
       rclcpp::get_logger(logger_name_),
       "Shutting down...");
+    executor_->remove_node(node_);
     node_.reset();
     executor_.reset();
     context_.reset();
