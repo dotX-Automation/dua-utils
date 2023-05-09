@@ -18,11 +18,11 @@ namespace DUANode
  * @param node_name Name of the node.
  * @param opts Node options.
  */
-NodeBase::NodeBase(std::string && node_name, rclcpp::NodeOptions && opts)
+NodeBase::NodeBase(std::string && node_name, rclcpp::NodeOptions && opts, bool verbose)
 : Node(node_name, opts)
 {
   // Create and initialize Parameter Manager object
-  pmanager_ = std::make_shared<ParamsManager::PManager>(this);
+  pmanager_ = std::make_shared<ParamsManager::PManager>(this, verbose);
 }
 
 /**

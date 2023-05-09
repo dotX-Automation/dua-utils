@@ -25,7 +25,9 @@ namespace DUANode
 class DUA_NODE_PUBLIC NodeBase : public rclcpp::Node
 {
 public:
-  NodeBase(std::string && node_name, rclcpp::NodeOptions && opts = rclcpp::NodeOptions());
+  NodeBase(std::string && node_name,
+    rclcpp::NodeOptions && opts = rclcpp::NodeOptions(),
+    bool verbose = false);
   ~NodeBase();
 
 protected:
