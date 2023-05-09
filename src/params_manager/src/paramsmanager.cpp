@@ -127,35 +127,51 @@ void PManager::log_update_(const rclcpp::Parameter & p)
       break;
     case PType::PARAMETER_BOOL_ARRAY:
       msg += "[ ";
-      for (bool b : p.as_bool_array()) {
+      for (auto it = p.as_bool_array().begin(); it != p.as_bool_array().end(); ++it) {
+        bool b = *it;
         msg += b ? "true" : "false";
-        msg += ", ";
+        if (it != p.as_bool_array().end() - 1) {
+          msg += ",";
+        }
+        msg += " ";
       }
       msg += "]";
       break;
     case PType::PARAMETER_INTEGER_ARRAY:
       msg += "[ ";
-      for (int i : p.as_integer_array()) {
+      for (auto it = p.as_integer_array().begin(); it != p.as_integer_array().end(); ++it) {
+        int i = *it;
         msg += std::to_string(i);
-        msg += ", ";
+        if (it != p.as_integer_array().end() - 1) {
+          msg += ",";
+        }
+        msg += " ";
       }
       msg += "]";
       break;
     case PType::PARAMETER_DOUBLE_ARRAY:
       msg += "[ ";
-      for (double d : p.as_double_array()) {
+      for (auto it = p.as_double_array().begin(); it != p.as_double_array().end(); ++it) {
+        double d = *it;
         msg += std::to_string(d);
-        msg += ", ";
+        if (it != p.as_double_array().end() - 1) {
+          msg += ",";
+        }
+        msg += " ";
       }
       msg += "]";
       break;
     case PType::PARAMETER_STRING_ARRAY:
       msg += "[ ";
-      for (std::string s : p.as_string_array()) {
+      for (auto it = p.as_string_array().begin(); it != p.as_string_array().end(); ++it) {
+        std::string s = *it;
         msg += "\'";
         msg += s;
         msg += "\'";
-        msg += ", ";
+        if (it != p.as_string_array().end() - 1) {
+          msg += ",";
+        }
+        msg += " ";
       }
       msg += "]";
       break;
