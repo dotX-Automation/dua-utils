@@ -18,7 +18,10 @@ namespace DUANode
  * @param node_name Name of the node.
  * @param opts Node options.
  */
-NodeBase::NodeBase(std::string && node_name, rclcpp::NodeOptions && opts, bool verbose)
+NodeBase::NodeBase(
+  std::string && node_name,
+  const rclcpp::NodeOptions & opts,
+  bool verbose)
 : Node(node_name, opts)
 {
   // Create and initialize Parameter Manager object

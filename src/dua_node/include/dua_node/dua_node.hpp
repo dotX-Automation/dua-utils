@@ -26,7 +26,7 @@ class DUA_NODE_PUBLIC NodeBase : public rclcpp::Node
 {
 public:
   NodeBase(std::string && node_name,
-    rclcpp::NodeOptions && opts = rclcpp::NodeOptions(),
+    const rclcpp::NodeOptions & opts = rclcpp::NodeOptions(),
     bool verbose = false);
   ~NodeBase();
 
