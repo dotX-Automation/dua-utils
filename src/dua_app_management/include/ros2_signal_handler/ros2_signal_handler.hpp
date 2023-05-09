@@ -55,8 +55,7 @@ public:
     std::shared_ptr<rclcpp::Context> context,
     std::string && logger_name = std::string("signal_handler"),
     std::function<void(int, std::string &)> && deferred_handler = nullptr,
-    std::function<void(int, siginfo_t *, void *)> && system_handler = nullptr
-  )
+    std::function<void(int, siginfo_t *, void *)> && system_handler = nullptr)
   {
     // Check if provided context is valid
     if (!context) {
