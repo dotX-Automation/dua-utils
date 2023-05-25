@@ -26,7 +26,7 @@ POSIX-compliant signal handler module for ROS 2 applications.
 
 Can be used by any ROS 2 standalone application but also by component managers, and allows to define custom behaviours upon process termination.
 
-This also adds support for initialization of custom ROS 2 contexts, and uses `sigaction` to manage handlers.
+This also adds support for initialization of custom ROS 2 contexts, uses `sigaction` to manage handlers. You can also provide a pointer to an `rclcpp::Executor` to be canceled when any of the traced signal is received, or not provide it and manage it inside one of your custom handlers.
 
 This module is made of a single header only: `signal_handler.hpp`, so to access its functions you just need to include that.
 

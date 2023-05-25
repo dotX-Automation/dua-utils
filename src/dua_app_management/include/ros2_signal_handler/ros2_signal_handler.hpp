@@ -46,6 +46,7 @@ public:
    *
    * @param context rclcpp::Context to operate on.
    * @param logger_name Name to be visualized in rclcpp log prints.
+   * @param executor Executor to be terminated on signal.
    * @param deferred_handler Signal handler to be called alongside main thread.
    * @param system_handler System signal handler to be called while tracing.
    *
@@ -54,6 +55,7 @@ public:
   void init(
     std::shared_ptr<rclcpp::Context> context,
     std::string && logger_name = std::string("signal_handler"),
+    rclcpp::Executor::SharedPtr executor = nullptr,
     std::function<void(int, std::string &)> && deferred_handler = nullptr,
     std::function<void(int, siginfo_t *, void *)> && system_handler = nullptr)
   {
@@ -78,6 +80,7 @@ public:
 
     // Initialize pointers
     context_ = context;
+    executor_ = executor;
     deferred_handler_ = deferred_handler;
     system_handler_ = system_handler;
 
@@ -220,7 +223,8 @@ public:
     handler_thread_.join();
 
     // Erase pointers
-    context_.reset();
+    context_ = nullptr;
+    executor_ = nullptr;
     deferred_handler_ = nullptr;
     system_handler_ = nullptr;
 
@@ -249,6 +253,9 @@ private:
 
   /* Internal rclcpp logger name. */
   std::string logger_name_;
+
+  /* Pointer to executor to stop on signal. */
+  std::shared_ptr<rclcpp::Executor> executor_ = nullptr;
 
   /* Pointer to context to operate on. */
   std::shared_ptr<rclcpp::Context> context_ = nullptr;
@@ -384,6 +391,11 @@ private:
       // Call custom handler, if present
       if (deferred_handler_) {
         deferred_handler_(local_sig, logger_name_);
+      }
+
+      // Stop executor, if given
+      if (executor_) {
+        executor_->cancel();
       }
 
       // Shut down context if requested
