@@ -11,7 +11,7 @@
         "${workspaceFolder}/**",
         "/opt/ros/humble/include/**",
         "${workspaceFolder}/install/**",
-        "${workspaceFolder}/install/dua_interfaces/**",
+        "${workspaceFolder}/install/dua_interfaces/include/**",
         "${workspaceFolder}/src/drone_state/include/**",
         "${workspaceFolder}/src/dua_app_management/include/**",
         "${workspaceFolder}/src/dua_node/include/**",

@@ -3,5 +3,8 @@ build/*
 install/*
 log/*
 
+# Test node
+src/test/*
+
 # Uncomment the following to avoid pushing personal configurations
 # .vscode/

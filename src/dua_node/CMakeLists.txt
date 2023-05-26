@@ -40,12 +40,11 @@ install(
   DESTINATION include)
 install(
   TARGETS duanode
-  EXPORT export_${PROJECT_NAME}
+  EXPORT dua_nodeTargets
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
-  RUNTIME DESTINATION bin)
-ament_export_libraries(
-  duanode)
+  RUNTIME DESTINATION bin
+  INCLUDES DESTINATION include)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -59,8 +58,10 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 endif()
 
-# Export headers and targets for downstream ament packages
-ament_export_include_directories(include)
-ament_export_targets(export_${PROJECT_NAME})
+# Export all dependencies and library targets for this package
+ament_export_targets(dua_nodeTargets HAS_LIBRARY_TARGET)
+ament_export_dependencies(
+  params_manager
+  rclcpp)
 
 ament_package()

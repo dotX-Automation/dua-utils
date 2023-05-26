@@ -77,14 +77,11 @@ install(
   DESTINATION include)
 install(
   TARGETS pose kinematicpose dynamicpose
-  EXPORT export_${PROJECT_NAME}
+  EXPORT drone_stateTargets
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
-  RUNTIME DESTINATION bin)
-ament_export_libraries(
-  pose
-  kinematicpose
-  dynamicpose)
+  RUNTIME DESTINATION bin
+  INCLUDES DESTINATION include)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -98,8 +95,11 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 endif()
 
-# Export headers and targets for downstream ament packages
-ament_export_include_directories(include)
-ament_export_targets(export_${PROJECT_NAME})
+# Export all dependencies and library targets for this package
+ament_export_targets(drone_stateTargets HAS_LIBRARY_TARGET)
+ament_export_dependencies(
+  dua_interfaces
+  Eigen3
+  geometry_msgs)
 
 ament_package()

@@ -23,7 +23,7 @@ find_package(ament_cmake_ros REQUIRED)
 find_package(rclcpp REQUIRED)
 
 # Params Manager library configuration
-add_library(paramsmanager
+add_library(paramsmanager SHARED
   src/paramsmanager.cpp)
 target_compile_features(paramsmanager PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
 target_compile_definitions(paramsmanager PRIVATE "PARAMS_MANAGER_BUILDING_LIBRARY")
@@ -39,12 +39,11 @@ install(
   DESTINATION include)
 install(
   TARGETS paramsmanager
-  EXPORT export_${PROJECT_NAME}
+  EXPORT paramsmanagerTargets
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
-  RUNTIME DESTINATION bin)
-ament_export_libraries(
-  paramsmanager)
+  RUNTIME DESTINATION bin
+  INCLUDES DESTINATION include)
 
 # CMake files installation
 install(
@@ -68,9 +67,9 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 endif()
 
-# Export headers and targets for downstream ament packages
-ament_export_include_directories(include)
-ament_export_targets(export_${PROJECT_NAME})
+# Export all dependencies and library targets for this package
+ament_export_targets(paramsmanagerTargets HAS_LIBRARY_TARGET)
+ament_export_dependencies(rclcpp)
 
 # Configure package with ament extesions
 ament_package(CONFIG_EXTRAS
