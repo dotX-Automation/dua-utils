@@ -6,12 +6,18 @@ Common utilities for software packages based on the Distributed Unified Architec
 
 This repository contains the following ROS 2 utilities:
 
-- [x] [`dua_interfaces`](dua_interfaces/README.md): ROS 2 interfaces for the Distributed Unified Architecture.
-- [x] [`dua_app_management`](dua_app_management/README.md): Collection of software modules and source files for the management of applications and processes.
-- [x] [`drone_state`](drone_state/README.md): C++ library to store and manipulate the state of a drone as a rigid body in 2D/3D space.
-- [x] [`filters`](filters/README.md): C++ library to implement dynamic, discrete-time scalar filters as ROS 2 plugins. Requires `pluginlib`.
+- [x] [`drone_state`](src/drone_state/README.md): C++ library to store and manipulate the state of a drone as a rigid body in 2D/3D space.
+- [x] [`dua_app_management`](src/dua_app_management/README.md): Collection of software modules and source files for the management of applications and processes.
+- [x] [`dua_interfaces`](src/dua_interfaces/README.md): ROS 2 interfaces for the Distributed Unified Architecture.
+- [x] [`dua_node`](src/dua_node/README.md): C++ library to implement a ROS 2 node leveraging the capabilities of the Distributed Unified Architecture.
+- [x] [`filters`](src/filters/README.md): C++ library to implement dynamic, discrete-time scalar filters as ROS 2 plugins. Requires `pluginlib`.
+- [x] [`params_manager`](src/params_manager/README.md): C++ library to easily manage ROS 2 node parameters with the `rclcpp` API.
 
-It is organized as a ROS 2 workspace for development, and can be built as such.
+## Usage
+
+This repository is organized as a ROS 2 workspace for development, and can be built as such.
+
+**The supported ROS 2 distribution is currently Humble Hawksbill.**
 
 It is cloned and built as part of the build process of every base unit of [`dua-foundation`](https://github.com/IntelligentSystemsLabUTV/dua-foundation).
 
