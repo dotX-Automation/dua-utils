@@ -23,6 +23,8 @@ find_package(ament_cmake_ros REQUIRED)
 find_package(dua_interfaces REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(Eigen3 3.4 REQUIRED NO_MODULE)
+find_package(rclcpp REQUIRED)
+find_package(std_msgs REQUIRED)
 
 # Pose library configuration
 add_library(pose SHARED
@@ -37,7 +39,9 @@ target_link_libraries(pose
   Eigen3::Eigen)
 ament_target_dependencies(pose
   dua_interfaces
-  geometry_msgs)
+  geometry_msgs
+  rclcpp
+  std_msgs)
 
 # Kinematic Pose library configuration
 add_library(kinematicpose SHARED
