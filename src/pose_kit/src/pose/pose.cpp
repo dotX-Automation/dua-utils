@@ -9,7 +9,7 @@
 
 #include <pose/pose.hpp>
 
-namespace DroneState
+namespace PoseKit
 {
 
 /**
@@ -339,4 +339,4 @@ Pose Pose::operator*(const Pose & p) const
   return new_pose;
 }
 
-}  // namespace DroneState
+}  // namespace PoseKit

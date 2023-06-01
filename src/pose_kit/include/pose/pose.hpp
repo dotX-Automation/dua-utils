@@ -7,8 +7,8 @@
  * April 13, 2023
  */
 
-#ifndef DRONE_STATE__POSE_HPP_
-#define DRONE_STATE__POSE_HPP_
+#ifndef POSE_KIT__POSE_HPP_
+#define POSE_KIT__POSE_HPP_
 
 #include "visibility_control.h"
 
@@ -22,7 +22,7 @@
 
 using namespace dua_interfaces::msg;
 
-namespace DroneState
+namespace PoseKit
 {
 
 /**
@@ -86,6 +86,6 @@ protected:
   std::array<double, 36> pose_covariance_{};
 };
 
-}  // namespace DroneState
+}  // namespace PoseKit
 
-#endif  // DRONE_STATE__POSE_HPP_
+#endif  // POSE_KIT__POSE_HPP_

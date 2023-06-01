@@ -7,8 +7,8 @@
  * April 14, 2023
  */
 
-#ifndef DRONE_STATE__DYNAMIC_POSE_HPP_
-#define DRONE_STATE__DYNAMIC_POSE_HPP_
+#ifndef POSE_KIT__DYNAMIC_POSE_HPP_
+#define POSE_KIT__DYNAMIC_POSE_HPP_
 
 #include "visibility_control.h"
 
@@ -22,7 +22,7 @@
 
 #include <kinematic_pose/kinematic_pose.hpp>
 
-namespace DroneState
+namespace PoseKit
 {
 
 /**
@@ -96,6 +96,6 @@ protected:
   std::array<double, 36> acceleration_cov_{};
 };
 
-}  // namespace DroneState
+}  // namespace PoseKit
 
-#endif  // DRONE_STATE__DYNAMIC_POSE_HPP_
+#endif  // POSE_KIT__DYNAMIC_POSE_HPP_

@@ -9,7 +9,7 @@
 
 #include <dynamic_pose/dynamic_pose.hpp>
 
-namespace DroneState
+namespace PoseKit
 {
 
 /**
@@ -263,4 +263,4 @@ DynamicPose DynamicPose::operator*(const DynamicPose & dp) const
   return new_pose;
 }
 
-} // namespace DroneState
+} // namespace PoseKit

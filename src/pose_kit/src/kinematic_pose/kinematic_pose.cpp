@@ -9,7 +9,7 @@
 
 #include <kinematic_pose/kinematic_pose.hpp>
 
-namespace DroneState
+namespace PoseKit
 {
 
 /**
@@ -245,4 +245,4 @@ KinematicPose KinematicPose::operator*(const KinematicPose & kp) const
   return new_pose;
 }
 
-} // namespace DroneState
+} // namespace PoseKit
