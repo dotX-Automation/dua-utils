@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>drone_state</name>
+  <name>pose_kit</name>
   <version>1.0.0</version>
-  <description>Drone state data objects with basic operations.</description>
+  <description>3D rigid body state data objects with basic operations.</description>
   <maintainer email="isl.torvergata@gmail.com">Intelligent Systems Lab</maintainer>
   <license>GPL-3.0-only</license>
 

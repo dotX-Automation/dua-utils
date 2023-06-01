@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(drone_state)
+project(pose_kit)
 
 set(CMAKE_BUILD_TYPE "RelWithDebInfo")
 
@@ -17,7 +17,7 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic -fvisibility=hidden)
 endif()
 
-# find dependencies
+# Find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(ament_cmake_ros REQUIRED)
 find_package(dua_interfaces REQUIRED)
@@ -81,7 +81,7 @@ install(
   DESTINATION include)
 install(
   TARGETS pose kinematicpose dynamicpose
-  EXPORT drone_stateTargets
+  EXPORT pose_kitTargets
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin
@@ -100,10 +100,12 @@ if(BUILD_TESTING)
 endif()
 
 # Export all dependencies and library targets for this package
-ament_export_targets(drone_stateTargets HAS_LIBRARY_TARGET)
+ament_export_targets(pose_kitTargets HAS_LIBRARY_TARGET)
 ament_export_dependencies(
   dua_interfaces
   Eigen3
-  geometry_msgs)
+  geometry_msgs
+  rclcpp
+  std_msgs)
 
 ament_package()
