@@ -313,10 +313,10 @@ void Pose::set_pose_covariance(const std::array<double, 36> & cov)
 }
 
 /**
- * @brief Roto-translates a pose by a given pose.
+ * @brief Right-multiplies by a given pose.
  *
- * @param p Pose to be added.
- * @return Roto-translated pose.
+ * @param p Transform pose.
+ * @return Transformed pose.
  *
  * @throws std::runtime_error if the coordinate frame is not coherent.
  */
@@ -335,7 +335,7 @@ Pose Pose::operator*(const Pose & p) const
   new_pose.set_position(new_position);
   new_pose.set_attitude(new_attitude);
   new_pose.set_rpy(Eigen::EulerAnglesXYZd(new_attitude));
-  new_pose.set_pose_covariance(pose_covariance_);
+  new_pose.set_pose_covariance(this->get_pose_covariance());
   return new_pose;
 }
 

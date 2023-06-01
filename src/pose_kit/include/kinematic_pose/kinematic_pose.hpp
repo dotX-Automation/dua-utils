@@ -46,13 +46,16 @@ public:
   KinematicPose(
     double x, double y, double z,
     double vx, double vy, double vz,
-    double heading);
+    double heading,
+    const std::array<double, 36> & cov = std::array<double, 36>{});
   KinematicPose(
     const Eigen::Vector3d & pos,
     const Eigen::Quaterniond & q,
     const Eigen::EulerAnglesXYZd & rpy_angles,
     const Eigen::Vector3d & vel,
-    const Eigen::Vector3d & angular_vel);
+    const Eigen::Vector3d & angular_vel,
+    const std::array<double, 36> & cov = std::array<double, 36>{},
+    const std::array<double, 36> & twist_cov = std::array<double, 36>{});
   KinematicPose(const EulerPoseStamped & msg);
   KinematicPose(Pose p)
   : Pose(std::move(p)) {}
@@ -63,10 +66,12 @@ public:
   /* Getters. */
   Eigen::Vector3d get_velocity() const;
   Eigen::Vector3d get_angular_velocity() const;
+  std::array<double, 36> get_twist_covariance() const;
 
   /* Setters. */
   void set_velocity(const Eigen::Vector3d & vel);
   void set_angular_velocity(const Eigen::Vector3d & angular_vel);
+  void set_twist_covariance(const std::array<double, 36> & twist_cov);
 
   /* Geometric operations. */
   KinematicPose operator*(const KinematicPose & kp) const;
@@ -79,6 +84,7 @@ protected:
   /* Internal data. */
   Eigen::Vector3d velocity_ = {0.0, 0.0, 0.0}; // [m/s]
   Eigen::Vector3d angular_velocity_ = {0.0, 0.0, 0.0}; // [rad/s]
+  std::array<double, 36> twist_covariance_{};
 };
 
 }  // namespace DroneState

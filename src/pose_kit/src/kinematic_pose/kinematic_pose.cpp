@@ -22,6 +22,7 @@ KinematicPose::KinematicPose(const KinematicPose & kp)
 {
   set_velocity(kp.get_velocity());
   set_angular_velocity(kp.get_angular_velocity());
+  set_twist_covariance(kp.get_twist_covariance());
 }
 
 /**
@@ -83,12 +84,14 @@ KinematicPose::KinematicPose(
  * @param vy Initial Y linear velocity [m/s].
  * @param vz Initial Z linear velocity [m/s].
  * @param heading Initial heading [rad].
+ * @param cov Initial covariance matrix.
  */
 KinematicPose::KinematicPose(
   double x, double y, double z,
   double vx, double vy, double vz,
-  double heading)
-: Pose(x, y, z, heading)
+  double heading,
+  const std::array<double, 36> & cov)
+: Pose(x, y, z, heading, cov)
 {
   set_velocity(Eigen::Vector3d(vx, vy, vz));
   set_angular_velocity(Eigen::Vector3d::Zero());
@@ -102,17 +105,22 @@ KinematicPose::KinematicPose(
  * @param rpy_angles Initial euler angles [rad].
  * @param vel Initial linear velocity [m/s].
  * @param angular_vel Initial angular velocity [rad/s].
+ * @param cov Initial covariance matrix.
+ * @param twist_cov Initial twist covariance matrix.
  */
 KinematicPose::KinematicPose(
   const Eigen::Vector3d & pos,
   const Eigen::Quaterniond & q,
   const Eigen::EulerAnglesXYZd & rpy_angles,
   const Eigen::Vector3d & vel,
-  const Eigen::Vector3d & angular_vel)
-: Pose(pos, q, rpy_angles)
+  const Eigen::Vector3d & angular_vel,
+  const std::array<double, 36> & cov,
+  const std::array<double, 36> & twist_cov)
+: Pose(pos, q, rpy_angles, cov)
 {
   set_velocity(vel);
   set_angular_velocity(angular_vel);
+  set_twist_covariance(twist_cov);
 }
 
 /**
@@ -139,6 +147,7 @@ KinematicPose & KinematicPose::operator=(const KinematicPose & kp)
   set_rpy(kp.get_rpy());
   set_velocity(kp.get_velocity());
   set_angular_velocity(kp.get_angular_velocity());
+  set_twist_covariance(kp.get_twist_covariance());
   return *this;
 }
 
@@ -154,6 +163,7 @@ KinematicPose & KinematicPose::operator=(KinematicPose && kp)
   set_rpy(kp.get_rpy());
   set_velocity(kp.get_velocity());
   set_angular_velocity(kp.get_angular_velocity());
+  set_twist_covariance(kp.get_twist_covariance());
   return *this;
 }
 
@@ -178,6 +188,14 @@ Eigen::Vector3d KinematicPose::get_angular_velocity() const
 }
 
 /**
+ * @brief Twist covariance getter.
+ */
+std::array<double, 36> KinematicPose::get_twist_covariance() const
+{
+  return twist_covariance_;
+}
+
+/**
  * @brief Linear velocity setter.
  *
  * @param vel Linear velocity [m/s].
@@ -198,10 +216,20 @@ void KinematicPose::set_angular_velocity(const Eigen::Vector3d & angular_vel)
 }
 
 /**
- * @brief Roto-translates a pose by a given pose.
+ * @brief Twist covariance setter.
  *
- * @param kp Pose to be added.
- * @return Roto-translated pose.
+ * @param twist_cov Twist covariance.
+ */
+void KinematicPose::set_twist_covariance(const std::array<double, 36> & twist_cov)
+{
+  twist_covariance_ = twist_cov;
+}
+
+/**
+ * @brief Right-multiplies by a given pose.
+ *
+ * @param kp Transform pose.
+ * @return Transformed pose.
  *
  * @throws std::runtime_error if the coordinate frame is not coherent.
  */
@@ -213,6 +241,7 @@ KinematicPose KinematicPose::operator*(const KinematicPose & kp) const
   KinematicPose new_pose =
     dynamic_cast<const Pose &>(*this).operator*(dynamic_cast<const Pose &>(kp));
   // TODO Transform velocities
+  new_pose.set_twist_covariance(this->get_twist_covariance());
   return new_pose;
 }
 
