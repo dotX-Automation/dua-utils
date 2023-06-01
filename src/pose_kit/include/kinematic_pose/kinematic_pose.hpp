@@ -1,5 +1,5 @@
 /**
- * Kinematic drone pose library, based on Eigen geometry types.
+ * Kinematic pose library, based on Eigen geometry types.
  *
  * Roberto Masocco <robmasocco@gmail.com>
  * Intelligent Systems Lab <isl.torvergata@gmail.com>

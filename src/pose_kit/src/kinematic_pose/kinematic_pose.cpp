@@ -1,5 +1,5 @@
 /**
- * Kinematic drone pose library implementation.
+ * Kinematic pose library implementation.
  *
  * Roberto Masocco <robmasocco@gmail.com>
  * Intelligent Systems Lab <isl.torvergata@gmail.com>

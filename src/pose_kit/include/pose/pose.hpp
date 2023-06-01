@@ -1,5 +1,5 @@
 /**
- * Drone pose library, based on Eigen geometry types.
+ * Pose library, based on Eigen geometry types.
  *
  * Roberto Masocco <robmasocco@gmail.com>
  * Intelligent Systems Lab <isl.torvergata@gmail.com>
@@ -37,11 +37,13 @@ public:
   Pose(double x, double y, double z);
   Pose(const Eigen::Quaterniond & q);
   Pose(const Eigen::EulerAnglesXYZd & rpy_angles);
-  Pose(double x, double y, double z, double heading);
+  Pose(double x, double y, double z, double heading,
+    const std::array<double, 36> & cov = std::array<double, 36>{});
   Pose(
     const Eigen::Vector3d & pos,
     const Eigen::Quaterniond & q,
-    const Eigen::EulerAnglesXYZd & rpy_angles);
+    const Eigen::EulerAnglesXYZd & rpy_angles,
+    const std::array<double, 36> & cov = std::array<double, 36>{});
   Pose(const EulerPoseStamped & msg);
   // TODO Constructor from PoseStamped
   // TODO Constructor from PoseWithCovarianceStamped
@@ -61,11 +63,13 @@ public:
   Eigen::AngleAxisd get_rotation() const;
   Eigen::Translation3d get_translation() const;
   Eigen::Transform<double, 3, Eigen::Affine> get_roto_translation() const;
+  std::array<double, 36> get_pose_covariance() const;
 
   /* Setters. */
   void set_position(const Eigen::Vector3d & pos);
   void set_attitude(const Eigen::Quaterniond & q);
   void set_rpy(const Eigen::EulerAnglesXYZd & rpy_angles);
+  void set_pose_covariance(const std::array<double, 36> & cov);
 
   /* Geometric operations. */
   Pose operator*(const Pose & p) const;
@@ -79,6 +83,7 @@ protected:
   Eigen::Vector3d position_ = {0.0, 0.0, 0.0}; // [m]
   Eigen::Quaterniond attitude_ = Eigen::Quaterniond::Identity();
   Eigen::EulerAnglesXYZd rpy_ = {0.0, 0.0, 0.0}; // [rad] in [-PI +PI]
+  std::array<double, 36> pose_covariance_{};
 };
 
 }  // namespace DroneState

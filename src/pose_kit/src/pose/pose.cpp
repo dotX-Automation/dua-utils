@@ -1,5 +1,5 @@
 /**
- * Drone pose library implementation.
+ * Pose library implementation.
  *
  * Roberto Masocco <robmasocco@gmail.com>
  * Intelligent Systems Lab <isl.torvergata@gmail.com>
@@ -28,6 +28,7 @@ Pose::Pose(const Pose & p)
   set_position(p.get_position());
   set_attitude(p.get_attitude());
   set_rpy(p.get_rpy());
+  set_pose_covariance(p.get_pose_covariance());
 }
 
 /**
@@ -75,8 +76,11 @@ Pose::Pose(const Eigen::EulerAnglesXYZd & rpy_angles)
  * @param y Initial Y position [m].
  * @param z Initial Z position [m].
  * @param heading Initial heading [rad] in [-PI +PI].
+ * @param cov Initial pose covariance.
  */
-Pose::Pose(double x, double y, double z, double heading)
+Pose::Pose(
+  double x, double y, double z, double heading,
+  const std::array<double, 36> & cov)
 {
   set_position(Eigen::Vector3d(x, y, z));
   set_attitude(
@@ -85,6 +89,7 @@ Pose::Pose(double x, double y, double z, double heading)
       Eigen::AngleAxisd(0.0, Eigen::Vector3d::UnitY()) *
       Eigen::AngleAxisd(heading, Eigen::Vector3d::UnitZ())));
   set_rpy({0.0, 0.0, heading});
+  set_pose_covariance(cov);
 }
 
 /**
@@ -93,15 +98,18 @@ Pose::Pose(double x, double y, double z, double heading)
  * @param pos Initial position [m].
  * @param q Initial attitude quaternion.
  * @param rpy_angles Initial euler angles [rad] in [-PI +PI].
+ * @param cov Initial pose covariance.
  */
 Pose::Pose(
   const Eigen::Vector3d & pos,
   const Eigen::Quaterniond & q,
-  const Eigen::EulerAnglesXYZd & rpy_angles)
+  const Eigen::EulerAnglesXYZd & rpy_angles,
+  const std::array<double, 36> & cov)
 {
   set_position(pos);
   set_attitude(q);
   set_rpy(rpy_angles);
+  set_pose_covariance(cov);
 }
 
 /**
@@ -135,6 +143,7 @@ Pose & Pose::operator=(const Pose & p)
   set_position(p.get_position());
   set_attitude(p.get_attitude());
   set_rpy(p.get_rpy());
+  set_pose_covariance(p.get_pose_covariance());
   return *this;
 }
 
@@ -148,6 +157,7 @@ Pose & Pose::operator=(Pose && p)
   set_position(p.get_position());
   set_attitude(p.get_attitude());
   set_rpy(p.get_rpy());
+  set_pose_covariance(p.get_pose_covariance());
   return *this;
 }
 
@@ -253,6 +263,16 @@ Eigen::Transform<double, 3, Eigen::Affine> Pose::get_roto_translation() const
 }
 
 /**
+ * @brief Pose covariance getter.
+ *
+ * @return Pose covariance.
+ */
+std::array<double, 36> Pose::get_pose_covariance() const
+{
+  return pose_covariance_;
+}
+
+/**
  * @brief Position setter.
  *
  * @param pos Position [m].
@@ -283,6 +303,16 @@ void Pose::set_rpy(const Eigen::EulerAnglesXYZd & rpy_angles)
 }
 
 /**
+ * @brief Pose covariance setter.
+ *
+ * @param cov Pose covariance.
+ */
+void Pose::set_pose_covariance(const std::array<double, 36> & cov)
+{
+  pose_covariance_ = cov;
+}
+
+/**
  * @brief Roto-translates a pose by a given pose.
  *
  * @param p Pose to be added.
@@ -305,6 +335,7 @@ Pose Pose::operator*(const Pose & p) const
   new_pose.set_position(new_position);
   new_pose.set_attitude(new_attitude);
   new_pose.set_rpy(Eigen::EulerAnglesXYZd(new_attitude));
+  new_pose.set_pose_covariance(pose_covariance_);
   return new_pose;
 }
 
