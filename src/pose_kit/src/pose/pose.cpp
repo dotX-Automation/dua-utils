@@ -25,7 +25,6 @@ Pose::Pose()
  */
 Pose::Pose(const Pose & p)
 {
-  set_frame(p.get_frame());
   set_position(p.get_position());
   set_attitude(p.get_attitude());
   set_rpy(p.get_rpy());
@@ -37,11 +36,9 @@ Pose::Pose(const Pose & p)
  * @param x Initial X position [m].
  * @param y Initial Y position [m].
  * @param z Initial Z position [m].
- * @param frame Coordinate frame.
  */
-Pose::Pose(double x, double y, double z, CoordinateFrame frame)
+Pose::Pose(double x, double y, double z)
 {
-  set_frame(frame);
   set_position(Eigen::Vector3d(x, y, z));
   set_attitude(Eigen::Quaterniond::Identity());
   set_rpy({0.0, 0.0, 0.0});
@@ -51,11 +48,9 @@ Pose::Pose(double x, double y, double z, CoordinateFrame frame)
  * @brief Constructor with initial attitude.
  *
  * @param q Initial attitude quaternion.
- * @param frame Coordinate frame.
  */
-Pose::Pose(const Eigen::Quaterniond & q, CoordinateFrame frame)
+Pose::Pose(const Eigen::Quaterniond & q)
 {
-  set_frame(frame);
   set_position(Eigen::Vector3d(0.0, 0.0, 0.0));
   set_attitude(q);
   set_rpy({0.0, 0.0, 0.0});
@@ -65,11 +60,9 @@ Pose::Pose(const Eigen::Quaterniond & q, CoordinateFrame frame)
  * @brief Constructor with initial euler angles.
  *
  * @param rpy_angles Initial euler angles [rad] in [-PI +PI] (may also be an array).
- * @param frame Coordinate frame.
  */
-Pose::Pose(const Eigen::EulerAnglesXYZd & rpy_angles, CoordinateFrame frame)
+Pose::Pose(const Eigen::EulerAnglesXYZd & rpy_angles)
 {
-  set_frame(frame);
   set_position(Eigen::Vector3d(0.0, 0.0, 0.0));
   set_attitude(Eigen::Quaterniond(rpy_angles));
   set_rpy(rpy_angles);
@@ -82,11 +75,9 @@ Pose::Pose(const Eigen::EulerAnglesXYZd & rpy_angles, CoordinateFrame frame)
  * @param y Initial Y position [m].
  * @param z Initial Z position [m].
  * @param heading Initial heading [rad] in [-PI +PI].
- * @param frame Coordinate frame.
  */
-Pose::Pose(double x, double y, double z, double heading, CoordinateFrame frame)
+Pose::Pose(double x, double y, double z, double heading)
 {
-  set_frame(frame);
   set_position(Eigen::Vector3d(x, y, z));
   set_attitude(
     Eigen::Quaterniond(
@@ -102,15 +93,12 @@ Pose::Pose(double x, double y, double z, double heading, CoordinateFrame frame)
  * @param pos Initial position [m].
  * @param q Initial attitude quaternion.
  * @param rpy_angles Initial euler angles [rad] in [-PI +PI].
- * @param frame Coordinate frame.
  */
 Pose::Pose(
   const Eigen::Vector3d & pos,
   const Eigen::Quaterniond & q,
-  const Eigen::EulerAnglesXYZd & rpy_angles,
-  CoordinateFrame frame)
+  const Eigen::EulerAnglesXYZd & rpy_angles)
 {
-  set_frame(frame);
   set_position(pos);
   set_attitude(q);
   set_rpy(rpy_angles);
@@ -123,7 +111,6 @@ Pose::Pose(
  */
 Pose::Pose(const EulerPoseStamped & msg)
 {
-  set_frame(static_cast<CoordinateFrame>(msg.coordinate_system.coordinate_system));
   set_position(
     Eigen::Vector3d(
       msg.pose.position.x,
@@ -145,7 +132,6 @@ Pose::Pose(const EulerPoseStamped & msg)
  */
 Pose & Pose::operator=(const Pose & p)
 {
-  set_frame(p.get_frame());
   set_position(p.get_position());
   set_attitude(p.get_attitude());
   set_rpy(p.get_rpy());
@@ -159,7 +145,6 @@ Pose & Pose::operator=(const Pose & p)
  */
 Pose & Pose::operator=(Pose && p)
 {
-  set_frame(p.get_frame());
   set_position(p.get_position());
   set_attitude(p.get_attitude());
   set_rpy(p.get_rpy());
@@ -178,7 +163,6 @@ Pose::~Pose()
 EulerPoseStamped Pose::to_euler_pose_stamped()
 {
   EulerPoseStamped msg{};
-  msg.coordinate_system.coordinate_system = static_cast<uint8_t>(frame_);
   msg.pose.position.x = position_(0);
   msg.pose.position.y = position_(1);
   msg.pose.position.z = position_(2);
@@ -206,86 +190,6 @@ geometry_msgs::msg::PoseStamped Pose::to_pose_stamped()
   msg.pose.orientation.y = attitude_.y();
   msg.pose.orientation.z = attitude_.z();
   return msg;
-}
-
-/**
- * @brief Converts from NWU to NED.
- *
- * @return NED pose.
- *
- * @throws std::runtime_error if the coordinate frame is not NWU.
- */
-Pose Pose::nwu_to_ned()
-{
-  // Check that the coordinate frame is coherent
-  if (frame_ == CoordinateFrame::NWU) {
-    return Pose(*this);
-  }
-  if (frame_ != CoordinateFrame::NWU) {
-    throw std::runtime_error("Pose::nwu_to_ned: coordinate frame is not NWU");
-  }
-
-  // Build a converted pose
-  Pose new_pose{};
-  new_pose.set_frame(CoordinateFrame::NED);
-  new_pose.set_position(
-    Eigen::Vector3d(
-      position_.x(),
-      -position_.y(),
-      -position_.z()));
-  new_pose.set_attitude(
-    Eigen::Quaterniond(
-      attitude_.w(),
-      attitude_.x(),
-      -attitude_.y(),
-      -attitude_.z()));
-  new_pose.set_rpy(Eigen::EulerAnglesXYZd(attitude_));
-  return new_pose;
-}
-
-/**
- * @brief Converts from NED to NWU.
- *
- * @return NWU pose.
- *
- * @throws std::runtime_error if the coordinate frame is not NED.
- */
-Pose Pose::ned_to_nwu()
-{
-  // Check that the coordinate frame is coherent
-  if (frame_ == CoordinateFrame::NED) {
-    return Pose(*this);
-  }
-  if (frame_ != CoordinateFrame::NED) {
-    throw std::runtime_error("Pose::ned_to_nwu: coordinate frame is not NED");
-  }
-
-  // Build a converted pose
-  Pose new_pose{};
-  new_pose.set_frame(CoordinateFrame::NWU);
-  new_pose.set_position(
-    Eigen::Vector3d(
-      position_.x(),
-      -position_.y(),
-      -position_.z()));
-  new_pose.set_attitude(
-    Eigen::Quaterniond(
-      attitude_.w(),
-      attitude_.x(),
-      -attitude_.y(),
-      -attitude_.z()));
-  new_pose.set_rpy(Eigen::EulerAnglesXYZd(attitude_));
-  return new_pose;
-}
-
-/**
- * @brief Coordinate frame getter.
- *
- * @return Coordinate frame.
- */
-CoordinateFrame Pose::get_frame() const
-{
-  return frame_;
 }
 
 /**
@@ -349,25 +253,6 @@ Eigen::Transform<double, 3, Eigen::Affine> Pose::get_roto_translation() const
 }
 
 /**
- * @brief Coordinate frame setter.
- *
- * @param frame Coordinate frame.
- *
- * @throws std::invalid_argument if the coordinate frame is invalid.
- */
-void Pose::set_frame(CoordinateFrame frame)
-{
-  // Check that the coordinate frame is valid
-  if ((frame != CoordinateFrame::NWU) &&
-    (frame != CoordinateFrame::NED))
-  {
-    throw std::invalid_argument("Invalid coordinate frame");
-  }
-
-  frame_ = frame;
-}
-
-/**
  * @brief Position setter.
  *
  * @param pos Position [m].
@@ -407,10 +292,7 @@ void Pose::set_rpy(const Eigen::EulerAnglesXYZd & rpy_angles)
  */
 Pose Pose::operator*(const Pose & p) const
 {
-  // Check that the coordinate frame is coherent
-  if (frame_ != p.frame_) {
-    throw std::runtime_error("Pose::operator*: coordinate frames are not coherent");
-  }
+  // TODO Check that the coordinate frame is coherent
 
   // Compute the roto-translation using Eigen transformations
   Eigen::AngleAxisd r = p.get_rotation();
@@ -420,7 +302,6 @@ Pose Pose::operator*(const Pose & p) const
 
   // Build a new pose
   Pose new_pose{};
-  new_pose.set_frame(frame_);
   new_pose.set_position(new_position);
   new_pose.set_attitude(new_attitude);
   new_pose.set_rpy(Eigen::EulerAnglesXYZd(new_attitude));

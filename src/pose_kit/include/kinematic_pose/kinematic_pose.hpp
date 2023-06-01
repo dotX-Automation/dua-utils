@@ -17,7 +17,6 @@
 #include <Eigen/Geometry>
 #include <unsupported/Eigen/EulerAngles>
 
-#include <dua_interfaces/msg/coordinate_system.hpp>
 #include <dua_interfaces/msg/euler_pose_stamped.hpp>
 #include <geometry_msgs/msg/pose_stamped.hpp>
 
@@ -37,38 +36,29 @@ public:
   KinematicPose(const KinematicPose & kp);
   KinematicPose(
     double x, double y, double z,
-    double vx, double vy, double vz,
-    CoordinateFrame frame);
+    double vx, double vy, double vz);
   KinematicPose(
     const Eigen::Quaterniond & q,
-    const Eigen::Vector3d & angular_vel,
-    CoordinateFrame frame);
+    const Eigen::Vector3d & angular_vel);
   KinematicPose(
     const Eigen::EulerAnglesXYZd & rpy_angles,
-    const Eigen::Vector3d & angular_vel,
-    CoordinateFrame frame);
+    const Eigen::Vector3d & angular_vel);
   KinematicPose(
     double x, double y, double z,
     double vx, double vy, double vz,
-    double heading,
-    CoordinateFrame frame);
+    double heading);
   KinematicPose(
     const Eigen::Vector3d & pos,
     const Eigen::Quaterniond & q,
     const Eigen::EulerAnglesXYZd & rpy_angles,
     const Eigen::Vector3d & vel,
-    const Eigen::Vector3d & angular_vel,
-    CoordinateFrame frame);
+    const Eigen::Vector3d & angular_vel);
   KinematicPose(const EulerPoseStamped & msg);
   KinematicPose(Pose p)
   : Pose(std::move(p)) {}
 
   /* Destructor. */
   virtual ~KinematicPose() {}
-
-  /* Coordinate frame conversions. */
-  KinematicPose nwu_to_ned();
-  KinematicPose ned_to_nwu();
 
   /* Getters. */
   Eigen::Vector3d get_velocity() const;

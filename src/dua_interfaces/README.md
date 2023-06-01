@@ -8,9 +8,7 @@ Refer to the individual interface files for more information.
 
 ### Messages
 
-- [x] [`CommandResult`](msg/CommandResult.msg): Result of a command execution, useful to be included in high-level communications like services and actions.
-- [x] [`CommandResultStamped`](msg/CommandResultStamped.msg): Result of a command execution, with a timestamp.
-- [x] [`CoordinateSystem`](msg/CoordinateSystem.msg): Coordinate system, used to represent the reference frame of a pose (mainly useful as an enum).
+- [x] [`CommandResultStamped`](msg/CommandResultStamped.msg): Result of a command execution, useful to be included in high-level communications like services and actions, with a ROS header.
 - [x] [`EulerAttitudeSetpoint`](msg/EulerAttitudeSetpoint.msg): Setpoint for an Euler attitude controller.
 - [x] [`EulerPoseStamped`](msg/EulerPoseStamped.msg): Pose with Euler angles, avoids the need for a quaternion to Euler conversion.
 - [x] [`PositionSetpoint`](msg/PositionSetpoint.msg): Setpoint for a position controller.

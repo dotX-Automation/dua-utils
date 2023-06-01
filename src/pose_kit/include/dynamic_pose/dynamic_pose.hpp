@@ -17,7 +17,6 @@
 #include <Eigen/Geometry>
 #include <unsupported/Eigen/EulerAngles>
 
-#include <dua_interfaces/msg/coordinate_system.hpp>
 #include <dua_interfaces/msg/euler_pose_stamped.hpp>
 #include <geometry_msgs/msg/pose_stamped.hpp>
 
@@ -38,24 +37,20 @@ public:
   DynamicPose(
     double x, double y, double z,
     double vx, double vy, double vz,
-    double ax, double ay, double az,
-    CoordinateFrame frame);
+    double ax, double ay, double az);
   DynamicPose(
     const Eigen::Quaterniond & q,
     const Eigen::Vector3d & angular_vel,
-    const Eigen::Vector3d & angular_accel,
-    CoordinateFrame frame);
+    const Eigen::Vector3d & angular_accel);
   DynamicPose(
     const Eigen::EulerAnglesXYZd & rpy_angles,
     const Eigen::Vector3d & angular_vel,
-    const Eigen::Vector3d & angular_accel,
-    CoordinateFrame frame);
+    const Eigen::Vector3d & angular_accel);
   DynamicPose(
     double x, double y, double z,
     double vx, double vy, double vz,
     double ax, double ay, double az,
-    double heading,
-    CoordinateFrame frame);
+    double heading);
   DynamicPose(
     const Eigen::Vector3d & pos,
     const Eigen::Quaterniond & q,
@@ -63,8 +58,7 @@ public:
     const Eigen::Vector3d & vel,
     const Eigen::Vector3d & angular_vel,
     const Eigen::Vector3d & accel,
-    const Eigen::Vector3d & angular_accel,
-    CoordinateFrame frame);
+    const Eigen::Vector3d & angular_accel);
   DynamicPose(const EulerPoseStamped & msg);
   DynamicPose(Pose p)
   : KinematicPose(std::move(p)) {}
@@ -73,10 +67,6 @@ public:
 
   /* Destructor. */
   virtual ~DynamicPose() {}
-
-  /* Coordinate frame conversions. */
-  DynamicPose nwu_to_ned();
-  DynamicPose ned_to_nwu();
 
   /* Getters. */
   Eigen::Vector3d get_acceleration() const;

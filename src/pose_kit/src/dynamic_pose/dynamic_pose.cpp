@@ -33,14 +33,12 @@ DynamicPose::DynamicPose(const DynamicPose & dp)
  * @param vx Initial X linear velocity [m/s].
  * @param vy Initial Y linear velocity [m/s].
  * @param vz Initial Z linear velocity [m/s].
- * @param frame Coordinate frame.
  */
 DynamicPose::DynamicPose(
   double x, double y, double z,
   double vx, double vy, double vz,
-  double ax, double ay, double az,
-  CoordinateFrame frame)
-: KinematicPose(x, y, z, vx, vy, vz, frame)
+  double ax, double ay, double az)
+: KinematicPose(x, y, z, vx, vy, vz)
 {
   set_acceleration(Eigen::Vector3d(ax, ay, az));
   set_angular_acceleration(Eigen::Vector3d::Zero());
@@ -52,14 +50,12 @@ DynamicPose::DynamicPose(
  * @param q Initial attitude quaternion.
  * @param angular_vel Initial angular velocity [rad/s].
  * @param angular_accel Initial angular acceleration [rad/s^2].
- * @param frame Coordinate frame.
  */
 DynamicPose::DynamicPose(
   const Eigen::Quaterniond & q,
   const Eigen::Vector3d & angular_vel,
-  const Eigen::Vector3d & angular_accel,
-  CoordinateFrame frame)
-: KinematicPose(q, angular_vel, frame)
+  const Eigen::Vector3d & angular_accel)
+: KinematicPose(q, angular_vel)
 {
   set_acceleration(Eigen::Vector3d::Zero());
   set_angular_acceleration(angular_accel);
@@ -71,14 +67,12 @@ DynamicPose::DynamicPose(
  * @param rpy_angles Initial euler angles [rad].
  * @param angular_vel Initial angular velocity [rad/s].
  * @param angular_accel Initial angular acceleration [rad/s^2].
- * @param frame Coordinate frame.
  */
 DynamicPose::DynamicPose(
   const Eigen::EulerAnglesXYZd & rpy_angles,
   const Eigen::Vector3d & angular_vel,
-  const Eigen::Vector3d & angular_accel,
-  CoordinateFrame frame)
-: KinematicPose(rpy_angles, angular_vel, frame)
+  const Eigen::Vector3d & angular_accel)
+: KinematicPose(rpy_angles, angular_vel)
 {
   set_acceleration(Eigen::Vector3d::Zero());
   set_angular_acceleration(angular_accel);
@@ -102,9 +96,8 @@ DynamicPose::DynamicPose(
   double x, double y, double z,
   double vx, double vy, double vz,
   double ax, double ay, double az,
-  double heading,
-  CoordinateFrame frame)
-: KinematicPose(x, y, z, vx, vy, vz, heading, frame)
+  double heading)
+: KinematicPose(x, y, z, vx, vy, vz, heading)
 {
   set_acceleration(Eigen::Vector3d(ax, ay, az));
   set_angular_acceleration(Eigen::Vector3d::Zero());
@@ -120,7 +113,6 @@ DynamicPose::DynamicPose(
  * @param angular_vel Initial angular velocity [rad/s].
  * @param accel Initial linear acceleration [m/s^2].
  * @param angular_accel Initial angular acceleration [rad/s^2].
- * @param frame Coordinate frame.
  */
 DynamicPose::DynamicPose(
   const Eigen::Vector3d & pos,
@@ -129,9 +121,8 @@ DynamicPose::DynamicPose(
   const Eigen::Vector3d & vel,
   const Eigen::Vector3d & angular_vel,
   const Eigen::Vector3d & accel,
-  const Eigen::Vector3d & angular_accel,
-  CoordinateFrame frame)
-: KinematicPose(pos, q, rpy_angles, vel, angular_vel, frame)
+  const Eigen::Vector3d & angular_accel)
+: KinematicPose(pos, q, rpy_angles, vel, angular_vel)
 {
   set_acceleration(accel);
   set_angular_acceleration(angular_accel);
@@ -156,7 +147,6 @@ DynamicPose::DynamicPose(const EulerPoseStamped & msg)
  */
 DynamicPose & DynamicPose::operator=(const DynamicPose & dp)
 {
-  set_frame(dp.get_frame());
   set_position(dp.get_position());
   set_attitude(dp.get_attitude());
   set_rpy(dp.get_rpy());
@@ -174,7 +164,6 @@ DynamicPose & DynamicPose::operator=(const DynamicPose & dp)
  */
 DynamicPose & DynamicPose::operator=(DynamicPose && dp)
 {
-  set_frame(dp.get_frame());
   set_position(dp.get_position());
   set_attitude(dp.get_attitude());
   set_rpy(dp.get_rpy());
@@ -183,116 +172,6 @@ DynamicPose & DynamicPose::operator=(DynamicPose && dp)
   set_acceleration(dp.get_acceleration());
   set_angular_acceleration(dp.get_angular_acceleration());
   return *this;
-}
-
-/**
- * @brief Convetrs from NWU to NED.
- *
- * @return NED pose.
- *
- * @throws std::runtime_error if the coordinate frame is not NWU.
- */
-DynamicPose DynamicPose::nwu_to_ned()
-{
-  // Check that the coordinate frame is coherent
-  if (frame_ == CoordinateFrame::NWU) {
-    return DynamicPose(*this);
-  }
-  if (frame_ != CoordinateFrame::NWU) {
-    throw std::runtime_error("DynamicPose::nwu_to_ned: coordinate frame is not NWU");
-  }
-
-  // Build a converted pose
-  DynamicPose new_pose{};
-  new_pose.set_frame(CoordinateFrame::NED);
-  new_pose.set_position(
-    Eigen::Vector3d(
-      position_.x(),
-      -position_.y(),
-      -position_.z()));
-  new_pose.set_attitude(
-    Eigen::Quaterniond(
-      attitude_.w(),
-      attitude_.x(),
-      -attitude_.y(),
-      -attitude_.z()));
-  new_pose.set_rpy(Eigen::EulerAnglesXYZd(attitude_));
-  new_pose.set_velocity(
-    Eigen::Vector3d(
-      velocity_.x(),
-      -velocity_.y(),
-      -velocity_.z()));
-  new_pose.set_angular_velocity(
-    Eigen::Vector3d(
-      angular_velocity_.x(),
-      -angular_velocity_.y(),
-      -angular_velocity_.z()));
-  new_pose.set_acceleration(
-    Eigen::Vector3d(
-      acceleration_.x(),
-      -acceleration_.y(),
-      -acceleration_.z()));
-  new_pose.set_angular_acceleration(
-    Eigen::Vector3d(
-      angular_acceleration_.x(),
-      -angular_acceleration_.y(),
-      -angular_acceleration_.z()));
-  return new_pose;
-}
-
-/**
- * @brief Convetrs from NED to NWU.
- *
- * @return NWU pose.
- *
- * @throws std::runtime_error if the coordinate frame is not NED.
- */
-DynamicPose DynamicPose::ned_to_nwu()
-{
-  // Check that the coordinate frame is coherent
-  if (frame_ == CoordinateFrame::NED) {
-    return DynamicPose(*this);
-  }
-  if (frame_ != CoordinateFrame::NED) {
-    throw std::runtime_error("DynamicPose::nwu_to_ned: coordinate frame is not NED");
-  }
-
-  // Build a converted pose
-  DynamicPose new_pose{};
-  new_pose.set_frame(CoordinateFrame::NWU);
-  new_pose.set_position(
-    Eigen::Vector3d(
-      position_.x(),
-      -position_.y(),
-      -position_.z()));
-  new_pose.set_attitude(
-    Eigen::Quaterniond(
-      attitude_.w(),
-      attitude_.x(),
-      -attitude_.y(),
-      -attitude_.z()));
-  new_pose.set_rpy(Eigen::EulerAnglesXYZd(attitude_));
-  new_pose.set_velocity(
-    Eigen::Vector3d(
-      velocity_.x(),
-      -velocity_.y(),
-      -velocity_.z()));
-  new_pose.set_angular_velocity(
-    Eigen::Vector3d(
-      angular_velocity_.x(),
-      -angular_velocity_.y(),
-      -angular_velocity_.z()));
-  new_pose.set_acceleration(
-    Eigen::Vector3d(
-      acceleration_.x(),
-      -acceleration_.y(),
-      -acceleration_.z()));
-  new_pose.set_angular_acceleration(
-    Eigen::Vector3d(
-      angular_acceleration_.x(),
-      -angular_acceleration_.y(),
-      -angular_acceleration_.z()));
-  return new_pose;
 }
 
 /**
@@ -345,17 +224,12 @@ void DynamicPose::set_angular_acceleration(const Eigen::Vector3d & angular_accel
  */
 DynamicPose DynamicPose::operator*(const DynamicPose & dp) const
 {
-  // Check that the coordinate frame is coherent
-  if (frame_ != dp.frame_) {
-    throw std::runtime_error("DynamicPose::operator*: coordinate frames are not coherent");
-  }
+  // TODO Check that the coordinate frame is coherent
 
   // Build a new pose
-  Eigen::AngleAxisd r = dp.get_rotation();
   DynamicPose new_pose =
     dynamic_cast<const KinematicPose &>(*this).operator*(dynamic_cast<const KinematicPose &>(dp));
-  new_pose.set_acceleration(r * acceleration_);
-  new_pose.set_angular_acceleration(r * angular_acceleration_);
+  // TODO Transform accelerations
   return new_pose;
 }
 

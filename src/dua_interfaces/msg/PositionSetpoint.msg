@@ -8,9 +8,6 @@
 # ROS 2 message header (with timestamp from ROS 2 clock)
 std_msgs/Header header
 
-# Indicates the coordinate system used.
-dua_interfaces/CoordinateSystem coordinate_system
-
 # Position setpoint (meters)
 geometry_msgs/Point position_sp
 
