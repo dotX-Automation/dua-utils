@@ -20,8 +20,8 @@ namespace PoseKit
 DynamicPose::DynamicPose(const DynamicPose & dp)
 : KinematicPose(dynamic_cast<const KinematicPose &>(dp))
 {
-  set_acceleration(dp.get_acceleration());
-  set_angular_acceleration(dp.get_angular_acceleration());
+  this->set_acceleration(dp.get_acceleration());
+  this->set_angular_acceleration(dp.get_angular_acceleration());
 }
 
 /**
@@ -33,15 +33,17 @@ DynamicPose::DynamicPose(const DynamicPose & dp)
  * @param vx Initial X linear velocity [m/s].
  * @param vy Initial Y linear velocity [m/s].
  * @param vz Initial Z linear velocity [m/s].
+ * @param header ROS header.
  */
 DynamicPose::DynamicPose(
   double x, double y, double z,
   double vx, double vy, double vz,
-  double ax, double ay, double az)
-: KinematicPose(x, y, z, vx, vy, vz)
+  double ax, double ay, double az,
+  const std_msgs::msg::Header & header)
+: KinematicPose(x, y, z, vx, vy, vz, header)
 {
-  set_acceleration(Eigen::Vector3d(ax, ay, az));
-  set_angular_acceleration(Eigen::Vector3d::Zero());
+  this->set_acceleration(Eigen::Vector3d(ax, ay, az));
+  this->set_angular_acceleration(Eigen::Vector3d::Zero());
 }
 
 /**
@@ -50,15 +52,17 @@ DynamicPose::DynamicPose(
  * @param q Initial attitude quaternion.
  * @param angular_vel Initial angular velocity [rad/s].
  * @param angular_accel Initial angular acceleration [rad/s^2].
+ * @param header ROS header.
  */
 DynamicPose::DynamicPose(
   const Eigen::Quaterniond & q,
   const Eigen::Vector3d & angular_vel,
-  const Eigen::Vector3d & angular_accel)
-: KinematicPose(q, angular_vel)
+  const Eigen::Vector3d & angular_accel,
+  const std_msgs::msg::Header & header)
+: KinematicPose(q, angular_vel, header)
 {
-  set_acceleration(Eigen::Vector3d::Zero());
-  set_angular_acceleration(angular_accel);
+  this->set_acceleration(Eigen::Vector3d::Zero());
+  this->set_angular_acceleration(angular_accel);
 }
 
 /**
@@ -67,15 +71,17 @@ DynamicPose::DynamicPose(
  * @param rpy_angles Initial euler angles [rad].
  * @param angular_vel Initial angular velocity [rad/s].
  * @param angular_accel Initial angular acceleration [rad/s^2].
+ * @param header ROS header.
  */
 DynamicPose::DynamicPose(
   const Eigen::EulerAnglesXYZd & rpy_angles,
   const Eigen::Vector3d & angular_vel,
-  const Eigen::Vector3d & angular_accel)
-: KinematicPose(rpy_angles, angular_vel)
+  const Eigen::Vector3d & angular_accel,
+  const std_msgs::msg::Header & header)
+: KinematicPose(rpy_angles, angular_vel, header)
 {
-  set_acceleration(Eigen::Vector3d::Zero());
-  set_angular_acceleration(angular_accel);
+  this->set_acceleration(Eigen::Vector3d::Zero());
+  this->set_angular_acceleration(angular_accel);
 }
 
 /**
@@ -91,6 +97,7 @@ DynamicPose::DynamicPose(
  * @param ay Initial Y linear acceleration [m/s^2].
  * @param az Initial Z linear acceleration [m/s^2].
  * @param heading Initial heading [rad].
+ * @param header ROS header.
  * @param cov Initial covariance matrix.
  */
 DynamicPose::DynamicPose(
@@ -98,11 +105,12 @@ DynamicPose::DynamicPose(
   double vx, double vy, double vz,
   double ax, double ay, double az,
   double heading,
+  const std_msgs::msg::Header & header,
   const std::array<double, 36> & cov)
-: KinematicPose(x, y, z, vx, vy, vz, heading, cov)
+: KinematicPose(x, y, z, vx, vy, vz, heading, header, cov)
 {
-  set_acceleration(Eigen::Vector3d(ax, ay, az));
-  set_angular_acceleration(Eigen::Vector3d::Zero());
+  this->set_acceleration(Eigen::Vector3d(ax, ay, az));
+  this->set_angular_acceleration(Eigen::Vector3d::Zero());
 }
 
 /**
@@ -114,6 +122,7 @@ DynamicPose::DynamicPose(
  * @param angular_vel Initial angular velocity [rad/s].
  * @param accel Initial linear acceleration [m/s^2].
  * @param angular_accel Initial angular acceleration [rad/s^2].
+ * @param header ROS header.
  * @param cov Initial covariance matrix.
  * @param twist_cov Initial twist covariance matrix.
  * @param accel_cov Initial acceleration covariance matrix.
@@ -125,14 +134,15 @@ DynamicPose::DynamicPose(
   const Eigen::Vector3d & angular_vel,
   const Eigen::Vector3d & accel,
   const Eigen::Vector3d & angular_accel,
+  const std_msgs::msg::Header & header,
   const std::array<double, 36> & cov,
   const std::array<double, 36> & twist_cov,
   const std::array<double, 36> & accel_cov)
-: KinematicPose(pos, q, vel, angular_vel, cov, twist_cov)
+: KinematicPose(pos, q, vel, angular_vel, header, cov, twist_cov)
 {
-  set_acceleration(accel);
-  set_angular_acceleration(angular_accel);
-  set_acceleration_covariance(accel_cov);
+  this->set_acceleration(accel);
+  this->set_angular_acceleration(angular_accel);
+  this->set_acceleration_covariance(accel_cov);
 }
 
 /**
@@ -142,14 +152,14 @@ DynamicPose::DynamicPose(
  */
 DynamicPose & DynamicPose::operator=(const DynamicPose & dp)
 {
-  set_position(dp.get_position());
-  set_attitude(dp.get_attitude());
-  set_rpy(dp.get_rpy());
-  set_velocity(dp.get_velocity());
-  set_angular_velocity(dp.get_angular_velocity());
-  set_acceleration(dp.get_acceleration());
-  set_angular_acceleration(dp.get_angular_acceleration());
-  set_acceleration_covariance(dp.get_acceleration_covariance());
+  this->set_position(dp.get_position());
+  this->set_attitude(dp.get_attitude());
+  this->set_header(dp.get_header());
+  this->set_velocity(dp.get_velocity());
+  this->set_angular_velocity(dp.get_angular_velocity());
+  this->set_acceleration(dp.get_acceleration());
+  this->set_angular_acceleration(dp.get_angular_acceleration());
+  this->set_acceleration_covariance(dp.get_acceleration_covariance());
   return *this;
 }
 
@@ -160,73 +170,15 @@ DynamicPose & DynamicPose::operator=(const DynamicPose & dp)
  */
 DynamicPose & DynamicPose::operator=(DynamicPose && dp)
 {
-  set_position(dp.get_position());
-  set_attitude(dp.get_attitude());
-  set_rpy(dp.get_rpy());
-  set_velocity(dp.get_velocity());
-  set_angular_velocity(dp.get_angular_velocity());
-  set_acceleration(dp.get_acceleration());
-  set_angular_acceleration(dp.get_angular_acceleration());
-  set_acceleration_covariance(dp.get_acceleration_covariance());
+  this->set_position(dp.get_position());
+  this->set_attitude(dp.get_attitude());
+  this->set_header(dp.get_header());
+  this->set_velocity(dp.get_velocity());
+  this->set_angular_velocity(dp.get_angular_velocity());
+  this->set_acceleration(dp.get_acceleration());
+  this->set_angular_acceleration(dp.get_angular_acceleration());
+  this->set_acceleration_covariance(dp.get_acceleration_covariance());
   return *this;
-}
-
-/**
- * @brief Linear acceleration getter.
- *
- * @return Linear acceleration [m/s^2].
- */
-Eigen::Vector3d DynamicPose::get_acceleration() const
-{
-  return acceleration_;
-}
-
-/**
- * @brief Angular acceleration getter.
- *
- * @return Angular acceleration [rad/s^2].
- */
-Eigen::Vector3d DynamicPose::get_angular_acceleration() const
-{
-  return angular_acceleration_;
-}
-
-/**
- * @brief Acceleration covariance getter.
- */
-std::array<double, 36> DynamicPose::get_acceleration_covariance() const
-{
-  return acceleration_cov_;
-}
-
-/**
- * @brief Linear acceleration setter.
- *
- * @param accel Linear acceleration [m/s].
- */
-void DynamicPose::set_acceleration(const Eigen::Vector3d & accel)
-{
-  acceleration_ = accel;
-}
-
-/**
- * @brief Angular acceleration setter.
- *
- * @param angular_accel Angular acceleration [rad/s^2].
- */
-void DynamicPose::set_angular_acceleration(const Eigen::Vector3d & angular_accel)
-{
-  angular_acceleration_ = angular_accel;
-}
-
-/**
- * @brief Acceleration covariance setter.
- *
- * @param accel_cov Acceleration covariance.
- */
-void DynamicPose::set_acceleration_covariance(const std::array<double, 36> & accel_cov)
-{
-  acceleration_cov_ = accel_cov;
 }
 
 } // namespace PoseKit

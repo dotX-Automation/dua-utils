@@ -17,6 +17,8 @@
 #include <Eigen/Geometry>
 #include <unsupported/Eigen/EulerAngles>
 
+#include <std_msgs/msg/header.hpp>
+
 #include <pose/pose.hpp>
 
 namespace PoseKit
@@ -33,23 +35,28 @@ public:
   KinematicPose(const KinematicPose & kp);
   KinematicPose(
     double x, double y, double z,
-    double vx, double vy, double vz);
+    double vx, double vy, double vz,
+    const std_msgs::msg::Header & header);
   KinematicPose(
     const Eigen::Quaterniond & q,
-    const Eigen::Vector3d & angular_vel);
+    const Eigen::Vector3d & angular_vel,
+    const std_msgs::msg::Header & header);
   KinematicPose(
     const Eigen::EulerAnglesXYZd & rpy_angles,
-    const Eigen::Vector3d & angular_vel);
+    const Eigen::Vector3d & angular_vel,
+    const std_msgs::msg::Header & header);
   KinematicPose(
     double x, double y, double z,
     double vx, double vy, double vz,
     double heading,
+    const std_msgs::msg::Header & header,
     const std::array<double, 36> & cov = std::array<double, 36>{});
   KinematicPose(
     const Eigen::Vector3d & pos,
     const Eigen::Quaterniond & q,
     const Eigen::Vector3d & vel,
     const Eigen::Vector3d & angular_vel,
+    const std_msgs::msg::Header & header,
     const std::array<double, 36> & cov = std::array<double, 36>{},
     const std::array<double, 36> & twist_cov = std::array<double, 36>{});
   KinematicPose(Pose p)
@@ -65,14 +72,32 @@ public:
   // TODO
 
   /* Getters. */
-  Eigen::Vector3d get_velocity() const;
-  Eigen::Vector3d get_angular_velocity() const;
-  std::array<double, 36> get_twist_covariance() const;
+  inline Eigen::Vector3d get_velocity() const
+  {
+    return velocity_;
+  }
+  inline Eigen::Vector3d get_angular_velocity() const
+  {
+    return angular_velocity_;
+  }
+  inline std::array<double, 36> get_twist_covariance() const
+  {
+    return twist_covariance_;
+  }
 
   /* Setters. */
-  void set_velocity(const Eigen::Vector3d & vel);
-  void set_angular_velocity(const Eigen::Vector3d & angular_vel);
-  void set_twist_covariance(const std::array<double, 36> & twist_cov);
+  inline void set_velocity(const Eigen::Vector3d & vel)
+  {
+    velocity_ = vel;
+  }
+  inline void set_angular_velocity(const Eigen::Vector3d & angular_vel)
+  {
+    angular_velocity_ = angular_vel;
+  }
+  inline void set_twist_covariance(const std::array<double, 36> & twist_cov)
+  {
+    twist_covariance_ = twist_cov;
+  }
 
   /* Geometric operations. */
   // TODO
