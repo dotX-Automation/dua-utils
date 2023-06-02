@@ -228,16 +228,16 @@ dua_interfaces::msg::EulerPoseStamped Pose::to_euler_pose_stamped()
   Eigen::Quaterniond attitude = this->get_attitude();
   Eigen::EulerAnglesXYZd rpy = this->get_rpy();
   msg.set__header(this->get_header());
-  msg.pose.position.x = position(0);
-  msg.pose.position.y = position(1);
-  msg.pose.position.z = position(2);
-  msg.pose.orientation.w = attitude.w();
-  msg.pose.orientation.x = attitude.x();
-  msg.pose.orientation.y = attitude.y();
-  msg.pose.orientation.z = attitude.z();
-  msg.roll = rpy.alpha();
-  msg.pitch = rpy.beta();
-  msg.yaw = rpy.gamma();
+  msg.pose.position.set__x(position(0));
+  msg.pose.position.set__y(position(1));
+  msg.pose.position.set__z(position(2));
+  msg.pose.orientation.set__w(attitude.w());
+  msg.pose.orientation.set__x(attitude.x());
+  msg.pose.orientation.set__y(attitude.y());
+  msg.pose.orientation.set__z(attitude.z());
+  msg.set__roll(rpy.alpha());
+  msg.set__pitch(rpy.beta());
+  msg.set__yaw(rpy.gamma());
   return msg;
 }
 
@@ -252,13 +252,13 @@ geometry_msgs::msg::PoseStamped Pose::to_pose_stamped()
   Eigen::Vector3d position = this->get_position();
   Eigen::Quaterniond attitude = this->get_attitude();
   msg.set__header(this->get_header());
-  msg.pose.position.x = position(0);
-  msg.pose.position.y = position(1);
-  msg.pose.position.z = position(2);
-  msg.pose.orientation.w = attitude.w();
-  msg.pose.orientation.x = attitude.x();
-  msg.pose.orientation.y = attitude.y();
-  msg.pose.orientation.z = attitude.z();
+  msg.pose.position.set__x(position(0));
+  msg.pose.position.set__y(position(1));
+  msg.pose.position.set__z(position(2));
+  msg.pose.orientation.set__w(attitude.w());
+  msg.pose.orientation.set__x(attitude.x());
+  msg.pose.orientation.set__y(attitude.y());
+  msg.pose.orientation.set__z(attitude.z());
   return msg;
 }
 
@@ -273,15 +273,15 @@ geometry_msgs::msg::PoseWithCovarianceStamped Pose::to_pose_with_covariance_stam
   Eigen::Vector3d position = this->get_position();
   Eigen::Quaterniond attitude = this->get_attitude();
   msg.set__header(this->get_header());
-  msg.pose.pose.position.x = position(0);
-  msg.pose.pose.position.y = position(1);
-  msg.pose.pose.position.z = position(2);
-  msg.pose.pose.orientation.w = attitude.w();
-  msg.pose.pose.orientation.x = attitude.x();
-  msg.pose.pose.orientation.y = attitude.y();
-  msg.pose.pose.orientation.z = attitude.z();
-  msg.pose.covariance = this->get_pose_covariance();
+  msg.pose.pose.position.set__x(position(0));
+  msg.pose.pose.position.set__y(position(1));
+  msg.pose.pose.position.set__z(position(2));
+  msg.pose.pose.orientation.set__w(attitude.w());
+  msg.pose.pose.orientation.set__x(attitude.x());
+  msg.pose.pose.orientation.set__y(attitude.y());
+  msg.pose.pose.orientation.set__z(attitude.z());
+  msg.pose.set__covariance(this->get_pose_covariance());
   return msg;
 }
 
-}  // namespace PoseKit
+} // namespace PoseKit

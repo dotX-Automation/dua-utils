@@ -120,6 +120,6 @@ protected:
   std::array<double, 36> acceleration_cov_{};
 };
 
-}  // namespace PoseKit
+} // namespace PoseKit
 
-#endif  // POSE_KIT__DYNAMIC_POSE_HPP_
+#endif // POSE_KIT__DYNAMIC_POSE_HPP_

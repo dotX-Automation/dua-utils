@@ -132,6 +132,79 @@ KinematicPose::KinematicPose(
 }
 
 /**
+ * @brief Constructor that builds from a PoseStamped and a TwistStamped ROS messages.
+ *
+ * @param pose_stamped PoseStamped ROS message.
+ * @param twist_stamped TwistStamped ROS message.
+ * @param header ROS header to use (to conciliate the two headers of the messages).
+ */
+KinematicPose::KinematicPose(
+  const geometry_msgs::msg::PoseStamped & pose_stamped,
+  const geometry_msgs::msg::TwistStamped & twist_stamped,
+  const std_msgs::msg::Header & header)
+: Pose(pose_stamped)
+{
+  this->set_velocity(Eigen::Vector3d(
+      twist_stamped.twist.linear.x,
+      twist_stamped.twist.linear.y,
+      twist_stamped.twist.linear.z));
+  this->set_angular_velocity(Eigen::Vector3d(
+      twist_stamped.twist.angular.x,
+      twist_stamped.twist.angular.y,
+      twist_stamped.twist.angular.z));
+  this->set_header(header);
+}
+
+/**
+ * @brief Constructor that builds from a EulerPose and a TwistStamped ROS messages.
+ *
+ * @param euler_pose_stamped EulerPoseStamped ROS message.
+ * @param twist_stamped TwistStamped ROS message.
+ * @param header ROS header to use (to conciliate the two headers of the messages).
+ */
+KinematicPose::KinematicPose(
+  const dua_interfaces::msg::EulerPoseStamped & euler_pose_stamped,
+  const geometry_msgs::msg::TwistStamped & twist_stamped,
+  const std_msgs::msg::Header & header)
+: Pose(euler_pose_stamped)
+{
+  this->set_velocity(Eigen::Vector3d(
+      twist_stamped.twist.linear.x,
+      twist_stamped.twist.linear.y,
+      twist_stamped.twist.linear.z));
+  this->set_angular_velocity(Eigen::Vector3d(
+      twist_stamped.twist.angular.x,
+      twist_stamped.twist.angular.y,
+      twist_stamped.twist.angular.z));
+  this->set_header(header);
+}
+
+/**
+ * @brief Constructor that builds from a PoseWithCovarianceStamped and a TwistWithCovarianceStamped ROS messages.
+ *
+ * @param pose_with_cov_stamped PoseWithCovarianceStamped ROS message.
+ * @param twist_with_cov_stamped TwistWithCovarianceStamped ROS message.
+ * @param header ROS header to use (to conciliate the two headers of the messages).
+ */
+KinematicPose::KinematicPose(
+  const geometry_msgs::msg::PoseWithCovarianceStamped & pose_with_cov_stamped,
+  const geometry_msgs::msg::TwistWithCovarianceStamped & twist_with_cov_stamped,
+  const std_msgs::msg::Header & header)
+: Pose(pose_with_cov_stamped)
+{
+  this->set_velocity(Eigen::Vector3d(
+      twist_with_cov_stamped.twist.twist.linear.x,
+      twist_with_cov_stamped.twist.twist.linear.y,
+      twist_with_cov_stamped.twist.twist.linear.z));
+  this->set_angular_velocity(Eigen::Vector3d(
+      twist_with_cov_stamped.twist.twist.angular.x,
+      twist_with_cov_stamped.twist.twist.angular.y,
+      twist_with_cov_stamped.twist.twist.angular.z));
+  this->set_twist_covariance(twist_with_cov_stamped.twist.covariance);
+  this->set_header(header);
+}
+
+/**
  * @brief Copy assignment operator.
  *
  * @param kp KinematicPose to copy.
@@ -161,6 +234,47 @@ KinematicPose & KinematicPose::operator=(KinematicPose && kp)
   this->set_angular_velocity(kp.get_angular_velocity());
   this->set_twist_covariance(kp.get_twist_covariance());
   return *this;
+}
+
+/**
+ * @brief Fills and returns a TwistStamped ROS message.
+ *
+ * @return TwistStamped TwistStamped ROS message.
+ */
+geometry_msgs::msg::TwistStamped KinematicPose::to_twist_stamped() const
+{
+  geometry_msgs::msg::TwistStamped twist_stamped{};
+  Eigen::Vector3d linear_vel = this->get_velocity();
+  Eigen::Vector3d angular_vel = this->get_angular_velocity();
+  twist_stamped.set__header(this->get_header());
+  twist_stamped.twist.linear.set__x(linear_vel.x());
+  twist_stamped.twist.linear.set__y(linear_vel.y());
+  twist_stamped.twist.linear.set__z(linear_vel.z());
+  twist_stamped.twist.angular.set__x(angular_vel.x());
+  twist_stamped.twist.angular.set__y(angular_vel.y());
+  twist_stamped.twist.angular.set__z(angular_vel.z());
+  return twist_stamped;
+}
+
+/**
+ * @brief Fills and returns a TwistWithCovarianceStamped ROS message.
+ *
+ * @return TwistWithCovarianceStamped TwistWithCovarianceStamped ROS message.
+ */
+geometry_msgs::msg::TwistWithCovarianceStamped KinematicPose::to_twist_with_covariance_stamped() const
+{
+  geometry_msgs::msg::TwistWithCovarianceStamped twist_with_cov_stamped{};
+  Eigen::Vector3d linear_vel = this->get_velocity();
+  Eigen::Vector3d angular_vel = this->get_angular_velocity();
+  twist_with_cov_stamped.set__header(this->get_header());
+  twist_with_cov_stamped.twist.twist.linear.set__x(linear_vel.x());
+  twist_with_cov_stamped.twist.twist.linear.set__y(linear_vel.y());
+  twist_with_cov_stamped.twist.twist.linear.set__z(linear_vel.z());
+  twist_with_cov_stamped.twist.twist.angular.set__x(angular_vel.x());
+  twist_with_cov_stamped.twist.twist.angular.set__y(angular_vel.y());
+  twist_with_cov_stamped.twist.twist.angular.set__z(angular_vel.z());
+  twist_with_cov_stamped.twist.set__covariance(this->get_twist_covariance());
+  return twist_with_cov_stamped;
 }
 
 } // namespace PoseKit

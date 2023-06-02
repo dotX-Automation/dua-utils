@@ -17,6 +17,11 @@
 #include <Eigen/Geometry>
 #include <unsupported/Eigen/EulerAngles>
 
+#include <dua_interfaces/msg/euler_pose_stamped.hpp>
+#include <geometry_msgs/msg/pose_stamped.hpp>
+#include <geometry_msgs/msg/pose_with_covariance_stamped.hpp>
+#include <geometry_msgs/msg/twist_stamped.hpp>
+#include <geometry_msgs/msg/twist_with_covariance_stamped.hpp>
 #include <std_msgs/msg/header.hpp>
 
 #include <pose/pose.hpp>
@@ -63,13 +68,25 @@ public:
   : Pose(std::move(p)) {}
 
   /* Constructors from ROS messages. */
-  // TODO
+  KinematicPose(
+    const geometry_msgs::msg::PoseStamped & pose_stamped,
+    const geometry_msgs::msg::TwistStamped & twist_stamped,
+    const std_msgs::msg::Header & header);
+  KinematicPose(
+    const dua_interfaces::msg::EulerPoseStamped & euler_pose_stamped,
+    const geometry_msgs::msg::TwistStamped & twist_stamped,
+    const std_msgs::msg::Header & header);
+  KinematicPose(
+    const geometry_msgs::msg::PoseWithCovarianceStamped & pose_with_cov_stamped,
+    const geometry_msgs::msg::TwistWithCovarianceStamped & twist_with_cov_stamped,
+    const std_msgs::msg::Header & header);
 
   /* Destructor. */
   virtual ~KinematicPose() {}
 
   /* ROS interfaces conversion methods. */
-  // TODO
+  geometry_msgs::msg::TwistStamped to_twist_stamped() const;
+  geometry_msgs::msg::TwistWithCovarianceStamped to_twist_with_covariance_stamped() const;
 
   /* Getters. */
   inline Eigen::Vector3d get_velocity() const
@@ -113,6 +130,6 @@ protected:
   std::array<double, 36> twist_covariance_{};
 };
 
-}  // namespace PoseKit
+} // namespace PoseKit
 
-#endif  // POSE_KIT__KINEMATIC_POSE_HPP_
+#endif // POSE_KIT__KINEMATIC_POSE_HPP_

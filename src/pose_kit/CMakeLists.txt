@@ -57,6 +57,7 @@ target_link_libraries(kinematicpose
   pose
   Eigen3::Eigen)
 ament_target_dependencies(kinematicpose
+  dua_interfaces
   geometry_msgs
   std_msgs)
 

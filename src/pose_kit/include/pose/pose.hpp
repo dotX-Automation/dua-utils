@@ -193,6 +193,6 @@ protected:
   std_msgs::msg::Header header_{};
 };
 
-}  // namespace PoseKit
+} // namespace PoseKit
 
-#endif  // POSE_KIT__POSE_HPP_
+#endif // POSE_KIT__POSE_HPP_
