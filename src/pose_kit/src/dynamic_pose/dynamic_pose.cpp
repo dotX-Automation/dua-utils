@@ -110,7 +110,6 @@ DynamicPose::DynamicPose(
  *
  * @param pos Initial position [m].
  * @param q Initial attitude quaternion.
- * @param rpy_angles Initial euler angles [rad].
  * @param vel Initial linear velocity [m/s].
  * @param angular_vel Initial angular velocity [rad/s].
  * @param accel Initial linear acceleration [m/s^2].
@@ -122,7 +121,6 @@ DynamicPose::DynamicPose(
 DynamicPose::DynamicPose(
   const Eigen::Vector3d & pos,
   const Eigen::Quaterniond & q,
-  const Eigen::EulerAnglesXYZd & rpy_angles,
   const Eigen::Vector3d & vel,
   const Eigen::Vector3d & angular_vel,
   const Eigen::Vector3d & accel,
@@ -130,23 +128,11 @@ DynamicPose::DynamicPose(
   const std::array<double, 36> & cov,
   const std::array<double, 36> & twist_cov,
   const std::array<double, 36> & accel_cov)
-: KinematicPose(pos, q, rpy_angles, vel, angular_vel, cov, twist_cov)
+: KinematicPose(pos, q, vel, angular_vel, cov, twist_cov)
 {
   set_acceleration(accel);
   set_angular_acceleration(angular_accel);
   set_acceleration_covariance(accel_cov);
-}
-
-/**
- * @brief Constructor that builds from an EulerPoseStamped ROS message.
- *
- * @param msg ROS message to build from.
- */
-DynamicPose::DynamicPose(const EulerPoseStamped & msg)
-: KinematicPose(msg)
-{
-  set_acceleration(Eigen::Vector3d::Zero());
-  set_angular_acceleration(Eigen::Vector3d::Zero());
 }
 
 /**

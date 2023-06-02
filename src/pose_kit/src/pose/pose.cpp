@@ -97,18 +97,16 @@ Pose::Pose(
  *
  * @param pos Initial position [m].
  * @param q Initial attitude quaternion.
- * @param rpy_angles Initial euler angles [rad] in [-PI +PI].
  * @param cov Initial pose covariance.
  */
 Pose::Pose(
   const Eigen::Vector3d & pos,
   const Eigen::Quaterniond & q,
-  const Eigen::EulerAnglesXYZd & rpy_angles,
   const std::array<double, 36> & cov)
 {
   set_position(pos);
   set_attitude(q);
-  set_rpy(rpy_angles);
+  set_rpy(Eigen::EulerAnglesXYZd(q));
   set_pose_covariance(cov);
 }
 

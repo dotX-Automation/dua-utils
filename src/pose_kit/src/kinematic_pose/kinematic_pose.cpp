@@ -102,7 +102,6 @@ KinematicPose::KinematicPose(
  *
  * @param pos Initial position [m].
  * @param q Initial attitude quaternion.
- * @param rpy_angles Initial euler angles [rad].
  * @param vel Initial linear velocity [m/s].
  * @param angular_vel Initial angular velocity [rad/s].
  * @param cov Initial covariance matrix.
@@ -111,28 +110,15 @@ KinematicPose::KinematicPose(
 KinematicPose::KinematicPose(
   const Eigen::Vector3d & pos,
   const Eigen::Quaterniond & q,
-  const Eigen::EulerAnglesXYZd & rpy_angles,
   const Eigen::Vector3d & vel,
   const Eigen::Vector3d & angular_vel,
   const std::array<double, 36> & cov,
   const std::array<double, 36> & twist_cov)
-: Pose(pos, q, rpy_angles, cov)
+: Pose(pos, q, cov)
 {
   set_velocity(vel);
   set_angular_velocity(angular_vel);
   set_twist_covariance(twist_cov);
-}
-
-/**
- * @brief Constructor that builds from an EulerPoseStamped ROS message.
- *
- * @param msg ROS message to build from.
- */
-KinematicPose::KinematicPose(const EulerPoseStamped & msg)
-: Pose(msg)
-{
-  set_velocity(Eigen::Vector3d::Zero());
-  set_angular_velocity(Eigen::Vector3d::Zero());
 }
 
 /**

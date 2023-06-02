@@ -42,11 +42,11 @@ public:
   Pose(
     const Eigen::Vector3d & pos,
     const Eigen::Quaterniond & q,
-    const Eigen::EulerAnglesXYZd & rpy_angles,
     const std::array<double, 36> & cov = std::array<double, 36>{});
+
+  /* Constructors from ROS messages. */
   Pose(const EulerPoseStamped & msg);
-  // TODO Constructor from PoseStamped
-  // TODO Constructor from PoseWithCovarianceStamped
+  // TODO
 
   /* Destructor. */
   virtual ~Pose();
@@ -54,7 +54,7 @@ public:
   /* ROS interfaces conversion methods. */
   EulerPoseStamped to_euler_pose_stamped();
   geometry_msgs::msg::PoseStamped to_pose_stamped();
-  // TODO to_pose_with_covariance_stamped
+  // TODO
 
   /* Getters. */
   Eigen::Vector3d get_position() const;

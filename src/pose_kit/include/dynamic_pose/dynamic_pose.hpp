@@ -55,7 +55,6 @@ public:
   DynamicPose(
     const Eigen::Vector3d & pos,
     const Eigen::Quaterniond & q,
-    const Eigen::EulerAnglesXYZd & rpy_angles,
     const Eigen::Vector3d & vel,
     const Eigen::Vector3d & angular_vel,
     const Eigen::Vector3d & accel,
@@ -63,14 +62,19 @@ public:
     const std::array<double, 36> & cov = std::array<double, 36>{},
     const std::array<double, 36> & twist_cov = std::array<double, 36>{},
     const std::array<double, 36> & accel_cov = std::array<double, 36>{});
-  DynamicPose(const EulerPoseStamped & msg);
   DynamicPose(Pose p)
   : KinematicPose(std::move(p)) {}
   DynamicPose(KinematicPose kp)
   : KinematicPose(std::move(kp)) {}
 
+  /* Constructors from ROS messages. */
+  // TODO
+
   /* Destructor. */
   virtual ~DynamicPose() {}
+
+  /* ROS interfaces conversion methods. */
+  // TODO
 
   /* Getters. */
   Eigen::Vector3d get_acceleration() const;

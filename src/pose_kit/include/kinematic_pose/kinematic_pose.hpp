@@ -51,17 +51,21 @@ public:
   KinematicPose(
     const Eigen::Vector3d & pos,
     const Eigen::Quaterniond & q,
-    const Eigen::EulerAnglesXYZd & rpy_angles,
     const Eigen::Vector3d & vel,
     const Eigen::Vector3d & angular_vel,
     const std::array<double, 36> & cov = std::array<double, 36>{},
     const std::array<double, 36> & twist_cov = std::array<double, 36>{});
-  KinematicPose(const EulerPoseStamped & msg);
   KinematicPose(Pose p)
   : Pose(std::move(p)) {}
 
+  /* Constructors from ROS messages. */
+  // TODO
+
   /* Destructor. */
   virtual ~KinematicPose() {}
+
+  /* ROS interfaces conversion methods. */
+  // TODO
 
   /* Getters. */
   Eigen::Vector3d get_velocity() const;
