@@ -181,4 +181,47 @@ DynamicPose & DynamicPose::operator=(DynamicPose && dp)
   return *this;
 }
 
+/**
+ * @brief Fills and returns a sensor_msgs/Imu message.
+ *
+ * @return sensor_msgs/Imu message.
+ */
+sensor_msgs::msg::Imu DynamicPose::to_imu() const
+{
+  sensor_msgs::msg::Imu msg{};
+  Eigen::Quaterniond q = this->get_attitude();
+  Eigen::Vector3d angular_vel = this->get_angular_velocity();
+  Eigen::Vector3d accel = this->get_acceleration();
+  std::array<double, 36> pose_covariance = this->get_pose_covariance();
+  std::array<double, 36> twist_covariance = this->get_twist_covariance();
+  std::array<double, 36> accel_covariance = this->get_acceleration_covariance();
+  msg.set__header(this->get_header());
+  msg.orientation.set__w(q.w());
+  msg.orientation.set__x(q.x());
+  msg.orientation.set__y(q.y());
+  msg.orientation.set__z(q.z());
+  msg.angular_velocity.set__x(angular_vel.x());
+  msg.angular_velocity.set__y(angular_vel.y());
+  msg.angular_velocity.set__z(angular_vel.z());
+  msg.linear_acceleration.set__x(accel.x());
+  msg.linear_acceleration.set__y(accel.y());
+  msg.linear_acceleration.set__z(accel.z());
+  int msg_index = 0;
+  for (int i = 3; i < 6; ++i) {
+    for (int j = 3; j < 6; ++j) {
+      msg.orientation_covariance[msg_index] = pose_covariance[i * 6 + j];
+      msg.angular_velocity_covariance[msg_index] = twist_covariance[i * 6 + j];
+      ++msg_index;
+    }
+  }
+  msg_index = 0;
+  for (int i = 0; i < 3; ++i) {
+    for (int j = 0; j < 3; ++j) {
+      msg.linear_acceleration_covariance[msg_index] = accel_covariance[i * 6 + j];
+      ++msg_index;
+    }
+  }
+  return msg;
+}
+
 } // namespace PoseKit

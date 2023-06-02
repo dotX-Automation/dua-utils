@@ -17,6 +17,8 @@
 #include <Eigen/Geometry>
 #include <unsupported/Eigen/EulerAngles>
 
+#include <rclcpp/rclcpp.hpp>
+
 #include <dua_interfaces/msg/euler_pose_stamped.hpp>
 #include <geometry_msgs/msg/pose_stamped.hpp>
 #include <std_msgs/msg/header.hpp>
@@ -102,6 +104,26 @@ public:
   {
     return header_;
   }
+  inline uint64_t get_timestamp_ns() const
+  {
+    return header_.stamp.sec * 1e9 + header_.stamp.nanosec;
+  }
+  inline uint64_t get_timestamp_us() const
+  {
+    return header_.stamp.sec * 1e6 + header_.stamp.nanosec / 1e3;
+  }
+  inline uint64_t get_timestamp_ms() const
+  {
+    return header_.stamp.sec * 1e3 + header_.stamp.nanosec / 1e6;
+  }
+  inline uint64_t get_timestamp_s() const
+  {
+    return header_.stamp.sec;
+  }
+  inline std::string get_frame_id() const
+  {
+    return header_.frame_id;
+  }
 
   /* Setters. */
   inline void set_position(const Eigen::Vector3d & pos)
@@ -125,6 +147,34 @@ public:
   inline void set_header(const std_msgs::msg::Header & header)
   {
     header_ = header;
+  }
+  inline void set_timestamp(const rclcpp::Time & time_point)
+  {
+    header_.set__stamp(time_point);
+  }
+  inline void set_timestamp_ns(uint64_t timestamp_ns)
+  {
+    header_.stamp.set__sec(timestamp_ns / 1e9);
+    header_.stamp.set__nanosec(timestamp_ns % static_cast<uint64_t>(1e9));
+  }
+  inline void set_timestamp_us(uint64_t timestamp_us)
+  {
+    header_.stamp.set__sec(timestamp_us / 1e6);
+    header_.stamp.set__nanosec((timestamp_us % static_cast<uint64_t>(1e6)) * 1e3);
+  }
+  inline void set_timestamp_ms(uint64_t timestamp_ms)
+  {
+    header_.stamp.set__sec(timestamp_ms / 1e3);
+    header_.stamp.set__nanosec((timestamp_ms % static_cast<uint64_t>(1e3)) * 1e6);
+  }
+  inline void set_timestamp_s(uint64_t timestamp_s)
+  {
+    header_.stamp.set__sec(timestamp_s);
+    header_.stamp.set__nanosec(0);
+  }
+  inline void set_frame_id(const std::string & frame_id)
+  {
+    header_.set__frame_id(frame_id);
   }
 
   /* Geometric operations. */
