@@ -235,10 +235,13 @@ void DynamicPose::set_acceleration_covariance(const std::array<double, 36> & acc
  * @param dp Transform pose.
  * @return Transformed pose.
  *
- * @throws std::runtime_error if the coordinate frame is not coherent.
+ * @throws InvalidArgument if the coordinate frame is not coherent.
  */
 DynamicPose DynamicPose::operator*(const DynamicPose & dp) const
 {
+  (void)(dp);
+  throw std::logic_error("DynamicPose::operator*: Not implemented");
+  /*
   // TODO Check that the coordinate frame is coherent
 
   // Build a new pose
@@ -247,6 +250,7 @@ DynamicPose DynamicPose::operator*(const DynamicPose & dp) const
   // TODO Transform accelerations
   new_pose.set_acceleration_covariance(this->get_acceleration_covariance());
   return new_pose;
+  */
 }
 
 } // namespace PoseKit

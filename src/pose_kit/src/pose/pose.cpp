@@ -251,13 +251,16 @@ Eigen::Translation3d Pose::get_translation() const
 }
 
 /**
- * @brief Roto-translation getter.
+ * @brief Isometry getter.
  *
- * @return Roto-translation (as Eigen transformation).
+ * @return Isometry.
  */
-Eigen::Transform<double, 3, Eigen::Affine> Pose::get_roto_translation() const
+Eigen::Isometry3d Pose::get_isometry() const
 {
-  return get_translation() * get_rotation();
+  Eigen::Isometry3d isometry = Eigen::Isometry3d::Identity();
+  isometry.rotate(this->get_rotation());
+  isometry.pretranslate(this->get_translation().vector());
+  return isometry;
 }
 
 /**
@@ -316,19 +319,19 @@ void Pose::set_pose_covariance(const std::array<double, 36> & cov)
  * @param p Transform pose.
  * @return Transformed pose.
  *
- * @throws std::runtime_error if the coordinate frame is not coherent.
+ * @throws InvalidArgument if the coordinate frame is not coherent.
  */
 Pose Pose::operator*(const Pose & p) const
 {
   // TODO Check that the coordinate frame is coherent
 
-  // Compute the roto-translation using Eigen transformations
-  Eigen::AngleAxisd r = p.get_rotation();
-  Eigen::Transform<double, 3, Eigen::Affine> rt = p.get_roto_translation();
-  Eigen::Vector3d new_position = rt * position_;
-  Eigen::Quaterniond new_attitude = r * attitude_;
+  // Compute the right transformation using Eigen
+  Eigen::Isometry3d new_isometry = this->get_isometry() * p.get_isometry();
+  Eigen::Vector3d new_position(new_isometry.translation());
+  Eigen::Quaterniond new_attitude(new_isometry.rotation());
 
   // Build a new pose
+  // TODO Set header
   Pose new_pose{};
   new_pose.set_position(new_position);
   new_pose.set_attitude(new_attitude);

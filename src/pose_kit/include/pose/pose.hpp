@@ -62,7 +62,7 @@ public:
   Eigen::EulerAnglesXYZd get_rpy() const;
   Eigen::AngleAxisd get_rotation() const;
   Eigen::Translation3d get_translation() const;
-  Eigen::Transform<double, 3, Eigen::Affine> get_roto_translation() const;
+  Eigen::Isometry3d get_isometry() const;
   std::array<double, 36> get_pose_covariance() const;
 
   /* Setters. */
