@@ -122,7 +122,7 @@ Pose::Pose(
  *
  * @param msg ROS message to build from.
  */
-Pose::Pose(const EulerPoseStamped & msg)
+Pose::Pose(const dua_interfaces::msg::EulerPoseStamped & msg)
 {
   this->set_position(
     Eigen::Vector3d(
@@ -135,6 +135,49 @@ Pose::Pose(const EulerPoseStamped & msg)
       msg.pose.orientation.x,
       msg.pose.orientation.y,
       msg.pose.orientation.z));
+  this->set_header(msg.header);
+}
+
+/**
+ * @brief Constructor that builds from a PoseStamped ROS message.
+ *
+ * @param msg ROS message to build from.
+ */
+Pose::Pose(const geometry_msgs::msg::PoseStamped & msg)
+{
+  this->set_position(
+    Eigen::Vector3d(
+      msg.pose.position.x,
+      msg.pose.position.y,
+      msg.pose.position.z));
+  this->set_attitude(
+    Eigen::Quaterniond(
+      msg.pose.orientation.w,
+      msg.pose.orientation.x,
+      msg.pose.orientation.y,
+      msg.pose.orientation.z));
+  this->set_header(msg.header);
+}
+
+/**
+ * @brief Constructor that builds from a PoseWithCovarianceStamped ROS message.
+ *
+ * @param msg ROS message to build from.
+ */
+Pose::Pose(const geometry_msgs::msg::PoseWithCovarianceStamped & msg)
+{
+  this->set_position(
+    Eigen::Vector3d(
+      msg.pose.pose.position.x,
+      msg.pose.pose.position.y,
+      msg.pose.pose.position.z));
+  this->set_attitude(
+    Eigen::Quaterniond(
+      msg.pose.pose.orientation.w,
+      msg.pose.pose.orientation.x,
+      msg.pose.pose.orientation.y,
+      msg.pose.pose.orientation.z));
+  this->set_pose_covariance(msg.pose.covariance);
   this->set_header(msg.header);
 }
 
@@ -174,11 +217,13 @@ Pose::~Pose()
 {}
 
 /**
- * @brief Converts to an EulerPoseStamped ROS message (does not fill other fields).
+ * @brief Converts to an EulerPoseStamped ROS message.
+ *
+ * @return EulerPoseStamped ROS message.
  */
-EulerPoseStamped Pose::to_euler_pose_stamped()
+dua_interfaces::msg::EulerPoseStamped Pose::to_euler_pose_stamped()
 {
-  EulerPoseStamped msg{};
+  dua_interfaces::msg::EulerPoseStamped msg{};
   Eigen::Vector3d position = this->get_position();
   Eigen::Quaterniond attitude = this->get_attitude();
   Eigen::EulerAnglesXYZd rpy = this->get_rpy();
@@ -197,7 +242,9 @@ EulerPoseStamped Pose::to_euler_pose_stamped()
 }
 
 /**
- * @brief Converts to a PoseStamped ROS message (does not fill other fields).
+ * @brief Converts to a PoseStamped ROS message.
+ *
+ * @return PoseStamped ROS message.
  */
 geometry_msgs::msg::PoseStamped Pose::to_pose_stamped()
 {
@@ -212,6 +259,28 @@ geometry_msgs::msg::PoseStamped Pose::to_pose_stamped()
   msg.pose.orientation.x = attitude.x();
   msg.pose.orientation.y = attitude.y();
   msg.pose.orientation.z = attitude.z();
+  return msg;
+}
+
+/**
+ * @brief Converts to a PoseWithCovarianceStamped ROS message.
+ *
+ * @return PoseWithCovarianceStamped ROS message.
+ */
+geometry_msgs::msg::PoseWithCovarianceStamped Pose::to_pose_with_covariance_stamped()
+{
+  geometry_msgs::msg::PoseWithCovarianceStamped msg{};
+  Eigen::Vector3d position = this->get_position();
+  Eigen::Quaterniond attitude = this->get_attitude();
+  msg.set__header(this->get_header());
+  msg.pose.pose.position.x = position(0);
+  msg.pose.pose.position.y = position(1);
+  msg.pose.pose.position.z = position(2);
+  msg.pose.pose.orientation.w = attitude.w();
+  msg.pose.pose.orientation.x = attitude.x();
+  msg.pose.pose.orientation.y = attitude.y();
+  msg.pose.pose.orientation.z = attitude.z();
+  msg.pose.covariance = this->get_pose_covariance();
   return msg;
 }
 

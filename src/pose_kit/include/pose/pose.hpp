@@ -21,9 +21,8 @@
 
 #include <dua_interfaces/msg/euler_pose_stamped.hpp>
 #include <geometry_msgs/msg/pose_stamped.hpp>
+#include <geometry_msgs/msg/pose_with_covariance_stamped.hpp>
 #include <std_msgs/msg/header.hpp>
-
-using namespace dua_interfaces::msg;
 
 namespace PoseKit
 {
@@ -57,16 +56,17 @@ public:
     const std::array<double, 36> & cov = std::array<double, 36>{});
 
   /* Constructors from ROS messages. */
-  Pose(const EulerPoseStamped & msg);
-  // TODO
+  Pose(const dua_interfaces::msg::EulerPoseStamped & msg);
+  Pose(const geometry_msgs::msg::PoseStamped & msg);
+  Pose(const geometry_msgs::msg::PoseWithCovarianceStamped & msg);
 
   /* Destructor. */
   virtual ~Pose();
 
   /* ROS interfaces conversion methods. */
-  EulerPoseStamped to_euler_pose_stamped();
+  dua_interfaces::msg::EulerPoseStamped to_euler_pose_stamped();
   geometry_msgs::msg::PoseStamped to_pose_stamped();
-  // TODO
+  geometry_msgs::msg::PoseWithCovarianceStamped to_pose_with_covariance_stamped();
 
   /* Getters. */
   inline Eigen::Vector3d get_position() const
