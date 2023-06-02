@@ -17,9 +17,6 @@
 #include <Eigen/Geometry>
 #include <unsupported/Eigen/EulerAngles>
 
-#include <dua_interfaces/msg/euler_pose_stamped.hpp>
-#include <geometry_msgs/msg/pose_stamped.hpp>
-
 #include <kinematic_pose/kinematic_pose.hpp>
 
 namespace PoseKit
@@ -67,9 +64,6 @@ public:
   DynamicPose(KinematicPose kp)
   : KinematicPose(std::move(kp)) {}
 
-  /* Constructors from ROS messages. */
-  // TODO
-
   /* Destructor. */
   virtual ~DynamicPose() {}
 
@@ -91,7 +85,7 @@ public:
   DynamicPose & operator=(DynamicPose && dp);
 
   /* Geometric operations. */
-  DynamicPose operator*(const DynamicPose & dp) const;
+  // TODO
 
 protected:
   /* Internal data. */

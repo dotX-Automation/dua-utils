@@ -313,31 +313,4 @@ void Pose::set_pose_covariance(const std::array<double, 36> & cov)
   pose_covariance_ = cov;
 }
 
-/**
- * @brief Right-multiplies by a given pose.
- *
- * @param p Transform pose.
- * @return Transformed pose.
- *
- * @throws InvalidArgument if the coordinate frame is not coherent.
- */
-Pose Pose::operator*(const Pose & p) const
-{
-  // TODO Check that the coordinate frame is coherent
-
-  // Compute the right transformation using Eigen
-  Eigen::Isometry3d new_isometry = this->get_isometry() * p.get_isometry();
-  Eigen::Vector3d new_position(new_isometry.translation());
-  Eigen::Quaterniond new_attitude(new_isometry.rotation());
-
-  // Build a new pose
-  // TODO Set header
-  Pose new_pose{};
-  new_pose.set_position(new_position);
-  new_pose.set_attitude(new_attitude);
-  new_pose.set_rpy(Eigen::EulerAnglesXYZd(new_attitude));
-  new_pose.set_pose_covariance(this->get_pose_covariance());
-  return new_pose;
-}
-
 }  // namespace PoseKit

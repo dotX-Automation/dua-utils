@@ -211,28 +211,4 @@ void KinematicPose::set_twist_covariance(const std::array<double, 36> & twist_co
   twist_covariance_ = twist_cov;
 }
 
-/**
- * @brief Right-multiplies by a given pose.
- *
- * @param kp Transform pose.
- * @return Transformed pose.
- *
- * @throws InvalidArgument if the coordinate frame is not coherent.
- */
-KinematicPose KinematicPose::operator*(const KinematicPose & kp) const
-{
-  (void)(kp);
-  throw std::logic_error("KinematicPose::operator*: Not implemented");
-  /*
-  // TODO Check that the coordinate frame is coherent
-
-  // Build a new pose
-  KinematicPose new_pose =
-    dynamic_cast<const Pose &>(*this).operator*(dynamic_cast<const Pose &>(kp));
-  // TODO Transform velocities
-  new_pose.set_twist_covariance(this->get_twist_covariance());
-  return new_pose;
-  */
-}
-
 } // namespace PoseKit

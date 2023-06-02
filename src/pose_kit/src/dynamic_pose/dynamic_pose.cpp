@@ -229,28 +229,4 @@ void DynamicPose::set_acceleration_covariance(const std::array<double, 36> & acc
   acceleration_cov_ = accel_cov;
 }
 
-/**
- * @brief Right-multiplies by a given pose.
- *
- * @param dp Transform pose.
- * @return Transformed pose.
- *
- * @throws InvalidArgument if the coordinate frame is not coherent.
- */
-DynamicPose DynamicPose::operator*(const DynamicPose & dp) const
-{
-  (void)(dp);
-  throw std::logic_error("DynamicPose::operator*: Not implemented");
-  /*
-  // TODO Check that the coordinate frame is coherent
-
-  // Build a new pose
-  DynamicPose new_pose =
-    dynamic_cast<const KinematicPose &>(*this).operator*(dynamic_cast<const KinematicPose &>(dp));
-  // TODO Transform accelerations
-  new_pose.set_acceleration_covariance(this->get_acceleration_covariance());
-  return new_pose;
-  */
-}
-
 } // namespace PoseKit

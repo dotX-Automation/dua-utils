@@ -17,8 +17,10 @@
 #include <Eigen/Geometry>
 #include <unsupported/Eigen/EulerAngles>
 
+#include <builtin_interfaces/msg/time.hpp>
 #include <dua_interfaces/msg/euler_pose_stamped.hpp>
 #include <geometry_msgs/msg/pose_stamped.hpp>
+#include <std_msgs/msg/header.hpp>
 
 using namespace dua_interfaces::msg;
 
@@ -72,7 +74,7 @@ public:
   void set_pose_covariance(const std::array<double, 36> & cov);
 
   /* Geometric operations. */
-  Pose operator*(const Pose & p) const;
+  // TODO
 
   /* Assignment operators. */
   Pose & operator=(const Pose & p);

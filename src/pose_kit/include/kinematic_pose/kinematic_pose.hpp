@@ -17,9 +17,6 @@
 #include <Eigen/Geometry>
 #include <unsupported/Eigen/EulerAngles>
 
-#include <dua_interfaces/msg/euler_pose_stamped.hpp>
-#include <geometry_msgs/msg/pose_stamped.hpp>
-
 #include <pose/pose.hpp>
 
 namespace PoseKit
@@ -78,7 +75,7 @@ public:
   void set_twist_covariance(const std::array<double, 36> & twist_cov);
 
   /* Geometric operations. */
-  KinematicPose operator*(const KinematicPose & kp) const;
+  // TODO
 
   /* Assignment operators. */
   KinematicPose & operator=(const KinematicPose & kp);
