@@ -26,6 +26,7 @@ find_package(Eigen3 3.4 REQUIRED NO_MODULE)
 find_package(rclcpp REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
+find_package(tf2_eigen REQUIRED)
 
 # Pose library configuration
 add_library(pose SHARED
@@ -42,7 +43,8 @@ ament_target_dependencies(pose
   dua_interfaces
   geometry_msgs
   rclcpp
-  std_msgs)
+  std_msgs
+  tf2_eigen)
 
 # Kinematic Pose library configuration
 add_library(kinematicpose SHARED
@@ -108,6 +110,7 @@ ament_export_dependencies(
   geometry_msgs
   rclcpp
   sensor_msgs
-  std_msgs)
+  std_msgs
+  tf2_eigen)
 
 ament_package()

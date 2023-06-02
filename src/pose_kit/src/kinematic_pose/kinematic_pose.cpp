@@ -144,11 +144,13 @@ KinematicPose::KinematicPose(
   const std_msgs::msg::Header & header)
 : Pose(pose_stamped)
 {
-  this->set_velocity(Eigen::Vector3d(
+  this->set_velocity(
+    Eigen::Vector3d(
       twist_stamped.twist.linear.x,
       twist_stamped.twist.linear.y,
       twist_stamped.twist.linear.z));
-  this->set_angular_velocity(Eigen::Vector3d(
+  this->set_angular_velocity(
+    Eigen::Vector3d(
       twist_stamped.twist.angular.x,
       twist_stamped.twist.angular.y,
       twist_stamped.twist.angular.z));
@@ -168,11 +170,13 @@ KinematicPose::KinematicPose(
   const std_msgs::msg::Header & header)
 : Pose(euler_pose_stamped)
 {
-  this->set_velocity(Eigen::Vector3d(
+  this->set_velocity(
+    Eigen::Vector3d(
       twist_stamped.twist.linear.x,
       twist_stamped.twist.linear.y,
       twist_stamped.twist.linear.z));
-  this->set_angular_velocity(Eigen::Vector3d(
+  this->set_angular_velocity(
+    Eigen::Vector3d(
       twist_stamped.twist.angular.x,
       twist_stamped.twist.angular.y,
       twist_stamped.twist.angular.z));
@@ -192,11 +196,13 @@ KinematicPose::KinematicPose(
   const std_msgs::msg::Header & header)
 : Pose(pose_with_cov_stamped)
 {
-  this->set_velocity(Eigen::Vector3d(
+  this->set_velocity(
+    Eigen::Vector3d(
       twist_with_cov_stamped.twist.twist.linear.x,
       twist_with_cov_stamped.twist.twist.linear.y,
       twist_with_cov_stamped.twist.twist.linear.z));
-  this->set_angular_velocity(Eigen::Vector3d(
+  this->set_angular_velocity(
+    Eigen::Vector3d(
       twist_with_cov_stamped.twist.twist.angular.x,
       twist_with_cov_stamped.twist.twist.angular.y,
       twist_with_cov_stamped.twist.twist.angular.z));
@@ -261,7 +267,8 @@ geometry_msgs::msg::TwistStamped KinematicPose::to_twist_stamped() const
  *
  * @return TwistWithCovarianceStamped TwistWithCovarianceStamped ROS message.
  */
-geometry_msgs::msg::TwistWithCovarianceStamped KinematicPose::to_twist_with_covariance_stamped() const
+geometry_msgs::msg::TwistWithCovarianceStamped KinematicPose::to_twist_with_covariance_stamped()
+const
 {
   geometry_msgs::msg::TwistWithCovarianceStamped twist_with_cov_stamped{};
   Eigen::Vector3d linear_vel = this->get_velocity();

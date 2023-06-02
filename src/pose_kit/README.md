@@ -27,11 +27,13 @@ All classes are based on the `double` numeric type, and offer:
 
 Currently implemented and planned:
 
-- [x] Application of ROS `tf` transforms as right-multiplication in homogeneous coordinates, to express a pose in a *child frame* with respect to a new *parent frame*.
+- [x] Composition with a ROS `tf` transform to express a pose in a *parent frame* with data coming from a pose expressed in a *child frame*.
 
 ## Requirements
 
 Builds on ROS 2 Humble Hawksbill with Eigen 3.4.0 or higher.
+
+Requires `tf2` libraries.
 
 See [`package.xml`](package.xml) for more information.
 

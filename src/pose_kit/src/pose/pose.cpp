@@ -7,6 +7,8 @@
  * April 13, 2023
  */
 
+#include <tf2_eigen/tf2_eigen.hpp>
+
 #include <pose/pose.hpp>
 
 namespace PoseKit
@@ -282,6 +284,40 @@ geometry_msgs::msg::PoseWithCovarianceStamped Pose::to_pose_with_covariance_stam
   msg.pose.pose.orientation.set__z(attitude.z());
   msg.pose.set__covariance(this->get_pose_covariance());
   return msg;
+}
+
+/**
+ * @brief Applies a tf to make this track a parent frame w.r.t. a parent fixed frame.
+ *
+ * @param tf ROS transformation to apply, from the parent frame to this.
+ *
+ * @throws InvalidArgument if coordinate frames are not coherent.
+ */
+void Pose::track_parent(const geometry_msgs::msg::TransformStamped & tf)
+{
+  // Check that coordinate frames are coherent
+  if (this->get_frame_id() != tf.child_frame_id) {
+    throw std::invalid_argument("Pose::track_parent: Incoherent coordinate frames");
+  }
+
+  // Get isometries and tf representations
+  Eigen::Isometry3d pose = this->get_isometry();
+  Eigen::Isometry3d iso_from_to = tf2::transformToEigen(tf.transform);
+  Eigen::Matrix<double, 6, 6> R = Eigen::Matrix<double, 6, 6>::Zero();
+  R.block<3, 3>(0, 0) = iso_from_to.rotation();
+  R.block<3, 3>(3, 3) = iso_from_to.rotation();
+
+  // Remap covariance arrays, copy the input to preserve it
+  std::array<double, 36> cov = this->get_pose_covariance();
+  Eigen::Map<const Eigen::Matrix<double, 6, 6, Eigen::RowMajor>> cov_in(cov.data());
+  Eigen::Map<Eigen::Matrix<double, 6, 6, Eigen::RowMajor>> cov_out(pose_covariance_.data());
+
+  // Apply the transformation
+  Eigen::Isometry3d parent_pose = iso_from_to * pose * iso_from_to.inverse();
+  cov_out = R * cov_in * R.transpose();
+  this->set_position(parent_pose.translation());
+  this->set_attitude(Eigen::Quaterniond(parent_pose.rotation()));
+  this->set_frame_id(tf.header.frame_id);
 }
 
 } // namespace PoseKit

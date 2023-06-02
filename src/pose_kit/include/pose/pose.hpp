@@ -12,6 +12,7 @@
 
 #include "visibility_control.h"
 
+#include <array>
 #include <stdexcept>
 
 #include <Eigen/Geometry>
@@ -22,6 +23,7 @@
 #include <dua_interfaces/msg/euler_pose_stamped.hpp>
 #include <geometry_msgs/msg/pose_stamped.hpp>
 #include <geometry_msgs/msg/pose_with_covariance_stamped.hpp>
+#include <geometry_msgs/msg/transform_stamped.hpp>
 #include <std_msgs/msg/header.hpp>
 
 namespace PoseKit
@@ -178,7 +180,7 @@ public:
   }
 
   /* Geometric operations. */
-  // TODO
+  void track_parent(const geometry_msgs::msg::TransformStamped & tf);
 
   /* Assignment operators. */
   Pose & operator=(const Pose & p);
