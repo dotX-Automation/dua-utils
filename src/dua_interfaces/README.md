@@ -11,6 +11,7 @@ Refer to the individual interface files for more information.
 - [x] [`CommandResultStamped`](msg/CommandResultStamped.msg): Result of a command execution, useful to be included in high-level communications like services and actions, with a ROS header.
 - [x] [`EulerAttitudeSetpoint`](msg/EulerAttitudeSetpoint.msg): Setpoint for an Euler attitude controller.
 - [x] [`EulerPoseStamped`](msg/EulerPoseStamped.msg): Pose with Euler angles, avoids the need for a quaternion to Euler conversion.
+- [x] [`PointCloud2WithROI`](msg/PointCloud2WithROI.msg): Point cloud with a region of interest.
 - [x] [`PositionSetpoint`](msg/PositionSetpoint.msg): Setpoint for a position controller.
 - [x] [`VelocitySetpoint`](msg/VelocitySetpoint.msg): Setpoint for a velocity controller.
 

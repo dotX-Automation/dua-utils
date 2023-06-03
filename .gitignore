@@ -3,7 +3,7 @@ build/*
 install/*
 log/*
 
-# Test node
+# Local test code
 src/test/*
 
 # Uncomment the following to avoid pushing personal configurations
