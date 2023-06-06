@@ -20,6 +20,7 @@ endif()
 # Find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(ament_cmake_ros REQUIRED)
+find_package(rcl_action REQUIRED)
 find_package(rclcpp REQUIRED)
 
 # dua_qos library configuration
@@ -32,6 +33,7 @@ target_include_directories(duaqos PUBLIC
   $<INSTALL_INTERFACE:include>)
 ament_target_dependencies(
   duaqos
+  rcl_action
   rclcpp)
 
 # Library installation
@@ -60,6 +62,6 @@ endif()
 
 # Export all dependencies and library targets for this package
 ament_export_targets(dua_qosTargets HAS_LIBRARY_TARGET)
-ament_export_dependencies(rclcpp)
+ament_export_dependencies(rcl_action rclcpp)
 
 ament_package()

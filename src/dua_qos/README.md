@@ -19,6 +19,8 @@ The contents of each namespace are described below. Each getter takes an additio
 - `get_command_qos`: Returns a QoS profile for a command topic that is critical for the correct functioning of the system, so reliable by default.
 - `get_scan_qos`: Returns a QoS profile for a spatial scan topic, *e.g.*, laser scan, pointcloud, or map, that must be reliable but with a low depth because of their potential size.
 - `get_image_qos`: Returns a QoS profile for an image topic, *e.g.*, camera image, that must be best-effort because image transmission is very bandwidth-intensive and could clog a DDS network.
+- `get_action_server_options`: Returns an options structure for an action server, which is largely made of QoS profiles.
+- `get_action_client_options`: Returns an options structure for an action client, which is largely made of QoS profiles.
 
 ### `DUAQoS::Visualization`
 
