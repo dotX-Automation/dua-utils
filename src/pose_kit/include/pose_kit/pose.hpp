@@ -32,7 +32,7 @@ namespace PoseKit
 /**
  * Represents position and orientation of an autonomous agent.
  */
-class POSE_PUBLIC Pose
+class POSE_KIT_PUBLIC Pose
 {
 public:
   /* Constructors. */

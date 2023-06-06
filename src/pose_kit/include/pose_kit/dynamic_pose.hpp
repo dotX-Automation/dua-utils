@@ -21,7 +21,7 @@
 #include <sensor_msgs/msg/imu.hpp>
 #include <std_msgs/msg/header.hpp>
 
-#include <kinematic_pose/kinematic_pose.hpp>
+#include <pose_kit/kinematic_pose.hpp>
 
 namespace PoseKit
 {
@@ -29,7 +29,7 @@ namespace PoseKit
 /**
  * Represents position, orientation, velocity, and acceleration of an autonomous agent.
  */
-class DYNAMIC_POSE_PUBLIC DynamicPose : public KinematicPose
+class POSE_KIT_PUBLIC DynamicPose : public KinematicPose
 {
 public:
   /* Constructors. */

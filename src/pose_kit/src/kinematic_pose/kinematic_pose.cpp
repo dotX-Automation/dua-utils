@@ -7,7 +7,7 @@
  * April 14, 2023
  */
 
-#include <kinematic_pose/kinematic_pose.hpp>
+#include <pose_kit/kinematic_pose.hpp>
 
 namespace PoseKit
 {

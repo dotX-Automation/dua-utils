@@ -9,7 +9,7 @@
 
 #include <tf2_eigen/tf2_eigen.hpp>
 
-#include <pose/pose.hpp>
+#include <pose_kit/pose.hpp>
 
 namespace PoseKit
 {

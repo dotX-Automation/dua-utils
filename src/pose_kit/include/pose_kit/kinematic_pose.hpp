@@ -25,7 +25,7 @@
 #include <geometry_msgs/msg/twist_with_covariance_stamped.hpp>
 #include <std_msgs/msg/header.hpp>
 
-#include <pose/pose.hpp>
+#include <pose_kit/pose.hpp>
 
 namespace PoseKit
 {
@@ -33,7 +33,7 @@ namespace PoseKit
 /**
  * Represents position, orientation, and velocity of an autonomous agent.
  */
-class KINEMATIC_POSE_PUBLIC KinematicPose : public Pose
+class POSE_KIT_PUBLIC KinematicPose : public Pose
 {
 public:
   /* Constructors. */
