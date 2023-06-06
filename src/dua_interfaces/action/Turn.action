@@ -1,0 +1,21 @@
+# Coordinated turn operation: changes heading only.
+#
+# Roberto Masocco <robmasocco@gmail.com>
+# Intelligent Systems Lab <isl.torvergata@gmail.com>
+#
+# June 6, 2023
+
+# GOAL
+# Desired heading
+float64 heading
+---
+# RESULT
+# Operation result
+dua_interfaces/CommandResultStamped result
+---
+# FEEDBACK
+# Current yaw angle [-PI +PI] (radians)
+float64 current_yaw
+
+# Current yaw angle [-180 +180] (degrees)
+float64 current_yaw_deg

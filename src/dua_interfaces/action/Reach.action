@@ -1,0 +1,27 @@
+# Travel to a specific location from current position.
+#
+# Roberto Masocco <robmasocco@gmail.com>
+# Intelligent Systems Lab <isl.torvergata@gmail.com>
+#
+# June 6, 2023
+
+# GOAL
+# Target position and orientation
+geometry_msgs/PoseStamped target_pose
+
+# Confidece sphere radius (meters, absolute)
+float64 reach_radius
+
+# Indicates whether the robot should stop at the target position or not
+bool stop_at_target
+---
+# RESULT
+# Operation result
+dua_interfaces/CommandResultStamped result
+---
+# FEEDBACK
+# Current pose
+geometry_msgs/PoseStamped current_pose
+
+# Current distance from target
+float64 distance_from_target

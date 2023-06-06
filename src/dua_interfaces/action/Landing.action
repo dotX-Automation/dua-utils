@@ -1,0 +1,18 @@
+# Landing operation.
+#
+# Roberto Masocco <robmasocco@gmail.com>
+# Intelligent Systems Lab <isl.torvergata@gmail.com>
+#
+# June 6, 2023
+
+# GOAL
+# Decision position
+geometry_msgs/PointStamped minimums
+---
+# RESULT
+# Operation result
+dua_interfaces/CommandResultStamped result
+---
+# FEEDBACK
+# Current pose
+geometry_msgs/PoseStamped pose
