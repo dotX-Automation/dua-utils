@@ -13,3 +13,6 @@ geometry_msgs/Vector3 v_sp
 
 # Yaw velocity setpoint [-PI +PI] (radians/sec)
 float64 vyaw_sp
+
+# Yaw setpoint to keep [-PI +PI] (radians)
+float64 yaw_sp
