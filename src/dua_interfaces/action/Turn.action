@@ -6,6 +6,9 @@
 # June 6, 2023
 
 # GOAL
+# Header
+std_msgs/Header header
+
 # Desired heading
 float64 heading
 ---
