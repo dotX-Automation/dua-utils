@@ -13,6 +13,8 @@ Refer to the individual interface files for more information.
 - [x] [`EulerPoseStamped`](msg/EulerPoseStamped.msg): Pose with Euler angles, avoids the need for a quaternion to Euler conversion.
 - [x] [`PointCloud2WithROI`](msg/PointCloud2WithROI.msg): Point cloud with a region of interest.
 - [x] [`PositionSetpoint`](msg/PositionSetpoint.msg): Setpoint for a position controller.
+- [x] [`RatesSetpoint`](msg/RatesSetpoint.msg): Setpoint for a roll-pitch-yaw rates controller.
+- [x] [`RegionOfInterest`](msg/RegionOfInterest.msg): Region of interest, useful for image processing and spatial mapping.
 - [x] [`VelocitySetpoint`](msg/VelocitySetpoint.msg): Setpoint for a velocity controller.
 
 ## Requirements
