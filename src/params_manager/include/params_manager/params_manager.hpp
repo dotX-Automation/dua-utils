@@ -53,14 +53,16 @@ struct PARAMS_MANAGER_LOCAL ParamData
   std::string name_ = "";
   PType type_ = PType::PARAMETER_NOT_SET;
   Validator validator_ = nullptr;
+  void * var_ptr_ = nullptr;
 
   ParamData() {}
 
-  ParamData(const std::string & name, PType type, const Validator & validator)
+  ParamData(const std::string & name, PType type, void * var_ptr, const Validator & validator)
   {
     name_ = name;
     type_ = type;
     validator_ = validator;
+    var_ptr_ = var_ptr;
   }
 };
 
@@ -94,46 +96,55 @@ public:
     std::string && name,
     bool default_val,
     std::string && desc, std::string && constraints, bool read_only,
+    bool * var = nullptr,
     Validator && validator = nullptr);
   void declare_bool_array_parameter(
     std::string && name,
     std::vector<bool> && default_val,
     std::string && desc, std::string && constraints, bool read_only,
+    std::vector<bool> * var = nullptr,
     Validator && validator = nullptr);
   void declare_integer_parameter(
     std::string && name,
     int64_t default_val, int64_t from, int64_t to, int64_t step,
     std::string && desc, std::string && constraints, bool read_only,
+    int64_t * var = nullptr,
     Validator && validator = nullptr);
   void declare_integer_array_parameter(
     std::string && name,
     std::vector<int64_t> && default_val, int64_t from, int64_t to, int64_t step,
     std::string && desc, std::string && constraints, bool read_only,
+    std::vector<int64_t> * var = nullptr,
     Validator && validator = nullptr);
   void declare_double_parameter(
     std::string && name,
     double default_val, double from, double to, double step,
     std::string && desc, std::string && constraints, bool read_only,
+    double * var = nullptr,
     Validator && validator = nullptr);
   void declare_double_array_parameter(
     std::string && name,
     std::vector<double> && default_val, double from, double to, double step,
     std::string && desc, std::string && constraints, bool read_only,
+    std::vector<double> * var = nullptr,
     Validator && validator = nullptr);
   void declare_string_parameter(
     std::string && name,
     std::string && default_val,
     std::string && desc, std::string && constraints, bool read_only,
+    std::string * var = nullptr,
     Validator && validator = nullptr);
   void declare_string_array_parameter(
     std::string && name,
     std::vector<std::string> && default_val,
     std::string && desc, std::string && constraints, bool read_only,
+    std::vector<std::string> * var = nullptr,
     Validator && validator = nullptr);
   void declare_byte_array_parameter(
     std::string && name,
     std::vector<uint8_t> && default_val,
     std::string && desc, std::string && constraints, bool read_only,
+    std::vector<uint8_t> * var = nullptr,
     Validator && validator = nullptr);
 
   typedef std::shared_ptr<PManager> SharedPtr;
@@ -160,6 +171,7 @@ private:
   void PARAMS_MANAGER_LOCAL add_to_set_(
     const std::string & name,
     PType type,
+    void * var_ptr,
     const Validator & validator);
   std::shared_ptr<ParamData> PARAMS_MANAGER_LOCAL get_param_data_(const std::string & name);
   void PARAMS_MANAGER_LOCAL log_update_(const rclcpp::Parameter & param);

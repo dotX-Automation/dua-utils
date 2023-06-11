@@ -33,6 +33,7 @@ params_decl = """\
     "{{description}}",
     "{{constraints}}",
     {{read_only}},
+    {{var_ptr}},
     {{validator}});
 
 """
@@ -134,6 +135,13 @@ if __name__ == '__main__':
                     defaults[values['type']].replace('{{default_value}}', str(values['default_value'])) if is_string\
                     else defaults[values['type']].replace('{{default_value}}', str(values['default_value']).lower())
 
+            # Get parameter variable name, if present
+            var_name = str(values.get('var_name', ''))
+            if var_name != '':
+                var_ptr_subst = '&' + var_name
+            else:
+                var_ptr_subst = 'nullptr'
+
             # Get parameter validator, if present
             validator_name = str(values.get('validator', ''))
             if validator_name != '':
@@ -150,7 +158,8 @@ if __name__ == '__main__':
                 .replace('{{constraints}}', values['constraints'])\
                 .replace('{{manager_name}}', manager_name)\
                 .replace('{{validator}}', validator_subst)\
-                .replace('{{read_only}}', str(values['read_only']).lower())
+                .replace('{{read_only}}', str(values['read_only']).lower())\
+                .replace('{{var_ptr}}', var_ptr_subst)
 
         except Exception as e:
             exc_type, exc_obj, exc_tb = sys.exc_info()

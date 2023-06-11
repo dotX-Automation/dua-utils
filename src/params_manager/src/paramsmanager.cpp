@@ -75,16 +75,18 @@ std::shared_ptr<ParamData> PManager::get_param_data_(const std::string & name)
  *
  * @param name Parameter name.
  * @param type Parameter type.
+ * @param var_ptr Pointer to the variable to be updated.
  * @param validator External parameter validation routine.
  */
 void PManager::add_to_set_(
   const std::string & name,
   PType type,
+  void * var_ptr,
   const Validator & validator)
 {
   std::scoped_lock<std::mutex> lock(params_set_lock_);
 
-  ParamData data(name, type, validator);
+  ParamData data(name, type, var_ptr, validator);
   params_set_.insert(std::pair<std::string, ParamData>(name, data));
 }
 
@@ -220,6 +222,42 @@ rcl_interfaces::msg::SetParametersResult PManager::on_set_parameters_callback_(
       return res;
     }
 
+    // Update variable, if present
+    if (data->var_ptr_) {
+      switch (data->type_) {
+        case PType::PARAMETER_BOOL:
+          *static_cast<bool *>(data->var_ptr_) = p.as_bool();
+          break;
+        case PType::PARAMETER_INTEGER:
+          *static_cast<int64_t *>(data->var_ptr_) = p.as_int();
+          break;
+        case PType::PARAMETER_DOUBLE:
+          *static_cast<double *>(data->var_ptr_) = p.as_double();
+          break;
+        case PType::PARAMETER_STRING:
+          *static_cast<std::string *>(data->var_ptr_) = p.as_string();
+          break;
+        case PType::PARAMETER_BYTE_ARRAY:
+          *static_cast<std::vector<uint8_t> *>(data->var_ptr_) = p.as_byte_array();
+          break;
+        case PType::PARAMETER_BOOL_ARRAY:
+          *static_cast<std::vector<bool> *>(data->var_ptr_) = p.as_bool_array();
+          break;
+        case PType::PARAMETER_INTEGER_ARRAY:
+          *static_cast<std::vector<int64_t> *>(data->var_ptr_) = p.as_integer_array();
+          break;
+        case PType::PARAMETER_DOUBLE_ARRAY:
+          *static_cast<std::vector<double> *>(data->var_ptr_) = p.as_double_array();
+          break;
+        case PType::PARAMETER_STRING_ARRAY:
+          *static_cast<std::vector<std::string> *>(data->var_ptr_) = p.as_string_array();
+          break;
+        default:
+          RCLCPP_ERROR(node_->get_logger(), "PManager::on_set_parameters_callback_: unknown type");
+          break;
+      }
+    }
+
     // Run validator, if present
     if (data->validator_ && !data->validator_(p)) {
       RCLCPP_ERROR(
@@ -248,6 +286,7 @@ rcl_interfaces::msg::SetParametersResult PManager::on_set_parameters_callback_(
  * @param desc Parameter description.
  * @param constraints Additional value constraints.
  * @param read_only Read-only internal flag.
+ * @param var Pointer to the variable to be updated.
  * @param validator Parameter validation routine.
  *
  * @throws InvalidArgument if the parameter is already declared.
@@ -256,6 +295,7 @@ void PManager::declare_bool_parameter(
   std::string && name,
   bool default_val,
   std::string && desc, std::string && constraints, bool read_only,
+  bool * var,
   Validator && validator)
 {
   // Check if the parameter is not already present
@@ -264,7 +304,7 @@ void PManager::declare_bool_parameter(
   }
 
   // Add parameter to the set
-  add_to_set_(name, PType::PARAMETER_BOOL, validator);
+  add_to_set_(name, PType::PARAMETER_BOOL, var, validator);
 
   // Declare parameter
   rcl_interfaces::msg::ParameterDescriptor descriptor;
@@ -285,6 +325,7 @@ void PManager::declare_bool_parameter(
  * @param desc Parameter description.
  * @param constraints Additional value constraints.
  * @param read_only Read-only internal flag.
+ * @param var Pointer to the variable to be updated.
  * @param validator Parameter validation routine.
  *
  * @throws InvalidArgument if the parameter is already declared.
@@ -293,6 +334,7 @@ void PManager::declare_bool_array_parameter(
   std::string && name,
   std::vector<bool> && default_val,
   std::string && desc, std::string && constraints, bool read_only,
+  std::vector<bool> * var,
   Validator && validator)
 {
   // Check if the parameter is not already present
@@ -301,7 +343,7 @@ void PManager::declare_bool_array_parameter(
   }
 
   // Add parameter to the set
-  add_to_set_(name, PType::PARAMETER_BOOL_ARRAY, validator);
+  add_to_set_(name, PType::PARAMETER_BOOL_ARRAY, var, validator);
 
   // Declare parameter
   rcl_interfaces::msg::ParameterDescriptor descriptor;
@@ -325,6 +367,7 @@ void PManager::declare_bool_array_parameter(
  * @param desc Parameter description.
  * @param constraints Additional value constraints.
  * @param read_only Read-only internal flag.
+ * @param var Pointer to the variable to be updated.
  * @param validator Paramter validation routine.
  *
  * @throws InvalidArgument if the parameter is already declared.
@@ -333,6 +376,7 @@ void PManager::declare_integer_parameter(
   std::string && name,
   int64_t default_val, int64_t from, int64_t to, int64_t step,
   std::string && desc, std::string && constraints, bool read_only,
+  int64_t * var,
   Validator && validator)
 {
   // Check if the parameter is not already present
@@ -341,7 +385,7 @@ void PManager::declare_integer_parameter(
   }
 
   // Add parameter to the set
-  add_to_set_(name, PType::PARAMETER_INTEGER, validator);
+  add_to_set_(name, PType::PARAMETER_INTEGER, var, validator);
 
   // Declare parameter
   rcl_interfaces::msg::ParameterDescriptor descriptor;
@@ -370,6 +414,7 @@ void PManager::declare_integer_parameter(
  * @param desc Parameter description.
  * @param constraints Additional value constraints.
  * @param read_only Read-only internal flag.
+ * @param var Pointer to the variable to be updated.
  * @param validator Paramter validation routine.
  *
  * @throws InvalidArgument if the parameter is already declared.
@@ -378,6 +423,7 @@ void PManager::declare_integer_array_parameter(
   std::string && name,
   std::vector<int64_t> && default_val, int64_t from, int64_t to, int64_t step,
   std::string && desc, std::string && constraints, bool read_only,
+  std::vector<int64_t> * var,
   Validator && validator)
 {
   // Check if the parameter is not already present
@@ -386,7 +432,7 @@ void PManager::declare_integer_array_parameter(
   }
 
   // Add parameter to the set
-  add_to_set_(name, PType::PARAMETER_INTEGER_ARRAY, validator);
+  add_to_set_(name, PType::PARAMETER_INTEGER_ARRAY, var, validator);
 
   // Declare parameter
   rcl_interfaces::msg::ParameterDescriptor descriptor;
@@ -415,6 +461,7 @@ void PManager::declare_integer_array_parameter(
  * @param desc Parameter description.
  * @param constraints Additional value constraints.
  * @param read_only Read-only internal flag.
+ * @param var Pointer to the variable to be updated.
  * @param validator Parameter validation routine.
  *
  * @throws InvalidArgument if the parameter is already declared.
@@ -423,6 +470,7 @@ void PManager::declare_double_parameter(
   std::string && name,
   double default_val, double from, double to, double step,
   std::string && desc, std::string && constraints, bool read_only,
+  double * var,
   Validator && validator)
 {
   // Check if the parameter is not already present
@@ -431,7 +479,7 @@ void PManager::declare_double_parameter(
   }
 
   // Add parameter to the set
-  add_to_set_(name, PType::PARAMETER_DOUBLE, validator);
+  add_to_set_(name, PType::PARAMETER_DOUBLE, var, validator);
 
   // Declare parameter
   rcl_interfaces::msg::ParameterDescriptor descriptor;
@@ -460,6 +508,7 @@ void PManager::declare_double_parameter(
  * @param desc Parameter description.
  * @param constraints Additional value constraints.
  * @param read_only Read-only internal flag.
+ * @param var Pointer to the variable to be updated.
  * @param validator Parameter validation routine.
  *
  * @throws InvalidArgument if the parameter is already declared.
@@ -468,6 +517,7 @@ void PManager::declare_double_array_parameter(
   std::string && name,
   std::vector<double> && default_val, double from, double to, double step,
   std::string && desc, std::string && constraints, bool read_only,
+  std::vector<double> * var,
   Validator && validator)
 {
   // Check if the parameter is not already present
@@ -477,7 +527,7 @@ void PManager::declare_double_array_parameter(
   }
 
   // Add parameter to the set
-  add_to_set_(name, PType::PARAMETER_DOUBLE_ARRAY, validator);
+  add_to_set_(name, PType::PARAMETER_DOUBLE_ARRAY, var, validator);
 
   // Declare parameter
   rcl_interfaces::msg::ParameterDescriptor descriptor;
@@ -503,6 +553,7 @@ void PManager::declare_double_array_parameter(
  * @param desc Parameter description.
  * @param constraints Additional value constraints.
  * @param read_only Read-only internal flag.
+ * @param var Pointer to the variable to be updated.
  * @param validator Parameter validation routine.
  *
  * @throws InvalidArgument if the parameter is already declared.
@@ -511,6 +562,7 @@ void PManager::declare_string_parameter(
   std::string && name,
   std::string && default_val,
   std::string && desc, std::string && constraints, bool read_only,
+  std::string * var,
   Validator && validator)
 {
   // Check if the parameter is not already present
@@ -519,7 +571,7 @@ void PManager::declare_string_parameter(
   }
 
   // Add parameter to the set
-  add_to_set_(name, PType::PARAMETER_STRING, validator);
+  add_to_set_(name, PType::PARAMETER_STRING, var, validator);
 
   // Declare parameter
   rcl_interfaces::msg::ParameterDescriptor descriptor;
@@ -540,6 +592,7 @@ void PManager::declare_string_parameter(
  * @param desc Parameter description.
  * @param constraints Additional value constraints.
  * @param read_only Read-only internal flag.
+ * @param var Pointer to the variable to be updated.
  * @param validator Parameter validation routine.
  *
  * @throws InvalidArgument if the parameter is already declared.
@@ -548,6 +601,7 @@ void PManager::declare_string_array_parameter(
   std::string && name,
   std::vector<std::string> && default_val,
   std::string && desc, std::string && constraints, bool read_only,
+  std::vector<std::string> * var,
   Validator && validator)
 {
   // Check if the parameter is not already present
@@ -557,7 +611,7 @@ void PManager::declare_string_array_parameter(
   }
 
   // Add parameter to the set
-  add_to_set_(name, PType::PARAMETER_STRING_ARRAY, validator);
+  add_to_set_(name, PType::PARAMETER_STRING_ARRAY, var, validator);
 
   // Declare parameter
   rcl_interfaces::msg::ParameterDescriptor descriptor;
@@ -578,6 +632,7 @@ void PManager::declare_string_array_parameter(
  * @param desc Parameter description.
  * @param constraints Additional value constraints.
  * @param read_only Read-only internal flag.
+ * @param var Pointer to the variable to be updated.
  * @param validator Parameter validation routine.
  *
  * @throws InvalidArgument if the parameter is already declared.
@@ -586,6 +641,7 @@ void PManager::declare_byte_array_parameter(
   std::string && name,
   std::vector<uint8_t> && default_val,
   std::string && desc, std::string && constraints, bool read_only,
+  std::vector<uint8_t> * var,
   Validator && validator)
 {
   // Check if the parameter is not already present
@@ -594,7 +650,7 @@ void PManager::declare_byte_array_parameter(
   }
 
   // Add parameter to the set
-  add_to_set_(name, PType::PARAMETER_BYTE_ARRAY, validator);
+  add_to_set_(name, PType::PARAMETER_BYTE_ARRAY, var, validator);
 
   // Declare parameter
   rcl_interfaces::msg::ParameterDescriptor descriptor;
