@@ -8,6 +8,10 @@ This package contains modules, both compiled and source-only, to be included in 
 
 ### ros2_app_manager
 
+This library is made of two parts.
+
+#### ROS2AppManager
+
 Header-only library that implements a wrapper object for the usual `main` thread code of ROS 2 applications, *i.e.*, processes that run single nodes or collections thereof not as components.
 
 The `main` thread of a ROS 2 app should mostly contain calls to the following methods of the `ROS2AppManager` object, which summarize the lifecycle of a ROS 2 process:
@@ -17,6 +21,10 @@ The `main` thread of a ROS 2 app should mostly contain calls to the following me
 - `ROS2AppManager::shutdown` to shutdown the ROS 2 application by deleting its objects.
 
 There are also getters to access the ROS 2 objects, such as the node, the executor and the context.
+
+#### `dua_component_container_mt`
+
+Revised version of the `rclcpp`'s `component_container_mt` container process, which makes use of the tools in this package to robustify the process and make it more flexible: it is entirely built around the `MultiThreadedExecutor` ROS 2 executor for maximum performance, and it traces signals and allows to use `SIGUSR1` and `SIGUSR2` to interrupt threads without terminating the process.
 
 ### ros2_signal_handler
 
