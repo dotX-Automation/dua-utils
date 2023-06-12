@@ -7,6 +7,8 @@
  * June 11, 2023
  */
 
+#define DUA_COMPONENT_CONTAINER
+
 #include <cstdlib>
 #include <csignal>
 
@@ -23,8 +25,7 @@ using namespace DUAAppManagement;
 
 int main(int argc, char ** argv)
 {
-  ROS2AppManager<rclcpp::executors::MultiThreadedExecutor,
-    rclcpp_components::ComponentManager> app_manager(
+  ROS2AppManager<rclcpp::executors::MultiThreadedExecutor> app_manager(
     argc,
     argv,
     "dua_component_container_mt");

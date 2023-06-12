@@ -16,10 +16,15 @@
 #include <unistd.h>
 
 #include <rclcpp/rclcpp.hpp>
+
+#ifdef DUA_COMPONENT_CONTAINER
 #include <rclcpp_components/component_manager.hpp>
+#endif
 
 namespace DUAAppManagement
 {
+
+#ifndef DUA_COMPONENT_CONTAINER
 
 /**
  * Wraps common ROS 2 main thread tasks.
@@ -162,11 +167,13 @@ private:
   std::string logger_name_;
 };
 
+#else
+
 /**
  * Specialization for rclcpp_components::ComponentManager node.
  */
 template<class ExecutorT>
-class ROS2AppManager<ExecutorT, rclcpp_components::ComponentManager> final
+class ROS2AppManager final
 {
 public:
   /**
@@ -306,6 +313,8 @@ private:
   /* Logger name. */
   std::string logger_name_;
 };
+
+#endif // DUA_COMPONENT_CONTAINER
 
 } // namespace DUAAppManagement
 
