@@ -19,7 +19,9 @@ geometry_msgs/PointStamped[4] box_corners
 geometry_msgs/PoseStamped circle_center
 float64 circle_radius
 
-# Cylinder ROI data: center, radius and semi-height
-# The Z axis of the pose is the cylinder axis
-geometry_msgs/PoseStamped cylinder_center
-float64 cylinder_radius
+# Cylinder ROI data: four reference points:
+# - center
+# - on x axis, along the circle
+# - on y axis, along the circle
+# - on z axis, on the top of the cylinder
+geometry_msgs/PointStamped[4] cylinder_points
