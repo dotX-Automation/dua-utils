@@ -57,7 +57,7 @@ public:
     }
 
     // Initialize ROS 2 context
-    context_ = std::make_shared<rclcpp::Context>();
+    context_ = rclcpp::contexts::get_global_default_context();
     rclcpp::InitOptions init_options = rclcpp::InitOptions();
     init_options.shutdown_on_signal = false;
     context_->init(argc, argv, init_options);
@@ -120,7 +120,6 @@ public:
     node_.reset();
     context_->shutdown("ROS2AppManager::shutdown");
     executor_.reset();
-    context_.reset();
     is_valid_ = false;
   }
 
