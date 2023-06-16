@@ -118,7 +118,7 @@ public:
   }
 
   /* Geometric operations. */
-  // TODO
+  void track_parent(const geometry_msgs::msg::TransformStamped & tf) override;
 
   /* Assignment operators. */
   KinematicPose & operator=(const KinematicPose & kp);

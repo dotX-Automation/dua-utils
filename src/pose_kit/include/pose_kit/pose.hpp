@@ -180,7 +180,7 @@ public:
   }
 
   /* Geometric operations. */
-  void track_parent(const geometry_msgs::msg::TransformStamped & tf);
+  virtual void track_parent(const geometry_msgs::msg::TransformStamped & tf);
 
   /* Assignment operators. */
   Pose & operator=(const Pose & p);

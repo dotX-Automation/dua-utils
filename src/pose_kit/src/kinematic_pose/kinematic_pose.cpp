@@ -7,6 +7,8 @@
  * April 14, 2023
  */
 
+#include <tf2_eigen/tf2_eigen.hpp>
+
 #include <pose_kit/kinematic_pose.hpp>
 
 namespace PoseKit
@@ -282,6 +284,47 @@ const
   twist_with_cov_stamped.twist.twist.angular.set__z(angular_vel.z());
   twist_with_cov_stamped.twist.set__covariance(this->get_twist_covariance());
   return twist_with_cov_stamped;
+}
+
+/**
+ * @brief Applies a tf to make this track a parent frame w.r.t. a parent fixed frame.
+ *
+ * @param tf ROS transformation to apply, from the parent frame to this.
+ *
+ * @throws InvalidArgument if coordinate frames are not coherent.
+ */
+void KinematicPose::track_parent(const geometry_msgs::msg::TransformStamped & tf)
+{
+  // Transform the pose (this checks that the frames are coherent)
+  Pose::track_parent(tf);
+
+  // Build twist
+  Eigen::Matrix<double, 6, 1> twist = Eigen::Matrix<double, 6, 1>::Zero();
+  twist.block<3, 1>(0, 0) = this->get_velocity();
+  twist.block<3, 1>(3, 0) = this->get_angular_velocity();
+
+  // Get isometries and tf representations, and build adjoint matrix
+  Eigen::Isometry3d iso_from_to = tf2::transformToEigen(tf.transform);
+  Eigen::Matrix<double, 6, 6> adjoint = Eigen::Matrix<double, 6, 6>::Zero();
+  Eigen::Vector3d p = iso_from_to.translation();
+  Eigen::Matrix<double, 3, 3> p_hat = Eigen::Matrix<double, 3, 3>::Zero();
+  p_hat << 0, -p.z(), p.y(),
+    p.z(), 0, -p.x(),
+    -p.y(), p.x(), 0;
+  adjoint.block<3, 3>(0, 0) = iso_from_to.rotation();
+  adjoint.block<3, 3>(0, 3) = p_hat * iso_from_to.rotation();
+  adjoint.block<3, 3>(3, 3) = iso_from_to.rotation();
+
+  // Remap covariance arrays, copy the input to preserve it
+  std::array<double, 36> twist_cov = this->get_twist_covariance();
+  Eigen::Map<const Eigen::Matrix<double, 6, 6, Eigen::RowMajor>> twist_cov_in(twist_cov.data());
+  Eigen::Map<Eigen::Matrix<double, 6, 6, Eigen::RowMajor>> twist_cov_out(twist_covariance_.data());
+
+  // Apply the transformation to the twist and its covariance
+  Eigen::Matrix<double, 6, 1> twist_out = adjoint * twist;
+  twist_cov_out = adjoint * twist_cov_in * adjoint.inverse();
+  this->set_velocity(twist_out.block<3, 1>(0, 0));
+  this->set_angular_velocity(twist_out.block<3, 1>(3, 0));
 }
 
 } // namespace PoseKit
