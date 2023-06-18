@@ -32,9 +32,15 @@ Subscriber::Subscriber(
   rmw_qos_profile_t qos,
   bool spin)
 : node_(node),
-  base_topic_(base_topic),
   qos_(qos)
 {
+  // Check if the word base topic name is already compliant
+  if (base_topic.find("/stream") == std::string::npos) {
+    base_topic_ = base_topic + "/stream";
+  } else {
+    base_topic_ = base_topic;
+  }
+
   // Instantiate reset service
   reset_client_ = node_->create_client<std_srvs::srv::Trigger>(base_topic_ + "/reset");
 
