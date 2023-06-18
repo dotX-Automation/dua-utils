@@ -36,13 +36,13 @@ Subscriber::Subscriber(
   qos_(qos)
 {
   // Instantiate reset service
-  reset_client_ = node_->create_client<std_srvs::srv::Trigger>(base_topic_ + "/stream/reset");
+  reset_client_ = node_->create_client<std_srvs::srv::Trigger>(base_topic_ + "/reset");
 
   // Instantiate subscriber
   sub_ = std::make_shared<image_transport::Subscriber>(
     image_transport::create_subscription(
       node_,
-      base_topic_ + "/stream",
+      base_topic_,
       callback,
       "theora",
       qos_));
