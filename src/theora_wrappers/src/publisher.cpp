@@ -37,6 +37,13 @@ Publisher::Publisher(
       this,
       std::placeholders::_1,
       std::placeholders::_2));
+
+  // Instantiate publisher
+  pub_ = std::make_shared<image_transport::Publisher>(
+    image_transport::create_publisher(
+      node_,
+      base_topic_ + "/stream",
+      qos_));
 }
 
 /**

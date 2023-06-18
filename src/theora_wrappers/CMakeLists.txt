@@ -29,7 +29,7 @@ find_package(std_srvs REQUIRED)
 add_library(theorapub SHARED
   src/publisher.cpp)
 target_compile_features(theorapub PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
-target_compile_definitions(theorapub PRIVATE "THEORAPUB_BUILDING_LIBRARY")
+target_compile_definitions(theorapub PRIVATE "THEORA_WRAPPERS_BUILDING_LIBRARY")
 target_include_directories(theorapub PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
@@ -40,12 +40,27 @@ ament_target_dependencies(
   sensor_msgs
   std_srvs)
 
+# Theora subscriber
+add_library(theorasub SHARED
+  src/subscriber.cpp)
+target_compile_features(theorasub PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
+target_compile_definitions(theorasub PRIVATE "THEORA_WRAPPERS_BUILDING_LIBRARY")
+target_include_directories(theorasub PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>)
+ament_target_dependencies(
+  theorasub
+  image_transport
+  rclcpp
+  sensor_msgs
+  std_srvs)
+
 # Libraries installation
 install(
   DIRECTORY include/
   DESTINATION include)
 install(
-  TARGETS theorapub
+  TARGETS theorapub theorasub
   EXPORT theora_wrappersTargets
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
