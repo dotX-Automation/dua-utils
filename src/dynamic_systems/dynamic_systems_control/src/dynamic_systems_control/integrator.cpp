@@ -69,58 +69,43 @@ namespace DynamicSystems
 
     /* System */
 
-    IntegratorSystem::IntegratorSystem() {
-      std::shared_ptr<IntegratorState> state = std::make_shared<IntegratorState>();
-      state->x = MatrixXd(0,0);
-      reset(state);
-      input(MatrixXd(0,0));
-      update();
-    }
+    void IntegratorSystem::init_parse(const InitParams& initParams) {
+      auto casted = dynamic_cast<const IntegratorInitParams&>(initParams);
 
-    IntegratorSystem::~IntegratorSystem() {}
-
-    void IntegratorSystem::init(std::shared_ptr<InitParams> initParams) {
-      System::init(initParams);
-      
-      auto casted = std::dynamic_pointer_cast<IntegratorInitParams>(initParams);
-      if(!casted) {
-        throw std::invalid_argument("Invalid init parameters for integrator system.");
-      }
-      if(casted->time_sampling < 0.0) {
+      if(casted.time_sampling < 0.0) {
         throw std::invalid_argument("Invalid sampling time for integrator system.");
       }
 
-      if(casted->time_sampling > 0.0) {
-        this->kt_ = casted->time_sampling;
+      if(casted.time_sampling > 0.0) {
+        this->kt_ = casted.time_sampling;
       } else {
         this->kt_ = 1.0;
       }
 
       std::shared_ptr<IntegratorState> state = std::make_shared<IntegratorState>();
-      state->x = MatrixXd(casted->size[0], casted->size[1]);
+      state->x = MatrixXd(casted.size[0], casted.size[1]);
       reset(state);
-      input(MatrixXd(casted->size[0], casted->size[1]));
+      input(MatrixXd(casted.size[0], casted.size[1]));
       update();
     }
 
-    void IntegratorSystem::setup(std::shared_ptr<SetupParams> setupParams) {
-      System::setup(setupParams);
+    void IntegratorSystem::setup_parse(const SetupParams& setupParams) {
+      auto casted = dynamic_cast<const IntegratorSetupParams&>(setupParams);
 
-      auto casted = std::dynamic_pointer_cast<IntegratorSetupParams>(setupParams);
-      if(!casted) {
-        throw std::invalid_argument("Invalid setup parameters for integrator system.");
-      }
-      if(casted->saturation < 0.0) {
+      if(casted.saturation < 0.0) {
         throw std::invalid_argument("Invalid saturation for integrator system.");
       }
       
-      this->mul_ = casted->multiplier;
-      this->sat_ = casted->saturation;
+      this->mul_ = casted.multiplier;
+      this->sat_ = casted.saturation;
     }
 
-    void IntegratorSystem::fini(){
-      System::fini();
+    void IntegratorSystem::setup_default() {
+      this->mul_ = 1.0;
+      this->sat_ = 1.0;
     }
+
+    void IntegratorSystem::deinit(){}
 
     void IntegratorSystem::state_validator(State &state) {
       IntegratorState &state_casted = static_cast<IntegratorState&>(state);

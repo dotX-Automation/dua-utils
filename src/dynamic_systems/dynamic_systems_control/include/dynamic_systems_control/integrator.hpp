@@ -45,24 +45,23 @@ namespace DynamicSystems
     };
     
     class DYNAMIC_SYSTEMS_CONTROL_PUBLIC IntegratorSystem : public System {
-      public:
-        IntegratorSystem();
-        ~IntegratorSystem() override;
-
-        void init(std::shared_ptr<InitParams> initParams) override;
-        void setup(std::shared_ptr<SetupParams> setupParams) override;
-        void fini() override;
-
       protected:
+        void DYNAMIC_SYSTEMS_CONTROL_LOCAL init_parse(const InitParams& initParams) override;
+        void DYNAMIC_SYSTEMS_CONTROL_LOCAL setup_parse(const SetupParams& setupParams) override;
+        void DYNAMIC_SYSTEMS_CONTROL_LOCAL setup_default() override;
+        void DYNAMIC_SYSTEMS_CONTROL_LOCAL deinit() override;
         void DYNAMIC_SYSTEMS_CONTROL_LOCAL state_validator(State &state) override;
         void DYNAMIC_SYSTEMS_CONTROL_LOCAL input_validator(const State &state, MatrixXd &input) override;
         void DYNAMIC_SYSTEMS_CONTROL_LOCAL dynamic_map(const State &state, const MatrixXd &input, State &next) override;
         void DYNAMIC_SYSTEMS_CONTROL_LOCAL output_map(const State &state, const MatrixXd &input, MatrixXd& output) override;
 
       private:
-        double kt_ = 1.0;
-        double mul_ = 1.0;
-        double sat_ = 1.0;
+        /* init members */
+        double kt_;
+
+        /* setup members */
+        double mul_;
+        double sat_;
     };
   }
 }
