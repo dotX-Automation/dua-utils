@@ -80,30 +80,34 @@ namespace DynamicSystems
       reset_ = state->clone();
     }
     state_ = reset_->clone();
-    state_validator(state_);
+    state_validator(*state_.get());
     dirty_ = true;
   }
 
   void System::input(MatrixXd in){
     input_ = in;
-    input_validator(input_);
+    input_validator(*state_.get(), input_);
     dirty_ = true;
   }
 
   MatrixXd System::output(){
-    if(dirty_) {
-      output_map(state_, input_, output_);
-      dirty_ = false;
-    }
+    update();
     return output_;
   }
 
   void System::step() {
     std::unique_ptr<State> next = state_->clone();
-    dynamic_map(state_, input_, next);
+    dynamic_map(*state_.get(), input_, *next.get());
     state_ = std::move(next);
-    state_validator(state_);
+    state_validator(*state_.get());
     dirty_ = true;
+  }
+
+  void System::update() {
+    if(dirty_) {
+      output_map(*state_.get(), input_, output_);
+      dirty_ = false;
+    }
   }
 
   MatrixXd System::evolve(MatrixXd in){
@@ -133,20 +137,21 @@ namespace DynamicSystems
     return size;
   }
 
-  void System::state_validator(std::unique_ptr<State> &state) {
+  void System::state_validator(State &state) {
     UNUSED(state);
   }
   
-  void System::input_validator(MatrixXd &input) {
+  void System::input_validator(const State &state, MatrixXd &input) {
+    UNUSED(state);
     UNUSED(input);
   }
 
-  void System::dynamic_map(std::unique_ptr<State> &state, MatrixXd &input, std::unique_ptr<State> &next) {
+  void System::dynamic_map(const State &state, const MatrixXd &input, State &next) {
     UNUSED(input);
-    next = state->clone();
+    next.copy(state);
   }
 
-  void System::output_map(std::unique_ptr<State> &state, MatrixXd &input, MatrixXd& output) {
+  void System::output_map(const State &state, const MatrixXd &input, MatrixXd& output) {
     UNUSED(state);
     output = input;
   }

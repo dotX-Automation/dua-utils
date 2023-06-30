@@ -69,20 +69,21 @@ namespace DynamicSystems
     void input(MatrixXd in);
     MatrixXd output();
     void step();
+    void update();
     MatrixXd evolve(MatrixXd in);
-
+    
     std::shared_ptr<State> state();
     std::array<unsigned int, 2u> input_size();
     std::array<unsigned int, 2u> output_size();
 
   protected:
-    virtual void DYNAMIC_SYSTEMS_BASE_LOCAL state_validator(std::unique_ptr<State> &state);
-    virtual void DYNAMIC_SYSTEMS_BASE_LOCAL input_validator(MatrixXd &input);
-    virtual void DYNAMIC_SYSTEMS_BASE_LOCAL dynamic_map(std::unique_ptr<State> &state, MatrixXd &input, std::unique_ptr<State> &next);
-    virtual void DYNAMIC_SYSTEMS_BASE_LOCAL output_map(std::unique_ptr<State> &state, MatrixXd &input, MatrixXd& output);
+    virtual void DYNAMIC_SYSTEMS_BASE_LOCAL state_validator(State &state);
+    virtual void DYNAMIC_SYSTEMS_BASE_LOCAL input_validator(const State &state, MatrixXd &input);
+    virtual void DYNAMIC_SYSTEMS_BASE_LOCAL dynamic_map(const State &state, const MatrixXd &input, State &next);
+    virtual void DYNAMIC_SYSTEMS_BASE_LOCAL output_map(const State &state, const MatrixXd &input, MatrixXd &output);
 
   private:
-    bool dirty_;
+    bool dirty_ = true;
     std::unique_ptr<State> reset_;
     std::unique_ptr<State> state_;
     MatrixXd input_;
