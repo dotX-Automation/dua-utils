@@ -71,7 +71,7 @@ namespace DynamicSystems
     void step();
     MatrixXd evolve(MatrixXd in);
 
-    std::unique_ptr<State> state();
+    std::shared_ptr<State> state();
     std::array<unsigned int, 2u> input_size();
     std::array<unsigned int, 2u> output_size();
 

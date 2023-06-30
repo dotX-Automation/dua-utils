@@ -30,6 +30,8 @@ namespace DynamicSystems
       ~IntegratorSetupParams() override;
       std::unique_ptr<SetupParams> clone() const override;
       void copy(const SetupParams &other) override;
+
+      double coeff;
     };
 
     struct DYNAMIC_SYSTEMS_CONTROL_PUBLIC IntegratorState : public State {
@@ -37,7 +39,7 @@ namespace DynamicSystems
       std::unique_ptr<State> clone() const override;
       void copy(const State &other) override;
 
-      double x;
+      MatrixXd x;
     };
     
     class DYNAMIC_SYSTEMS_CONTROL_PUBLIC IntegratorSystem : public System {
@@ -56,7 +58,8 @@ namespace DynamicSystems
         void DYNAMIC_SYSTEMS_CONTROL_LOCAL output_map(std::unique_ptr<State> &state, MatrixXd &input, MatrixXd& output) override;
 
       private:
-        double kt;
+        double kt_ = 1.0;
+        double coeff_ = 1.0;
     };
   }
 }

@@ -114,7 +114,7 @@ namespace DynamicSystems
   }
 
   
-  std::unique_ptr<State> System::state() {
+  std::shared_ptr<State> System::state() {
     return state_->clone();
   }
 
