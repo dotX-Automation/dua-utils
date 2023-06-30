@@ -56,25 +56,50 @@ namespace DynamicSystems
   System::System() {
     reset_ = std::make_unique<State>();
     state_ = std::make_unique<State>();
+    setup_default();
   }
 
-  System::~System(){  }
+  System::~System(){
+    if(inited_) {
+      fini();
+    }
+  }
 
   void System::init(std::shared_ptr<InitParams> initParams) {
     if(initParams == nullptr) {
       throw std::invalid_argument("Null init parameters.");
     }
+    init_parse(*initParams.get());
+    inited_ = true;
+    dirty_ = true;
   }
 
   void System::setup(std::shared_ptr<SetupParams> setupParams) {
     if(setupParams == nullptr) {
-      throw std::invalid_argument("Null setup parameters.");
+      setup_default();
+    } else {
+      setup_parse(*setupParams.get());
+    }
+    dirty_ = true;
+  }
+
+  void System::fini() {
+    if(inited_) {
+      deinit();
+      inited_ = false;
+      dirty_ = true;
     }
   }
 
-  void System::fini() {}
-
   
+  bool System::initialized() {
+    return inited_;
+  }
+
+  bool System::dirty() {
+    return dirty_;
+  }
+
   void System::reset(std::shared_ptr<State> state) {
     if(state) {
       reset_ = state->clone();
@@ -136,6 +161,18 @@ namespace DynamicSystems
     size[1] = output_.cols();
     return size;
   }
+
+  void System::init_parse(const InitParams& initParams) {
+    UNUSED(initParams);
+  }
+
+  void System::setup_parse(const SetupParams& setupParams) {
+    UNUSED(setupParams);
+  }
+
+  void System::setup_default() {}
+
+  void System::deinit() {}
 
   void System::state_validator(State &state) {
     UNUSED(state);
