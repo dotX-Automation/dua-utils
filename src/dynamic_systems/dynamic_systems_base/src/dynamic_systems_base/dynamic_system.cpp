@@ -52,11 +52,13 @@ namespace DynamicSystems
 
 
   /* System */
-  
+
   System::System() {
     reset_ = std::make_unique<State>();
     state_ = std::make_unique<State>();
   }
+
+  System::~System(){  }
 
   void System::init(std::shared_ptr<InitParams> initParams) {
     if(initParams == nullptr) {

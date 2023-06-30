@@ -59,7 +59,7 @@ namespace DynamicSystems
   {
   public:
     System();
-    ~System() = default;
+    virtual ~System();
 
     virtual void init(std::shared_ptr<InitParams> initParams);
     virtual void setup(std::shared_ptr<SetupParams> setupParams);

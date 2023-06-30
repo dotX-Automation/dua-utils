@@ -97,7 +97,8 @@
     "semaphore": "cpp",
     "stop_token": "cpp",
     "ranges": "cpp",
-    "geometry": "cpp"
+    "geometry": "cpp",
+    "cfloat": "cpp"
   },
   // Use Pylance as language server
   "python.languageServer": "Pylance",
