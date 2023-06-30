@@ -10,13 +10,15 @@
 #ifndef DYNAMIC_SYSTEMS_CONTROL__INTEGRATOR_HPP_
 #define DYNAMIC_SYSTEMS_CONTROL__INTEGRATOR_HPP_
 
+#include "visibility_control.h"
+
 #include <dynamic_systems_base/dynamic_system.hpp>
 
 namespace DynamicSystems
 {
   namespace Control 
   {
-    struct IntegratorInitParams : public InitParams {
+    struct DYNAMIC_SYSTEMS_CONTROL_PUBLIC IntegratorInitParams : public InitParams {
       ~IntegratorInitParams() override;
       std::unique_ptr<InitParams> clone() const override;
       void copy(const InitParams &other) override;
@@ -24,13 +26,13 @@ namespace DynamicSystems
       double time_sampling;
     };
 
-    struct IntegratorSetupParams : public SetupParams {
+    struct DYNAMIC_SYSTEMS_CONTROL_PUBLIC IntegratorSetupParams : public SetupParams {
       ~IntegratorSetupParams() override;
       std::unique_ptr<SetupParams> clone() const override;
       void copy(const SetupParams &other) override;
     };
 
-    struct IntegratorState : public State {
+    struct DYNAMIC_SYSTEMS_CONTROL_PUBLIC IntegratorState : public State {
       ~IntegratorState() override;
       std::unique_ptr<State> clone() const override;
       void copy(const State &other) override;
@@ -38,7 +40,7 @@ namespace DynamicSystems
       double x;
     };
     
-    class IntegratorSystem : public System {
+    class DYNAMIC_SYSTEMS_CONTROL_PUBLIC IntegratorSystem : public System {
       public:
         IntegratorSystem();
         ~IntegratorSystem() override;
@@ -48,10 +50,10 @@ namespace DynamicSystems
         void fini() override;
 
       protected:
-        void state_validator(std::unique_ptr<State> &state) override;
-        void input_validator(MatrixXd &input) override;
-        void dynamic_map(std::unique_ptr<State> &state, MatrixXd &input, std::unique_ptr<State> &next) override;
-        void output_map(std::unique_ptr<State> &state, MatrixXd &input, MatrixXd& output) override;
+        void DYNAMIC_SYSTEMS_CONTROL_LOCAL state_validator(std::unique_ptr<State> &state) override;
+        void DYNAMIC_SYSTEMS_CONTROL_LOCAL input_validator(MatrixXd &input) override;
+        void DYNAMIC_SYSTEMS_CONTROL_LOCAL dynamic_map(std::unique_ptr<State> &state, MatrixXd &input, std::unique_ptr<State> &next) override;
+        void DYNAMIC_SYSTEMS_CONTROL_LOCAL output_map(std::unique_ptr<State> &state, MatrixXd &input, MatrixXd& output) override;
 
       private:
         double kt;

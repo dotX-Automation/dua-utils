@@ -146,7 +146,7 @@ namespace DynamicSystems
     next = state->clone();
   }
 
-  void output_map(std::unique_ptr<State> &state, MatrixXd &input, MatrixXd& output) {
+  void System::output_map(std::unique_ptr<State> &state, MatrixXd &input, MatrixXd& output) {
     UNUSED(state);
     output = input;
   }

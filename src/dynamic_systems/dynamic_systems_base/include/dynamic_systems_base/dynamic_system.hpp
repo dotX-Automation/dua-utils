@@ -25,7 +25,7 @@ namespace DynamicSystems
   /**
    * Holds init parameters for a dynamic system. Made to be derived from.
    */
-  struct InitParams
+  struct DYNAMIC_SYSTEMS_BASE_PUBLIC InitParams
   {
     virtual ~InitParams();
     virtual std::unique_ptr<InitParams> clone() const;
@@ -35,7 +35,7 @@ namespace DynamicSystems
   /**
    * Holds setup parameters for a dynamic system. Made to be derived from.
    */
-  struct SetupParams
+  struct DYNAMIC_SYSTEMS_BASE_PUBLIC SetupParams
   {
     virtual ~SetupParams();
     virtual std::unique_ptr<SetupParams> clone() const;
@@ -45,7 +45,7 @@ namespace DynamicSystems
   /**
    * Holds internal state for a dynamic system. Made to be derived from.
    */
-  struct State
+  struct DYNAMIC_SYSTEMS_BASE_PUBLIC State
   {
     virtual ~State();
     virtual std::unique_ptr<State> clone() const;
@@ -55,7 +55,7 @@ namespace DynamicSystems
   /**
    * Base class for dynamic systems.
    */
-  class System
+  class DYNAMIC_SYSTEMS_BASE_PUBLIC System
   {
   public:
     System();
@@ -76,10 +76,10 @@ namespace DynamicSystems
     std::array<unsigned int, 2u> output_size();
 
   protected:
-    virtual void state_validator(std::unique_ptr<State> &state);
-    virtual void input_validator(MatrixXd &input);
-    virtual void dynamic_map(std::unique_ptr<State> &state, MatrixXd &input, std::unique_ptr<State> &next);
-    virtual void output_map(std::unique_ptr<State> &state, MatrixXd &input, MatrixXd& output);
+    virtual void DYNAMIC_SYSTEMS_BASE_LOCAL state_validator(std::unique_ptr<State> &state);
+    virtual void DYNAMIC_SYSTEMS_BASE_LOCAL input_validator(MatrixXd &input);
+    virtual void DYNAMIC_SYSTEMS_BASE_LOCAL dynamic_map(std::unique_ptr<State> &state, MatrixXd &input, std::unique_ptr<State> &next);
+    virtual void DYNAMIC_SYSTEMS_BASE_LOCAL output_map(std::unique_ptr<State> &state, MatrixXd &input, MatrixXd& output);
 
   private:
     bool dirty_;
