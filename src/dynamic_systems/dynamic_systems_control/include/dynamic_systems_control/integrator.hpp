@@ -24,6 +24,7 @@ namespace DynamicSystems
       void copy(const InitParams &other) override;
 
       double time_sampling;
+      std::array<unsigned int, 2> size;
     };
 
     struct DYNAMIC_SYSTEMS_CONTROL_PUBLIC IntegratorSetupParams : public SetupParams {
@@ -31,7 +32,8 @@ namespace DynamicSystems
       std::unique_ptr<SetupParams> clone() const override;
       void copy(const SetupParams &other) override;
 
-      double coeff;
+      double multiplier;
+      double saturation;
     };
 
     struct DYNAMIC_SYSTEMS_CONTROL_PUBLIC IntegratorState : public State {
@@ -52,14 +54,15 @@ namespace DynamicSystems
         void fini() override;
 
       protected:
-        void DYNAMIC_SYSTEMS_CONTROL_LOCAL state_validator(std::unique_ptr<State> &state) override;
-        void DYNAMIC_SYSTEMS_CONTROL_LOCAL input_validator(MatrixXd &input) override;
-        void DYNAMIC_SYSTEMS_CONTROL_LOCAL dynamic_map(std::unique_ptr<State> &state, MatrixXd &input, std::unique_ptr<State> &next) override;
-        void DYNAMIC_SYSTEMS_CONTROL_LOCAL output_map(std::unique_ptr<State> &state, MatrixXd &input, MatrixXd& output) override;
+        void DYNAMIC_SYSTEMS_CONTROL_LOCAL state_validator(State &state) override;
+        void DYNAMIC_SYSTEMS_CONTROL_LOCAL input_validator(const State &state, MatrixXd &input) override;
+        void DYNAMIC_SYSTEMS_CONTROL_LOCAL dynamic_map(const State &state, const MatrixXd &input, State &next) override;
+        void DYNAMIC_SYSTEMS_CONTROL_LOCAL output_map(const State &state, const MatrixXd &input, MatrixXd& output) override;
 
       private:
         double kt_ = 1.0;
-        double coeff_ = 1.0;
+        double mul_ = 1.0;
+        double sat_ = 1.0;
     };
   }
 }

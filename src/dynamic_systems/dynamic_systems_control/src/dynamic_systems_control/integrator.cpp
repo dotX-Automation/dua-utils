@@ -27,6 +27,7 @@ namespace DynamicSystems
       InitParams::copy(other);
       auto casted = dynamic_cast<const IntegratorInitParams&>(other);
       this->time_sampling = casted.time_sampling;
+      this->size = casted.size;
     }
 
 
@@ -43,7 +44,8 @@ namespace DynamicSystems
     void IntegratorSetupParams::copy(const SetupParams &other) {
       SetupParams::copy(other);
       auto casted = dynamic_cast<const IntegratorSetupParams&>(other);
-      this->coeff = casted.coeff;
+      this->multiplier = casted.multiplier;
+      this->saturation = casted.saturation;
     }
 
 
@@ -69,8 +71,10 @@ namespace DynamicSystems
 
     IntegratorSystem::IntegratorSystem() {
       std::shared_ptr<IntegratorState> state = std::make_shared<IntegratorState>();
-      state->x = MatrixXd(1,1);
+      state->x = MatrixXd(0,0);
       reset(state);
+      input(MatrixXd(0,0));
+      update();
     }
 
     IntegratorSystem::~IntegratorSystem() {}
@@ -83,7 +87,7 @@ namespace DynamicSystems
         throw std::invalid_argument("Invalid init parameters for integrator system.");
       }
       if(casted->time_sampling < 0.0) {
-        throw std::invalid_argument("Invalid init parameters for integrator system.");
+        throw std::invalid_argument("Invalid sampling time for integrator system.");
       }
 
       if(casted->time_sampling > 0.0) {
@@ -91,6 +95,12 @@ namespace DynamicSystems
       } else {
         this->kt_ = 1.0;
       }
+
+      std::shared_ptr<IntegratorState> state = std::make_shared<IntegratorState>();
+      state->x = MatrixXd(casted->size[0], casted->size[1]);
+      reset(state);
+      input(MatrixXd(casted->size[0], casted->size[1]));
+      update();
     }
 
     void IntegratorSystem::setup(std::shared_ptr<SetupParams> setupParams) {
@@ -100,32 +110,42 @@ namespace DynamicSystems
       if(!casted) {
         throw std::invalid_argument("Invalid setup parameters for integrator system.");
       }
+      if(casted->saturation < 0.0) {
+        throw std::invalid_argument("Invalid saturation for integrator system.");
+      }
       
-      this->coeff_ = casted->coeff;
+      this->mul_ = casted->multiplier;
+      this->sat_ = casted->saturation;
     }
 
     void IntegratorSystem::fini(){
       System::fini();
     }
 
-    void IntegratorSystem::state_validator(std::unique_ptr<State> &state) {
-      UNUSED(state);
+    void IntegratorSystem::state_validator(State &state) {
+      IntegratorState &state_casted = static_cast<IntegratorState&>(state);
+      if(this->sat_ > 0.0) {
+        state_casted.x = state_casted.x.cwiseMax(-this->sat_).cwiseMin(this->sat_);
+      }
     }
 
-    void IntegratorSystem::input_validator(MatrixXd &input) {
+    void IntegratorSystem::input_validator(const State &state, MatrixXd &input) {
+      const IntegratorState &state_casted = static_cast<const IntegratorState&>(state);
+      if(input.size() != state_casted.x.size()) {
+        throw std::invalid_argument("Invalid input size.");
+      }
+    }
+
+    void IntegratorSystem::dynamic_map(const State &state, const MatrixXd &input, State &next) {
+      const IntegratorState &state_casted = static_cast<const IntegratorState&>(state);
+      IntegratorState &next_casted = static_cast<IntegratorState&>(next);
+      next_casted.x = state_casted.x + this->mul_ * this->kt_ * input;
+    }
+
+    void IntegratorSystem::output_map(const State &state, const MatrixXd &input, MatrixXd& output) {
       UNUSED(input);
-    }
-
-    void IntegratorSystem::dynamic_map(std::unique_ptr<State> &state, MatrixXd &input, std::unique_ptr<State> &next) {
-      IntegratorState *state_ptr = (IntegratorState *) state.get();
-      IntegratorState *next_ptr = (IntegratorState *) next.get();
-      next_ptr->x = state_ptr->x + this->coeff_ * this->kt_ * input;
-    }
-
-    void IntegratorSystem::output_map(std::unique_ptr<State> &state, MatrixXd &input, MatrixXd& output) {
-      UNUSED(input);
-      IntegratorState *state_ptr = (IntegratorState *) state.get();
-      output = state_ptr->x;
+      const IntegratorState &state_casted = static_cast<const IntegratorState&>(state);
+      output = state_casted.x;
     }
   }
 } 
