@@ -62,9 +62,8 @@ namespace DynamicSystems
 
     void IntegratorState::copy(const State &other) {
       State::copy(other);
-
       auto casted = dynamic_cast<const IntegratorState&>(other);
-      this->x = casted.x;
+      this->value = casted.value;
     }
     
 
@@ -84,7 +83,7 @@ namespace DynamicSystems
       }
 
       std::shared_ptr<IntegratorState> state = std::make_shared<IntegratorState>();
-      state->x = MatrixXd(casted.rows, casted.cols);
+      state->value = MatrixXd(casted.rows, casted.cols);
       reset(state);
       input(MatrixXd(casted.rows, casted.cols));
       update();
@@ -111,13 +110,13 @@ namespace DynamicSystems
     void IntegratorSystem::state_validator(State &state) {
       IntegratorState &state_casted = static_cast<IntegratorState&>(state);
       if(this->sat_ > 0.0) {
-        state_casted.x = state_casted.x.cwiseMax(-this->sat_).cwiseMin(this->sat_);
+        state_casted.value = state_casted.value.cwiseMax(-this->sat_).cwiseMin(this->sat_);
       }
     }
 
     void IntegratorSystem::input_validator(const State &state, MatrixXd &input) {
       const IntegratorState &state_casted = static_cast<const IntegratorState&>(state);
-      if(input.size() != state_casted.x.size()) {
+      if(input.size() != state_casted.value.size()) {
         throw std::invalid_argument("Invalid input size.");
       }
     }
@@ -125,13 +124,13 @@ namespace DynamicSystems
     void IntegratorSystem::dynamic_map(const State &state, const MatrixXd &input, State &next) {
       const IntegratorState &state_casted = static_cast<const IntegratorState&>(state);
       IntegratorState &next_casted = static_cast<IntegratorState&>(next);
-      next_casted.x = state_casted.x + this->mul_ * this->kt_ * input;
+      next_casted.value = state_casted.value + this->mul_ * this->kt_ * input;
     }
 
     void IntegratorSystem::output_map(const State &state, const MatrixXd &input, MatrixXd& output) {
       UNUSED(input);
       const IntegratorState &state_casted = static_cast<const IntegratorState&>(state);
-      output = state_casted.x;
+      output = state_casted.value;
     }
   }
 } 

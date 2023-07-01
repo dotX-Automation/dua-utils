@@ -42,7 +42,7 @@ namespace DynamicSystems
       std::unique_ptr<State> clone() const override;
       void copy(const State &other) override;
 
-      MatrixXd x;
+      MatrixXd value;
     };
     
     class DYNAMIC_SYSTEMS_CONTROL_PUBLIC IntegratorSystem : public System {
