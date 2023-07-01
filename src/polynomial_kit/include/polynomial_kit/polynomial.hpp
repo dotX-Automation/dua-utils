@@ -48,23 +48,23 @@ namespace PolynomialKit
       Polynomial operator+();
       Polynomial operator-(); 
 
-      Polynomial operator+(const Polynomial& other);
-      Polynomial operator-(const Polynomial& other);
-      Polynomial operator*(const Polynomial& other);
-      Polynomial operator/(const Polynomial& other);
-      Polynomial operator%(const Polynomial& other);
-      Polynomial operator^(unsigned int p);
-      Polynomial operator<<(unsigned int s);
-      Polynomial operator>>(unsigned int s);
+      Polynomial operator+(const Polynomial& other);  // Sum
+      Polynomial operator-(const Polynomial& other);  // Subtraction
+      Polynomial operator*(const Polynomial& other);  // Multiplication
+      Polynomial operator/(const Polynomial& other);  // Division whole part
+      Polynomial operator%(const Polynomial& other);  // Division remainder
+      Polynomial operator^(const unsigned int& p);    // Power
+      Polynomial operator<<(const unsigned int& s);   // Shift left  (increase degree)
+      Polynomial operator>>(const unsigned int& s);   // Shift right (decrease degree)
 
-      Polynomial& operator+=(const Polynomial& rhs);
-      Polynomial& operator-=(const Polynomial& rhs);
-      Polynomial& operator*=(const Polynomial& rhs);
-      Polynomial& operator/=(const Polynomial& rhs);
-      Polynomial& operator%=(const Polynomial& rhs);
-      Polynomial& operator^=(unsigned int p);
-      Polynomial& operator<<=(unsigned int s);
-      Polynomial& operator>>=(unsigned int s);
+      Polynomial& operator+=(const Polynomial& rhs);  // Sum
+      Polynomial& operator-=(const Polynomial& rhs);  // Subtraction
+      Polynomial& operator*=(const Polynomial& rhs);  // Multiplication
+      Polynomial& operator/=(const Polynomial& rhs);  // Division whole part
+      Polynomial& operator%=(const Polynomial& rhs);  // Division remainder
+      Polynomial& operator^=(const unsigned int& p);  // Power
+      Polynomial& operator<<=(const unsigned int& s); // Shift left  (increase degree)
+      Polynomial& operator>>=(const unsigned int& s); // Shift right (decrease degree)
     
     private:
       MatrixX<T> poly;
