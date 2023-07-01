@@ -12,7 +12,6 @@
         "/opt/ros/humble/include/**",
         "${workspaceFolder}/install/**",
         "${workspaceFolder}/install/dua_interfaces/include/**",
-        "${workspaceFolder}/src/pose_kit/include/**",
         "${workspaceFolder}/src/dua_app_management/include/**",
         "${workspaceFolder}/src/dua_node/include/**",
         "${workspaceFolder}/src/dynamic_systems/dynamic_systems_base/include/**",
@@ -20,6 +19,8 @@
         "${workspaceFolder}/src/filters/filters_base/include/**",
         "${workspaceFolder}/src/filters/filters_plugins/include/**",
         "${workspaceFolder}/src/params_manager/include/**",
+        "${workspaceFolder}/src/polynomial_kit/include/**",
+        "${workspaceFolder}/src/pose_kit/include/**",
         "${workspaceFolder}/src/dua_qos/include/**",
         "/usr/local/**",
         "/usr/local/include"
