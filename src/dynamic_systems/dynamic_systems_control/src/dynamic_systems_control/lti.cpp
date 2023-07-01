@@ -26,6 +26,8 @@ namespace DynamicSystems
     void LTIInitParams::copy(const InitParams &other) {
       InitParams::copy(other);
       auto casted = dynamic_cast<const LTIInitParams&>(other);
+      this->time_sampling = casted.time_sampling;
+      this->zoh_steps = casted.zoh_steps;
       this->matrixA = casted.matrixA;
       this->matrixB = casted.matrixB;
       this->matrixC = casted.matrixC;
@@ -70,6 +72,14 @@ namespace DynamicSystems
     void LTISystem::init_parse(const InitParams& initParams) {
       auto casted = dynamic_cast<const LTIInitParams&>(initParams);
 
+      if(casted.time_sampling < 0.0) {
+        throw std::invalid_argument("Invalid time sampling for lti system.");
+      }
+
+      if(casted.time_sampling > 0.0 && casted.zoh_steps == 0) {
+        throw std::invalid_argument("Invalid zoh steps for lti system.");
+      }
+
       if(casted.matrixA.rows() != casted.matrixA.cols() ||
          casted.matrixB.rows() != casted.matrixA.rows() ||
          casted.matrixC.cols() != casted.matrixA.cols() ||
@@ -82,11 +92,18 @@ namespace DynamicSystems
       n_ = casted.matrixA.rows();
       m_ = casted.matrixB.cols();
       q_ = casted.matrixC.rows();
-      A_ = casted.matrixA;
-      B_ = casted.matrixB;
-      C_ = casted.matrixC;
-      D_ = casted.matrixD;
 
+      if(casted.time_sampling > 0.0) {
+        distretization_zoh(casted.time_sampling, casted.zoh_steps,
+          casted.matrixA, casted.matrixB, casted.matrixC, casted.matrixD,
+          A_, B_, C_, D_);
+      } else {
+        A_ = casted.matrixA;
+        B_ = casted.matrixB;
+        C_ = casted.matrixC;
+        D_ = casted.matrixD;
+      }
+      
       std::shared_ptr<LTIState> state = std::make_shared<LTIState>();
       state->value = MatrixXd(n_, 1);
       reset(state);

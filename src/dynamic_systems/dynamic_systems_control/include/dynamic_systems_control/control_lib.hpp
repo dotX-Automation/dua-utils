@@ -13,12 +13,18 @@
 #include "visibility_control.h"
 
 #include <Eigen/Geometry>
+#include <unsupported/Eigen/MatrixFunctions>
+
+using namespace Eigen;
 
 namespace DynamicSystems
 {
   namespace Control 
   {
-
+    void DYNAMIC_SYSTEMS_CONTROL_PUBLIC distretization_zoh(
+      double ts, unsigned int steps, 
+      const MatrixXd & A, const MatrixXd & B, const MatrixXd & C, const MatrixXd & D,
+      MatrixXd & A_zoh, MatrixXd & B_zoh, MatrixXd & C_zoh, MatrixXd & D_zoh);
   }
 }
 

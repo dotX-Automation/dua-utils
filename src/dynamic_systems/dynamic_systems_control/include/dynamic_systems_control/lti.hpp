@@ -13,6 +13,7 @@
 #include "visibility_control.h"
 
 #include <dynamic_systems_base/dynamic_system.hpp>
+#include <dynamic_systems_control/control_lib.hpp>
 
 namespace DynamicSystems
 {
@@ -22,7 +23,9 @@ namespace DynamicSystems
       ~LTIInitParams() override;
       std::unique_ptr<InitParams> clone() const override;
       void copy(const InitParams &other) override;
-      
+
+      double time_sampling;
+      unsigned int zoh_steps;
       MatrixXd matrixA;
       MatrixXd matrixB;
       MatrixXd matrixC;
