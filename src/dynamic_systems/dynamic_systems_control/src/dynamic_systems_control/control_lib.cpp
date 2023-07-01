@@ -8,6 +8,7 @@
  */
 
 #include <dynamic_systems_control/control_lib.hpp>
+#include <unsupported/Eigen/Polynomials>
 
 namespace DynamicSystems
 {
@@ -41,6 +42,6 @@ namespace DynamicSystems
       B_zoh = H*B;
       C_zoh = C;
       D_zoh = D;
-      }
+    }
   }
 } 
