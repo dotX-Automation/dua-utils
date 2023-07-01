@@ -10,6 +10,7 @@ This repository contains the following ROS 2 utilities:
 - [x] [`dua_interfaces`](src/dua_interfaces/README.md): ROS 2 interfaces for the Distributed Unified Architecture.
 - [x] [`dua_node`](src/dua_node/README.md): C++ library to implement a ROS 2 node leveraging the capabilities of the Distributed Unified Architecture.
 - [x] [`dua_qos`](src/dua_qos/README.md): C++ library to implement common ROS 2 Quality of Service (QoS) profiles for DUA modules.
+- [x] [`dynamic_systems`](src/dynamic_systems/README.md): C++ library to implement modular dynamic systems. Requires `eigen 3.4`.
 - [x] [`filters`](src/filters/README.md): C++ library to implement dynamic, discrete-time scalar filters as ROS 2 plugins. Requires `pluginlib`.
 - [x] [`params_manager`](src/params_manager/README.md): C++ library to easily manage ROS 2 node parameters with the `rclcpp` API.
 - [x] [`pose_kit`](src/pose_kit/README.md): Collection of C++ libraries to store and manipulate the state of a rigid body in 2D/3D space.
