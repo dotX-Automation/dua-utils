@@ -14,7 +14,7 @@
 
 #include <cmath>
 #include <memory>
-#include <Eigen/Geometry>
+#include <Eigen/Core>
 
 #define UNUSED(arg) (void)(arg)
 

@@ -12,7 +12,7 @@
 
 #include "visibility_control.h"
 
-#include <Eigen/Geometry>
+#include <Eigen/Core>
 #include <unsupported/Eigen/MatrixFunctions>
 
 using namespace Eigen;
