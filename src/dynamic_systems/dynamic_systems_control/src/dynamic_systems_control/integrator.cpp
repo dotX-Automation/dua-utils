@@ -27,7 +27,8 @@ namespace DynamicSystems
       InitParams::copy(other);
       auto casted = dynamic_cast<const IntegratorInitParams&>(other);
       this->time_sampling = casted.time_sampling;
-      this->size = casted.size;
+      this->rows = casted.rows;
+      this->cols = casted.cols;
     }
 
 
@@ -83,9 +84,9 @@ namespace DynamicSystems
       }
 
       std::shared_ptr<IntegratorState> state = std::make_shared<IntegratorState>();
-      state->x = MatrixXd(casted.size[0], casted.size[1]);
+      state->x = MatrixXd(casted.rows, casted.cols);
       reset(state);
-      input(MatrixXd(casted.size[0], casted.size[1]));
+      input(MatrixXd(casted.rows, casted.cols));
       update();
     }
 

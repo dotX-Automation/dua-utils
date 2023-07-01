@@ -24,7 +24,8 @@ namespace DynamicSystems
       void copy(const InitParams &other) override;
 
       double time_sampling;
-      std::array<unsigned int, 2> size;
+      unsigned int rows;
+      unsigned int cols;
     };
 
     struct DYNAMIC_SYSTEMS_CONTROL_PUBLIC IntegratorSetupParams : public SetupParams {
