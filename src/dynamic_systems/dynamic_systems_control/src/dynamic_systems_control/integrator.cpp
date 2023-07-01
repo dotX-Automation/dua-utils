@@ -116,7 +116,7 @@ namespace DynamicSystems
 
     void IntegratorSystem::input_validator(const State &state, MatrixXd &input) {
       const IntegratorState &state_casted = static_cast<const IntegratorState&>(state);
-      if(input.size() != state_casted.value.size()) {
+      if(input.rows() != state_casted.value.rows() || input.cols() != state_casted.value.cols()) {
         throw std::invalid_argument("Invalid input size.");
       }
     }
