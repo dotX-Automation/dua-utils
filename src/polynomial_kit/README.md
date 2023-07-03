@@ -12,7 +12,13 @@ One class:
 
 The `Polynomial` can use any numeric type, and offer:
 
-- Overloaded operator for all common operations.
+- Eigen integration for optimized performance.
+- Template class to accomodate every need.
+- Overloaded operator for the following operations:
+  - Addition;
+  - Product;
+  - Power;
+  - Degree shift.
 
 ---
 

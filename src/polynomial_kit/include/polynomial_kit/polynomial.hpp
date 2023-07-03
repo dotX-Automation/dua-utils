@@ -24,24 +24,35 @@ namespace PolynomialKit
   class POLYNOMIAL_KIT_PUBLIC Polynomial {
     public:
       Polynomial();
-      Polynomial(T val);
-      Polynomial(VectorX<T> vector);
-      Polynomial(MatrixX<T> matrix);
-
+      Polynomial(const T& value);
+      Polynomial(const MatrixX<T>& matrix);
       ~Polynomial();
 
-      VectorX<T> row_vector();
-      VectorX<T> col_vector();
+      int degree();
+      unsigned int size();
+      unsigned int capacity();
+      void reserve(unsigned int capacity, bool force = false);
+      void clean();
+      void trim();
+
+      void set(unsigned int degree, const T& coeff);
+      T get(unsigned int degree);
+      T coeff(unsigned int degree);
+      T eval(const T& value);
       
-      MatrixX<T> row_matrix();
-      MatrixX<T> col_matrix();
+      VectorX<T> row_vector(unsigned int mindegree = 0);
+      VectorX<T> col_vector(unsigned int mindegree = 0);
+      MatrixX<T> row_matrix(unsigned int mindegree = 0);
+      MatrixX<T> col_matrix(unsigned int mindegree = 0);
 
       Polynomial& operator=(const Polynomial& other);
       
-      T& operator[](std::size_t idx);
-      const T& operator[](std::size_t idx) const;
-
-      T operator()(T x) const;
+      Polynomial& operator+=(const Polynomial& other);  // Sum
+      Polynomial& operator-=(const Polynomial& other);  // Subtraction
+      Polynomial& operator*=(const Polynomial& other);  // Multiplication
+      Polynomial& operator^=(unsigned int p);         // Power
+      Polynomial& operator<<=(unsigned int s);        // Shift left  (increase degree)
+      Polynomial& operator>>=(unsigned int s);        // Shift right (decrease degree)
 
       bool operator==(const Polynomial& other);
 
@@ -51,24 +62,27 @@ namespace PolynomialKit
       Polynomial operator+(const Polynomial& other);  // Sum
       Polynomial operator-(const Polynomial& other);  // Subtraction
       Polynomial operator*(const Polynomial& other);  // Multiplication
-      Polynomial operator/(const Polynomial& other);  // Division whole part
-      Polynomial operator%(const Polynomial& other);  // Division remainder
-      Polynomial operator^(const unsigned int& p);    // Power
-      Polynomial operator<<(const unsigned int& s);   // Shift left  (increase degree)
-      Polynomial operator>>(const unsigned int& s);   // Shift right (decrease degree)
-
-      Polynomial& operator+=(const Polynomial& rhs);  // Sum
-      Polynomial& operator-=(const Polynomial& rhs);  // Subtraction
-      Polynomial& operator*=(const Polynomial& rhs);  // Multiplication
-      Polynomial& operator/=(const Polynomial& rhs);  // Division whole part
-      Polynomial& operator%=(const Polynomial& rhs);  // Division remainder
-      Polynomial& operator^=(const unsigned int& p);  // Power
-      Polynomial& operator<<=(const unsigned int& s); // Shift left  (increase degree)
-      Polynomial& operator>>=(const unsigned int& s); // Shift right (decrease degree)
+      Polynomial operator^(unsigned int p);           // Power
+      Polynomial operator<<(unsigned int s);          // Shift left  (increase degree)
+      Polynomial operator>>(unsigned int s);          // Shift right (decrease degree)
     
     private:
-      MatrixX<T> poly;
+      MatrixX<T> poly_ = MatrixX<T>(1,1);
+      unsigned int size_ = 1;
+      unsigned int capacity_ = 1;
   };
+
+  typedef Polynomial<double> Polynomiald;
+  typedef Polynomial<float> Polynomialf;
+  typedef Polynomial<long> Polynomiall;
+  typedef Polynomial<int> Polynomiali;
+  typedef Polynomial<short> Polynomials;
+  
+  typedef Polynomial<std::complex<double>> Polynomialdc;
+  typedef Polynomial<std::complex<float>> Polynomialfc;
+  typedef Polynomial<std::complex<long>> Polynomiallc;
+  typedef Polynomial<std::complex<int>> Polynomialic;
+  typedef Polynomial<std::complex<short>> Polynomialsc;
 }
 
 #endif  //POLYNOMIAL_KIT__DYNAMIC_SYSTEM_HPP_
