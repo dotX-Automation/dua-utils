@@ -50,25 +50,25 @@ namespace PolynomialKit
       Polynomial& operator+=(const Polynomial& other);  // Sum
       Polynomial& operator-=(const Polynomial& other);  // Subtraction
       Polynomial& operator*=(const Polynomial& other);  // Multiplication
-      Polynomial& operator^=(unsigned int p);         // Power
-      Polynomial& operator<<=(unsigned int s);        // Shift left  (increase degree)
-      Polynomial& operator>>=(unsigned int s);        // Shift right (decrease degree)
+      Polynomial& operator^=(unsigned int p);           // Power
+      Polynomial& operator<<=(unsigned int s);          // Shift left  (increase degree)
+      Polynomial& operator>>=(unsigned int s);          // Shift right (decrease degree)
 
       bool operator==(const Polynomial& other);
 
       Polynomial operator+();
       Polynomial operator-(); 
 
-      Polynomial operator+(const Polynomial& other);  // Sum
-      Polynomial operator-(const Polynomial& other);  // Subtraction
-      Polynomial operator*(const Polynomial& other);  // Multiplication
-      Polynomial operator^(unsigned int p);           // Power
-      Polynomial operator<<(unsigned int s);          // Shift left  (increase degree)
-      Polynomial operator>>(unsigned int s);          // Shift right (decrease degree)
+      Polynomial operator+(const Polynomial& other);    // Sum
+      Polynomial operator-(const Polynomial& other);    // Subtraction
+      Polynomial operator*(const Polynomial& other);    // Multiplication
+      Polynomial operator^(unsigned int p);             // Power
+      Polynomial operator<<(unsigned int s);            // Shift left  (increase degree)
+      Polynomial operator>>(unsigned int s);            // Shift right (decrease degree)
 
       template <typename U>
       inline explicit operator Polynomial<U>() const {
-        return Polynomial<U>(this->poly_.cast<U>());
+        return Polynomial<U>(this->poly_.template cast<U>());
       }
 
     private:
@@ -77,17 +77,17 @@ namespace PolynomialKit
       unsigned int capacity_ = 1;
   };
 
-  typedef Polynomial<double> Polynomiald;
-  typedef Polynomial<float> Polynomialf;
-  typedef Polynomial<long> Polynomiall;
-  typedef Polynomial<int> Polynomiali;
-  typedef Polynomial<short> Polynomials;
+  using Polynomiald = Polynomial<double>;
+  using Polynomialf = Polynomial<float>;
+  using Polynomiall = Polynomial<long>;
+  using Polynomiali = Polynomial<int>;
+  using Polynomials = Polynomial<short>;
   
-  typedef Polynomial<std::complex<double>> Polynomialdc;
-  typedef Polynomial<std::complex<float>> Polynomialfc;
-  typedef Polynomial<std::complex<long>> Polynomiallc;
-  typedef Polynomial<std::complex<int>> Polynomialic;
-  typedef Polynomial<std::complex<short>> Polynomialsc;
+  using Polynomialdc = Polynomial<std::complex<double>>;
+  using Polynomialfc = Polynomial<std::complex<float>>;
+  using Polynomiallc = Polynomial<std::complex<long>>;
+  using Polynomialic = Polynomial<std::complex<int>>;
+  using Polynomialsc = Polynomial<std::complex<short>>;
 }
 
 #endif  //POLYNOMIAL_KIT__DYNAMIC_SYSTEM_HPP_
