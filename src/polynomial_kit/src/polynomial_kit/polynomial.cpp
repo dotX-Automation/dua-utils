@@ -48,17 +48,17 @@ namespace PolynomialKit
   Polynomial<T>::~Polynomial() {}
 
   template <typename T>
-  int Polynomial<T>::degree() {
+  unsigned int Polynomial<T>::degree() const {
     return size_-1;
   }
 
   template <typename T>
-  unsigned int Polynomial<T>::size() {
+  unsigned int Polynomial<T>::size() const {
     return size_;
   }
 
   template <typename T>
-  unsigned int Polynomial<T>::capacity() {
+  unsigned int Polynomial<T>::capacity() const {
     return capacity_;
   }
   
@@ -78,14 +78,16 @@ namespace PolynomialKit
   
   template <typename T>
   void Polynomial<T>::clean() {
-    this->poly_(0, seq(this->size(), this->capacity()-1)) = T();
+    for(unsigned int i = this->size(); i < this->capacity(); i++) {
+      this->poly_(0, i) = T();
+    }
   }
 
   template <typename T>
   void Polynomial<T>::trim() {
     unsigned int index = size_-1;
     while(index > 0) {
-      if(poly_(0, index) != 0) {
+      if(poly_(0, index) != T()) {
         break;
       }
       index--;
@@ -109,7 +111,7 @@ namespace PolynomialKit
   }
 
   template <typename T>
-  T Polynomial<T>::get(unsigned int degree) {
+  T Polynomial<T>::get(unsigned int degree) const {
     if(degree < size_){
       return poly_(0, degree);
     } else {
@@ -118,16 +120,16 @@ namespace PolynomialKit
   }
 
   template <typename T>
-  T Polynomial<T>::coeff(unsigned int degree) {
+  T Polynomial<T>::coeff(unsigned int degree) const {
     return get(degree);
   }
 
   template <typename T>
-  T Polynomial<T>::eval(const T& point) {
+  T Polynomial<T>::eval(const T& point) const {
     T state = point;
-    T value = (*this)[0];
-    for(int i = 1; i < this->degree(); i++) {
-      value = (*this)[i] * state;
+    T value = this->poly_(0, 0);
+    for(unsigned int i = 1; i < this->degree(); i++) {
+      value = this->poly_(0, i) * state;
       state = state * state;
     }
     return value;
@@ -145,20 +147,20 @@ namespace PolynomialKit
   
   template <typename T>
   MatrixX<T> Polynomial<T>::row_matrix(unsigned int mindegree) {
+    MatrixX<T> res = MatrixX<T>::Map(poly_.data(), 1, poly_.cols());
     if(mindegree >= size_) {
-      return MatrixX<T>::Map(poly_.data(), 1, poly_.cols()).conservativeResize(1, mindegree+1);
-    } else {
-      return MatrixX<T>::Map(poly_.data(), 1, poly_.cols());
-    }
+      res.conservativeResize(1, mindegree+1);
+    } 
+    return res;
   }
 
   template <typename T>
   MatrixX<T> Polynomial<T>::col_matrix(unsigned int mindegree) {
+    MatrixX<T> res = MatrixX<T>::Map(poly_.data(), poly_.cols(), 1);
     if(mindegree >= size_) {
-      return MatrixX<T>::Map(poly_.data(), poly_.cols(), 1).conservativeResize(1, mindegree+1);
-    } else {
-      return MatrixX<T>::Map(poly_.data(), poly_.cols(), 1);
-    }
+      res.conservativeResize(1, mindegree+1);
+    } 
+    return res;
   }
 
   template <typename T>
@@ -208,7 +210,7 @@ namespace PolynomialKit
     MatrixX<T> res = MatrixX<T>(1, size);
     for(unsigned int i = 0; i < this->size(); i++) {
       for(unsigned int j = 0; j < this->size(); j++) {
-        res.poly_(0, i+j) += this->poly_(0, i) * this->poly_(0, j);
+        res(0, i+j) += this->poly_(0, i) * this->poly_(0, j);
       }
     }
     this->reserve(size);
@@ -219,15 +221,15 @@ namespace PolynomialKit
 
   template <typename T>
   Polynomial<T>& Polynomial<T>::operator^=(unsigned int p) {
-    Polynomial<T> square = *this;
+    Polynomial<T> square(this->poly_);
     bool first = true;
     while(true) {
       if(p % 2 == 1) {
         if(first) {
-          this = square;
+          *this = square;
           first = false;
         } else {
-          this *= square;
+          *this *= square;
         }
       }
       p /= 2;
@@ -241,22 +243,22 @@ namespace PolynomialKit
 
   template <typename T>
   Polynomial<T>& Polynomial<T>::operator<<=(unsigned int s) {
-    this->size_++;
+    this->size_ += s;
     this->reserve(this->size());
-    this->poly_(0, seq(1, this->degree())) = this->poly_(0, seq(0, this->degree()-1));
+    this->poly_(0, seq(s, this->degree())) = this->poly_(0, seq(0, this->degree()-s));
     this->poly_(0, 0) = T();
     return *this;
   }
   
   template <typename T>
   Polynomial<T>& Polynomial<T>::operator>>=(unsigned int s) {
-    this->size_--;
-    this->poly_(0, seq(0, this->degree()-1)) = this->poly_(0, seq(1, this->degree()));
+    this->size_ -= s;
+    this->poly_(0, seq(0, this->degree()-s)) = this->poly_(0, seq(s, this->degree()));
     return *this;
   }
   
   template <typename T>
-  bool Polynomial<T>::operator==(const Polynomial<T>& other) {
+  bool Polynomial<T>::operator==(const Polynomial<T>& other) const {
     if(this->degree() == other.degree()) {
       return this->poly_(0, seq(0, this->degree())) == other.poly_(0, seq(0, other.degree()));
     } else {
@@ -265,54 +267,24 @@ namespace PolynomialKit
   }
 
   template <typename T>
-  Polynomial<T> Polynomial<T>::operator+() {
+  Polynomial<T> Polynomial<T>::operator+() const {
     return Polynomial<T>(this->poly_);
   }
   
   template <typename T>
-  Polynomial<T> Polynomial<T>::operator-() {
+  Polynomial<T> Polynomial<T>::operator-() const {
     return Polynomial<T>(-this->poly_);
   }
 
-  template <typename T>
-  Polynomial<T> Polynomial<T>::operator+(const Polynomial<T>& other) {
-    Polynomial<T> res = *this;
-    res += other;
-    return res;
-  }
+  template class Polynomial<double>;
+  template class Polynomial<float>;
+  template class Polynomial<long>;
+  template class Polynomial<int>;
+  template class Polynomial<short>;
 
-  template <typename T>
-  Polynomial<T> Polynomial<T>::operator-(const Polynomial<T>& other) {
-    Polynomial<T> res = *this;
-    res -= other;
-    return res;
-  }
-
-  template <typename T>
-  Polynomial<T> Polynomial<T>::operator*(const Polynomial<T>& other) {
-    Polynomial<T> res = *this;
-    res *= other;
-    return res;
-  }
-
-  template <typename T>
-  Polynomial<T> Polynomial<T>::operator^(unsigned int p) {
-    Polynomial<T> res = *this;
-    res ^= p;
-    return res;
-  }
-
-  template <typename T>
-  Polynomial<T> Polynomial<T>::operator<<(unsigned int s) {
-    Polynomial<T> res = *this;
-    res <<= s;
-    return res;
-  }
-
-  template <typename T>
-  Polynomial<T> Polynomial<T>::operator>>(unsigned int s) {
-    Polynomial<T> res = *this;
-    res >>= s;
-    return res;
-  }
+  template class Polynomial<std::complex<double>>;
+  template class Polynomial<std::complex<float>>;
+  template class Polynomial<std::complex<long>>;
+  template class Polynomial<std::complex<int>>;
+  template class Polynomial<std::complex<short>>;
 }

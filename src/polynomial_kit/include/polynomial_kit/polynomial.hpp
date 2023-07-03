@@ -28,17 +28,17 @@ namespace PolynomialKit
       Polynomial(const MatrixX<T>& matrix);
       ~Polynomial();
 
-      int degree();
-      unsigned int size();
-      unsigned int capacity();
+      unsigned int degree() const;
+      unsigned int size() const;
+      unsigned int capacity() const;
       void reserve(unsigned int capacity, bool force = false);
       void clean();
       void trim();
 
       void set(unsigned int degree, const T& coeff);
-      T get(unsigned int degree);
-      T coeff(unsigned int degree);
-      T eval(const T& value);
+      T get(unsigned int degree) const;
+      T coeff(unsigned int degree) const;
+      T eval(const T& value) const;
       
       VectorX<T> row_vector(unsigned int mindegree = 0);
       VectorX<T> col_vector(unsigned int mindegree = 0);
@@ -47,24 +47,26 @@ namespace PolynomialKit
 
       Polynomial& operator=(const Polynomial& other);
       
-      Polynomial& operator+=(const Polynomial& other);  // Sum
-      Polynomial& operator-=(const Polynomial& other);  // Subtraction
-      Polynomial& operator*=(const Polynomial& other);  // Multiplication
-      Polynomial& operator^=(unsigned int p);           // Power
-      Polynomial& operator<<=(unsigned int s);          // Shift left  (increase degree)
-      Polynomial& operator>>=(unsigned int s);          // Shift right (decrease degree)
+      Polynomial& operator+=(const Polynomial& other);
+      Polynomial& operator-=(const Polynomial& other);
+      Polynomial& operator*=(const Polynomial& other);
+      Polynomial& operator^=(unsigned int p);
+      Polynomial& operator<<=(unsigned int s);
+      Polynomial& operator>>=(unsigned int s);
 
-      bool operator==(const Polynomial& other);
+      bool operator==(const Polynomial& other) const;
 
-      Polynomial operator+();
-      Polynomial operator-(); 
+      Polynomial operator+() const;
+      Polynomial operator-() const; 
 
-      Polynomial operator+(const Polynomial& other);    // Sum
-      Polynomial operator-(const Polynomial& other);    // Subtraction
-      Polynomial operator*(const Polynomial& other);    // Multiplication
-      Polynomial operator^(unsigned int p);             // Power
-      Polynomial operator<<(unsigned int s);            // Shift left  (increase degree)
-      Polynomial operator>>(unsigned int s);            // Shift right (decrease degree)
+      /*
+      Polynomial operator+(const Polynomial& other) const;
+      Polynomial operator-(const Polynomial& other) const;
+      Polynomial operator*(const Polynomial& other) const;
+      Polynomial operator^(unsigned int p) const;
+      Polynomial operator<<(unsigned int s) const;
+      Polynomial operator>>(unsigned int s) const;
+      */
 
       template <typename U>
       inline explicit operator Polynomial<U>() const {
