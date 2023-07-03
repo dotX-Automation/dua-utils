@@ -65,7 +65,12 @@ namespace PolynomialKit
       Polynomial operator^(unsigned int p);           // Power
       Polynomial operator<<(unsigned int s);          // Shift left  (increase degree)
       Polynomial operator>>(unsigned int s);          // Shift right (decrease degree)
-    
+
+      template <typename U>
+      inline explicit operator Polynomial<U>() const {
+        return Polynomial<U>(this->poly_.cast<U>());
+      }
+
     private:
       MatrixX<T> poly_ = MatrixX<T>(1,1);
       unsigned int size_ = 1;

@@ -14,13 +14,15 @@ namespace PolynomialKit
   template <typename T>
   Polynomial<T>::Polynomial() {
     reserve(1);
-    poly_(0,0) = T();
+    this->size_ = 1;
+    this->poly_(0,0) = T();
   }
 
   template <typename T>
   Polynomial<T>::Polynomial(const T& value) {
     reserve(1);
-    poly_(0,0) = value;
+    this->size_ = 1;
+    this->poly_(0,0) = value;
   }
 
   template <typename T>
@@ -32,9 +34,11 @@ namespace PolynomialKit
     if(matrix.rows() >= 1 && matrix.cols() >= 1) {
       if(matrix.rows() > 1) {
         reserve(matrix.rows());
+        this->size_ = matrix.rows();
         poly_ = MatrixX<T>::Map(matrix.data(), 1, matrix.rows());
       } else {
         reserve(matrix.cols());
+        this->size_ = matrix.cols();
         poly_ = MatrixX<T>::Map(matrix.data(), 1, matrix.cols());
       }
     }
@@ -262,20 +266,12 @@ namespace PolynomialKit
 
   template <typename T>
   Polynomial<T> Polynomial<T>::operator+() {
-    Polynomial<T> res;
-    res.capacity_ = this->capacity_;
-    res.size_ = this->size_;
-    res.poly_ = this->poly_;
-    return res;
+    return Polynomial<T>(this->poly_);
   }
   
   template <typename T>
   Polynomial<T> Polynomial<T>::operator-() {
-    Polynomial<T> res;
-    res.capacity_ = this->capacity_;
-    res.size_ = this->size_;
-    res.poly_ = -this->poly_;
-    return res;
+    return Polynomial<T>(-this->poly_);
   }
 
   template <typename T>
