@@ -59,18 +59,19 @@ namespace PolynomialKit
       Polynomial operator+() const;
       Polynomial operator-() const; 
 
-      /*
-      Polynomial operator+(const Polynomial& other) const;
-      Polynomial operator-(const Polynomial& other) const;
-      Polynomial operator*(const Polynomial& other) const;
-      Polynomial operator^(unsigned int p) const;
-      Polynomial operator<<(unsigned int s) const;
-      Polynomial operator>>(unsigned int s) const;
-      */
-
       template <typename U>
       inline explicit operator Polynomial<U>() const {
         return Polynomial<U>(this->poly_.template cast<U>());
+      }
+
+      friend std::ostream &operator<<(std::ostream &output, const Polynomial<T> &poly) {
+        for(unsigned int i = 0; i < poly.size(); i++) {
+          output << poly.poly_(0, i);
+          if(i < poly.degree()) {
+            output << " ";
+          }
+        }
+        return output;  
       }
 
     private:
