@@ -41,7 +41,7 @@ install(
   DESTINATION include)
 install(
   TARGETS dynamic_systems_control
-  EXPORT dynamic_systems_control
+  EXPORT dynamic_systems_controlTargets
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin
@@ -60,8 +60,6 @@ if(BUILD_TESTING)
 endif()
 
 # Export all dependencies and library targets for this package
-ament_export_targets(dynamic_systems_control HAS_LIBRARY_TARGET)
-ament_export_dependencies(
-  dynamic_systems_base)
+ament_export_targets(dynamic_systems_controlTargets HAS_LIBRARY_TARGET)
 
 ament_package()

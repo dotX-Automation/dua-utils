@@ -25,14 +25,14 @@ find_package(Eigen3 3.4 REQUIRED NO_MODULE)
 add_library(polynomial_kit SHARED
   src/polynomial_kit/polynomial.cpp)
 target_compile_features(polynomial_kit PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
-target_compile_definitions(polynomial_kit PRIVATE "DYNAMIC_SYSTEMS_BASE_BUILDING_LIBRARY")
+target_compile_definitions(polynomial_kit PRIVATE "POLYNOMIAL_KIT_BUILDING_LIBRARY")
 target_include_directories(polynomial_kit PUBLIC
   ${EIGEN3_INCLUDE_DIR}
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
 target_link_libraries(polynomial_kit
   Eigen3::Eigen)
-ament_target_dependencies(polynomial_kit)
+# ament_target_dependencies(polynomial_kit)
 
 # Libraries installation
 install(
@@ -40,7 +40,7 @@ install(
   DESTINATION include)
 install(
   TARGETS polynomial_kit
-  EXPORT polynomial_kit
+  EXPORT polynomial_kitTargets
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin
@@ -59,8 +59,6 @@ if(BUILD_TESTING)
 endif()
 
 # Export all dependencies and library targets for this package
-ament_export_targets(polynomial_kit HAS_LIBRARY_TARGET)
-ament_export_dependencies(
-  Eigen3)
+ament_export_targets(polynomial_kitTargets HAS_LIBRARY_TARGET)
 
 ament_package()
