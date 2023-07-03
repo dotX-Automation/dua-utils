@@ -276,6 +276,48 @@ namespace PolynomialKit
     return Polynomial<T>(-this->poly_);
   }
 
+  template <typename T>
+  Polynomial<T> Polynomial<T>::operator+(const Polynomial<T>& other) const {
+    Polynomial<T> res = *this;
+    res += other;
+    return res;
+  }
+
+  template <typename T>
+  Polynomial<T> Polynomial<T>::operator-(const Polynomial<T>& other) const {
+    Polynomial<T> res = *this;
+    res -= other;
+    return res;
+  }
+
+  template <typename T>
+  Polynomial<T> Polynomial<T>::operator*(const Polynomial<T>& other) const {
+    Polynomial<T> res = *this;
+    res *= other;
+    return res;
+  }
+
+  template <typename T>
+  Polynomial<T> Polynomial<T>::operator^(unsigned int p) const {
+    Polynomial<T> res = *this;
+    res ^= p;
+    return res;
+  }
+
+  template <typename T>
+  Polynomial<T> Polynomial<T>::operator<<(unsigned int s) const {
+    Polynomial<T> res = *this;
+    res <<= s;
+    return res;
+  }
+
+  template <typename T>
+  Polynomial<T> Polynomial<T>::operator>>(unsigned int s) const {
+    Polynomial<T> res = *this;
+    res >>= s;
+    return res;
+  }
+
   template class Polynomial<double>;
   template class Polynomial<float>;
   template class Polynomial<long>;

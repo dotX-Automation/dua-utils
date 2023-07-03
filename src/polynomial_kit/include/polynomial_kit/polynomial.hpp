@@ -59,6 +59,13 @@ namespace PolynomialKit
       Polynomial operator+() const;
       Polynomial operator-() const; 
 
+      Polynomial operator+(const Polynomial& other) const;
+      Polynomial operator-(const Polynomial& other) const;
+      Polynomial operator*(const Polynomial& other) const;
+      Polynomial operator^(unsigned int p) const;
+      Polynomial operator<<(unsigned int s) const;
+      Polynomial operator>>(unsigned int s) const;
+
       template <typename U>
       inline explicit operator Polynomial<U>() const {
         return Polynomial<U>(this->poly_.template cast<U>());
