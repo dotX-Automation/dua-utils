@@ -33,6 +33,8 @@ namespace PolynomialKit
       inline unsigned int size() const;
       inline unsigned int capacity() const;
       void reserve(unsigned int capacity, bool force = false);
+      void regrade(unsigned int degree);
+      void reset(unsigned int degree = 0, bool clean = false);
       void clean();
       void trim();
 
