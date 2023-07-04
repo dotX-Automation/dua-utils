@@ -353,12 +353,10 @@ namespace PolynomialKit
   template class Polynomial<long>;
   template class Polynomial<int>;
   template class Polynomial<short>;
-  template class Polynomial<signed char>;
 
   template class Polynomial<std::complex<double>>;
   template class Polynomial<std::complex<float>>;
   template class Polynomial<std::complex<long>>;
   template class Polynomial<std::complex<int>>;
   template class Polynomial<std::complex<short>>;
-  template class Polynomial<std::complex<signed char>>;
 }
