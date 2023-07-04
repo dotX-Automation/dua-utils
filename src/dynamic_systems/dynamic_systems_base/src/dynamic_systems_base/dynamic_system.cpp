@@ -109,6 +109,10 @@ namespace DynamicSystems
     dirty_ = true;
   }
 
+  void System::input(double in) {
+    input(MatrixXd(in));
+  }
+
   void System::input(MatrixXd in){
     input_ = in;
     input_validator(*state_.get(), input_);
@@ -135,6 +139,10 @@ namespace DynamicSystems
     }
   }
 
+  MatrixXd System::evolve(double in) {
+    return evolve(MatrixXd(in));
+  }
+
   MatrixXd System::evolve(MatrixXd in){
     input(in);
     MatrixXd res = output();
@@ -142,7 +150,6 @@ namespace DynamicSystems
     return res;
   }
 
-  
   std::shared_ptr<State> System::state() {
     return state_->clone();
   }

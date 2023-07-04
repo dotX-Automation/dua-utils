@@ -68,10 +68,12 @@ namespace DynamicSystems
     bool initialized();
     bool dirty();
     void reset(std::shared_ptr<State> state = nullptr);
+    void input(double in);
     void input(MatrixXd in);
     MatrixXd output();
     void step();
     void update();
+    MatrixXd evolve(double in);
     MatrixXd evolve(MatrixXd in);
     
     std::shared_ptr<State> state();
