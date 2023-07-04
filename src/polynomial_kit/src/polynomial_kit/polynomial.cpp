@@ -132,7 +132,7 @@ namespace PolynomialKit
     T y = poly_(0, 0);
     for(unsigned int i = 1; i < size_; i++) {
       y += poly_(0, i) * x;
-      x *= x;
+      x *= point;
     }
     return y;
   }
