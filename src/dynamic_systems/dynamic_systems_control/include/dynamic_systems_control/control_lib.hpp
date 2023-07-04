@@ -24,12 +24,22 @@ namespace DynamicSystems
 {
   namespace Control 
   {
+    enum CommonLTIType : unsigned int {
+      ORDER_0,
+      ORDER_1,
+      ORDER_2
+    };
+
     enum ButterworthType : unsigned int {
       LOW_PASS,
       HIGH_PASS,
       BAND_PASS,
       NOTCH
     };
+
+    void DYNAMIC_SYSTEMS_CONTROL_PUBLIC common_lti(CommonLTIType type,
+      std::vector<double> params,
+      Polynomiald & num, Polynomiald & den);
 
     void DYNAMIC_SYSTEMS_CONTROL_PUBLIC butterworth(ButterworthType type, 
       unsigned int degree, std::vector<double> omegas,

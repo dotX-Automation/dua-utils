@@ -47,6 +47,13 @@ namespace DynamicSystems
     };
     
     class DYNAMIC_SYSTEMS_CONTROL_PUBLIC LTISystem : public System {
+      public:
+        LTISystem& make_common_lti(double time_sampling, unsigned int zoh_steps, 
+          CommonLTIType type, std::vector<double> params);
+
+        LTISystem& make_butterworth(double time_sampling, unsigned int zoh_steps, 
+          ButterworthType type, unsigned int degree, std::vector<double> omegas);
+
       protected:
         void DYNAMIC_SYSTEMS_CONTROL_LOCAL init_parse(const InitParams& initParams) override;
         void DYNAMIC_SYSTEMS_CONTROL_LOCAL setup_parse(const SetupParams& setupParams) override;

@@ -13,6 +13,51 @@ namespace DynamicSystems
 {
   namespace Control 
   {
+    void common_lti(CommonLTIType type,
+      std::vector<double> params,
+      Polynomiald & num, Polynomiald & den) 
+    {
+      if(type == CommonLTIType::ORDER_0) {
+        if(params.size() != 1) {
+          std::invalid_argument("Wrong number of parameters.");
+        }
+        double k = params.at(0);
+        num.regrade(0);
+        den.regrade(0);
+        num.set(0, k);
+        den.set(0, 1.0);
+      } 
+      else if (type == CommonLTIType::ORDER_1) {
+        if(params.size() != 2) {
+          std::invalid_argument("Wrong number of parameters.");
+        }
+        double k = params.at(0);
+        double tau = params.at(1);
+        num.regrade(0);
+        den.regrade(1);
+        num.set(0, k);
+        den.set(0, 1.0);
+        den.set(1, tau);
+      } 
+      else if (type == CommonLTIType::ORDER_2) {
+        if(params.size() != 3) {
+          std::invalid_argument("Wrong number of parameters.");
+        }
+        double k = params.at(0);
+        double omega = params.at(1);
+        double zeta = params.at(2);
+        num.regrade(0);
+        den.regrade(2);
+        num.set(0, k * omega * omega);
+        den.set(0, omega * omega);
+        den.set(1, 2.0 * zeta * omega);
+        den.set(2, 1.0);
+      } 
+      else {
+        std::invalid_argument("Unexpected type.");
+      }
+    }
+
     void butterworth(ButterworthType type, 
       unsigned int degree, std::vector<double> omegas,
       Polynomiald & num, Polynomiald & den) 

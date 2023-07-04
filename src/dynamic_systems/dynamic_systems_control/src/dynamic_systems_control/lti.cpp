@@ -68,6 +68,37 @@ namespace DynamicSystems
     
 
     /* System */
+    LTISystem& LTISystem::make_common_lti(double time_sampling, unsigned int zoh_steps, 
+      CommonLTIType type, std::vector<double> params) 
+    {
+      Polynomiald num, den;
+      std::shared_ptr<LTIInitParams> initParams = std::make_shared<LTIInitParams>();
+      LTISystem lti;
+
+      initParams->time_sampling = time_sampling;
+      initParams->zoh_steps = zoh_steps;
+      common_lti(type, params, num, den);
+      realization(num, den, initParams->matrixA, initParams->matrixB, initParams->matrixC, initParams->matrixD);
+
+      lti.init(initParams);
+      return lti;
+    }
+
+    LTISystem& LTISystem::make_butterworth(double time_sampling, unsigned int zoh_steps, 
+      ButterworthType type, unsigned int degree, std::vector<double> omegas)
+    {
+      Polynomiald num, den;
+      std::shared_ptr<LTIInitParams> initParams = std::make_shared<LTIInitParams>();
+      LTISystem lti;
+
+      initParams->time_sampling = time_sampling;
+      initParams->zoh_steps = zoh_steps;
+      butterworth(type, degree, omegas, num, den);
+      realization(num, den, initParams->matrixA, initParams->matrixB, initParams->matrixC, initParams->matrixD);
+
+      lti.init(initParams);
+      return lti;
+    }
 
     void LTISystem::init_parse(const InitParams& initParams) {
       auto casted = dynamic_cast<const LTIInitParams&>(initParams);
