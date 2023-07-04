@@ -94,7 +94,7 @@ namespace DynamicSystems
       q_ = casted.matrixC.rows();
 
       if(casted.time_sampling > 0.0) {
-        distretization_zoh(casted.time_sampling, casted.zoh_steps,
+        discretization_zoh(casted.time_sampling, casted.zoh_steps,
           casted.matrixA, casted.matrixB, casted.matrixC, casted.matrixD,
           A_, B_, C_, D_);
       } else {
