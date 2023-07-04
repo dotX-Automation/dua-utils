@@ -31,7 +31,6 @@ namespace PolynomialKit
     if(matrix.rows() > 2 && matrix.cols() > 2) {
       std::invalid_argument("Argument is not a vector.");
     }
-
     if(matrix.rows() >= 1 && matrix.cols() >= 1) {
       if(matrix.rows() > 1) {
         reserve(matrix.rows());
