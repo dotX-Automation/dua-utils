@@ -20,6 +20,7 @@ endif()
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(dynamic_systems_base REQUIRED)
+find_package(polynomial_kit REQUIRED)
 find_package(Eigen3 3.4 REQUIRED NO_MODULE)
 
 # Dynamic systems control library configuration
@@ -33,7 +34,8 @@ target_include_directories(dynamic_systems_control PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
 ament_target_dependencies(dynamic_systems_control
-  dynamic_systems_base)
+  dynamic_systems_base
+  polynomial_kit)
 
 # Libraries installation
 install(
