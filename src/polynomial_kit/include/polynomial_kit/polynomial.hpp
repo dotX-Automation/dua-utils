@@ -71,7 +71,11 @@ namespace PolynomialKit
 
       template <typename U>
       inline explicit operator Polynomial<U>() const {
-        return Polynomial<U>(this->poly_.template cast<U>());
+        Polynomial<U> res;
+        res.capacity_ = this->capacity_;
+        res.size_ = this->size_;
+        res.poly_ = this->poly_.template cast<U>();
+        return res;
       }
 
       friend std::ostream &operator<<(std::ostream &output, const Polynomial<T> &poly) {
@@ -100,11 +104,11 @@ namespace PolynomialKit
   using Polynomiali = Polynomial<int>;
   using Polynomials = Polynomial<short>;
   
-  using Polynomialdc = Polynomial<std::complex<double>>;
-  using Polynomialfc = Polynomial<std::complex<float>>;
-  using Polynomiallc = Polynomial<std::complex<long>>;
-  using Polynomialic = Polynomial<std::complex<int>>;
-  using Polynomialsc = Polynomial<std::complex<short>>;
+  using Polynomialcd = Polynomial<std::complex<double>>;
+  using Polynomialcf = Polynomial<std::complex<float>>;
+  using Polynomialcl = Polynomial<std::complex<long>>;
+  using Polynomialci = Polynomial<std::complex<int>>;
+  using Polynomialcs = Polynomial<std::complex<short>>;
 }
 
 #endif  //POLYNOMIAL_KIT__DYNAMIC_SYSTEM_HPP_
