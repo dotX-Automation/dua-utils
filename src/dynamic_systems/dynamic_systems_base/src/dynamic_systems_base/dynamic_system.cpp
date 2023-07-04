@@ -110,7 +110,9 @@ namespace DynamicSystems
   }
 
   void System::input(double in) {
-    input(MatrixXd(in));
+    MatrixXd m_in(1,1);
+    m_in(0,0) = in;
+    input(m_in);
   }
 
   void System::input(MatrixXd in){
@@ -140,7 +142,9 @@ namespace DynamicSystems
   }
 
   MatrixXd System::evolve(double in) {
-    return evolve(MatrixXd(in));
+    MatrixXd m_in(1,1);
+    m_in(0,0) = in;
+    return evolve(m_in);
   }
 
   MatrixXd System::evolve(MatrixXd in){
