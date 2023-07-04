@@ -22,7 +22,7 @@ using namespace PolynomialKit;
 
 namespace DynamicSystems
 {
-  namespace Control 
+  namespace Control
   {
     enum CommonLTIType : unsigned int {
       ORDER_0,
