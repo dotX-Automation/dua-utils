@@ -20,17 +20,18 @@ using namespace Eigen;
 
 namespace PolynomialKit 
 {
-  template <typename T = double>
+  template <typename T>
   class POLYNOMIAL_KIT_PUBLIC Polynomial {
     public:
       Polynomial();
       Polynomial(const T& value);
       Polynomial(const MatrixX<T>& matrix);
+      Polynomial(const Polynomial<T>& matrix);
       ~Polynomial();
 
-      unsigned int degree() const;
-      unsigned int size() const;
-      unsigned int capacity() const;
+      inline unsigned int degree() const;
+      inline unsigned int size() const;
+      inline unsigned int capacity() const;
       void reserve(unsigned int capacity, bool force = false);
       void clean();
       void trim();
@@ -72,10 +73,14 @@ namespace PolynomialKit
       }
 
       friend std::ostream &operator<<(std::ostream &output, const Polynomial<T> &poly) {
-        for(unsigned int i = 0; i < poly.size(); i++) {
+        unsigned int i = poly.degree();
+        while(true) {
           output << poly.poly_(0, i);
-          if(i < poly.degree()) {
+          if(i > 0) {
             output << " ";
+            i--;
+          } else {
+            break;
           }
         }
         return output;  
