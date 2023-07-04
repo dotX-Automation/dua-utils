@@ -87,13 +87,14 @@ namespace PolynomialKit
   void Polynomial<T>::regrade(unsigned int degree) {
     if(degree > this->degree()) {
       reserve(degree+1);
+      reset(size_);
     }
     size_ = degree + 1;
   }
 
   template <typename T>
   void Polynomial<T>::reset(unsigned int degree, bool clean) {
-    for(unsigned int i = degree; i < clean ? capacity_ : size_; i++) {
+    for(unsigned int i = degree; i < (clean ? capacity_ : size_); i++) {
       poly_(0, i) = T();
     }
   }
@@ -120,6 +121,7 @@ namespace PolynomialKit
         reserve(degree+1);
       }
       if(degree >= size_) {
+        reset(size_);
         size_ = degree+1;
       }
       poly_(0, degree) = coeff;
