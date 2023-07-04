@@ -48,10 +48,20 @@ namespace DynamicSystems
     
     class DYNAMIC_SYSTEMS_CONTROL_PUBLIC LTISystem : public System {
       public:
-        LTISystem& make_common_lti(double time_sampling, unsigned int zoh_steps, 
+        static void make_common_lti(
+          LTISystem & lti,
+          double time_sampling, unsigned int zoh_steps, 
+          CommonLTIType type, std::vector<double> params);
+        void make_common_lti(
+          double time_sampling, unsigned int zoh_steps, 
           CommonLTIType type, std::vector<double> params);
 
-        LTISystem& make_butterworth(double time_sampling, unsigned int zoh_steps, 
+        static void make_butterworth(
+          LTISystem & lti,
+          double time_sampling, unsigned int zoh_steps, 
+          ButterworthType type, unsigned int degree, std::vector<double> omegas);
+        void make_butterworth(
+          double time_sampling, unsigned int zoh_steps, 
           ButterworthType type, unsigned int degree, std::vector<double> omegas);
 
       protected:

@@ -68,12 +68,14 @@ namespace DynamicSystems
     
 
     /* System */
-    LTISystem& LTISystem::make_common_lti(double time_sampling, unsigned int zoh_steps, 
+
+    void LTISystem::make_common_lti(
+      LTISystem & lti,
+      double time_sampling, unsigned int zoh_steps, 
       CommonLTIType type, std::vector<double> params) 
     {
       Polynomiald num, den;
       std::shared_ptr<LTIInitParams> initParams = std::make_shared<LTIInitParams>();
-      LTISystem lti;
 
       initParams->time_sampling = time_sampling;
       initParams->zoh_steps = zoh_steps;
@@ -81,15 +83,22 @@ namespace DynamicSystems
       realization(num, den, initParams->matrixA, initParams->matrixB, initParams->matrixC, initParams->matrixD);
 
       lti.init(initParams);
-      return lti;
     }
 
-    LTISystem& LTISystem::make_butterworth(double time_sampling, unsigned int zoh_steps, 
+    void LTISystem::make_common_lti(
+      double time_sampling, unsigned int zoh_steps, 
+      CommonLTIType type, std::vector<double> params) 
+    {
+      make_common_lti(*this, time_sampling, zoh_steps, type, params);
+    }
+
+    void LTISystem::make_butterworth(
+      LTISystem & lti,
+      double time_sampling, unsigned int zoh_steps, 
       ButterworthType type, unsigned int degree, std::vector<double> omegas)
     {
       Polynomiald num, den;
       std::shared_ptr<LTIInitParams> initParams = std::make_shared<LTIInitParams>();
-      LTISystem lti;
 
       initParams->time_sampling = time_sampling;
       initParams->zoh_steps = zoh_steps;
@@ -97,7 +106,13 @@ namespace DynamicSystems
       realization(num, den, initParams->matrixA, initParams->matrixB, initParams->matrixC, initParams->matrixD);
 
       lti.init(initParams);
-      return lti;
+    }
+
+    void LTISystem::make_butterworth(
+      double time_sampling, unsigned int zoh_steps, 
+      ButterworthType type, unsigned int degree, std::vector<double> omegas)
+    {
+      make_butterworth(*this, time_sampling, zoh_steps, type, degree, omegas);
     }
 
     void LTISystem::init_parse(const InitParams& initParams) {
