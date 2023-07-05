@@ -166,7 +166,7 @@ namespace DynamicSystems
     void LTISystem::deinit(){}
 
     void LTISystem::state_validator(State<double> &state) {
-      const LTIState &state_casted = static_cast<const LTIState&>(state);
+      LTIState &state_casted = static_cast<LTIState&>(state);
       if(state_casted.value.rows() != n_ || state_casted.value.cols() != 1) {
         throw std::invalid_argument("Invalid state size.");
       }
