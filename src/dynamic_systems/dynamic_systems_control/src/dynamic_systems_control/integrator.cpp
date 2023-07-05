@@ -77,9 +77,9 @@ namespace DynamicSystems
       }
 
       if(casted.time_sampling > 0.0) {
-        this->kt_ = casted.time_sampling;
+        this->ts_ = casted.time_sampling;
       } else {
-        this->kt_ = 1.0;
+        this->ts_ = 1.0;
       }
 
       std::shared_ptr<IntegratorState> state = std::make_shared<IntegratorState>();
@@ -124,7 +124,7 @@ namespace DynamicSystems
     void IntegratorSystem::dynamic_map(const State<double> &state, const MatrixX<double> &input, State<double> &next) {
       const IntegratorState &state_casted = static_cast<const IntegratorState&>(state);
       IntegratorState &next_casted = static_cast<IntegratorState&>(next);
-      next_casted.value = state_casted.value + this->mul_ * this->kt_ * input;
+      next_casted.value = state_casted.value + this->mul_ * this->ts_ * input;
     }
 
     void IntegratorSystem::output_map(const State<double> &state, const MatrixX<double> &input, MatrixX<double>& output) {

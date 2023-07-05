@@ -95,14 +95,14 @@ namespace DynamicSystems
     void LTISystem::make_butterworth(
       LTISystem & lti,
       double time_sampling, unsigned int zoh_steps, 
-      ButterworthType type, unsigned int degree, std::vector<double> omegas)
+      ButterworthType type, unsigned int order, std::vector<double> omegas)
     {
       Polynomial<double> num, den;
       std::shared_ptr<LTIInitParams> initParams = std::make_shared<LTIInitParams>();
 
       initParams->time_sampling = time_sampling;
       initParams->zoh_steps = zoh_steps;
-      butterworth(type, degree, omegas, num, den);
+      butterworth(type, order, omegas, num, den);
       realization(num, den, initParams->matrixA, initParams->matrixB, initParams->matrixC, initParams->matrixD);
 
       lti.init(initParams);
@@ -110,9 +110,9 @@ namespace DynamicSystems
 
     void LTISystem::make_butterworth(
       double time_sampling, unsigned int zoh_steps, 
-      ButterworthType type, unsigned int degree, std::vector<double> omegas)
+      ButterworthType type, unsigned int order, std::vector<double> omegas)
     {
-      make_butterworth(*this, time_sampling, zoh_steps, type, degree, omegas);
+      make_butterworth(*this, time_sampling, zoh_steps, type, order, omegas);
     }
 
     void LTISystem::init_parse(const InitParams<double>& initParams) {

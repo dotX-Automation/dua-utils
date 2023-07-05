@@ -42,7 +42,7 @@ namespace DynamicSystems
       Polynomiald & num, Polynomiald & den);
 
     void DYNAMIC_SYSTEMS_CONTROL_PUBLIC butterworth(ButterworthType type, 
-      unsigned int degree, std::vector<double> omegas,
+      unsigned int order, std::vector<double> omegas,
       Polynomiald & num, Polynomiald & den);
 
     void DYNAMIC_SYSTEMS_CONTROL_PUBLIC realization(

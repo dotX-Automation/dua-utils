@@ -59,7 +59,7 @@ namespace DynamicSystems
     }
 
     void butterworth(ButterworthType type, 
-      unsigned int degree, std::vector<double> omegas,
+      unsigned int order, std::vector<double> omegas,
       Polynomiald & num, Polynomiald & den) 
     {
       if(type == ButterworthType::LOW_PASS || type == ButterworthType::HIGH_PASS) {
@@ -67,31 +67,31 @@ namespace DynamicSystems
           std::invalid_argument("Low/High pass filters need only one omega.");
         }
         double omega = omegas.at(0);
-        unsigned int l = degree/2;
+        unsigned int l = order/2;
         Polynomiald tmp;
         tmp.set(2, 1.0);
         den.regrade(0);
         den.set(0, 1.0);
         for(unsigned k = 0; k < l; k++) {
-          double exps = (double(2*(k+1) + degree - 1) / double(2 * degree)) * M_PI;
+          double exps = (double(2*(k+1) + order - 1) / double(2 * order)) * M_PI;
           double re = std::cos(exps);
           double im = std::sin(exps);
           tmp.set(0, (omega*omega) * (re*re + im*im));
           tmp.set(1, -2.0 * omega * re);
           den *= tmp;
         }
-        if(degree%2 == 1) {
+        if(order%2 == 1) {
           tmp.regrade(1);
           tmp.set(0, omega);
           tmp.set(1, 1.0);
           den *= tmp;
         }
         if(type == ButterworthType::HIGH_PASS) {
-          num.regrade(degree);
-          num.set(degree, 1.0);
+          num.regrade(order);
+          num.set(order, 1.0);
         } else {
           num.regrade(0);
-          num = std::pow(omega, degree);
+          num = std::pow(omega, order);
         }
       } 
       else if (type == ButterworthType::BAND_PASS) {
@@ -100,20 +100,20 @@ namespace DynamicSystems
         }
         Polynomiald num1, num2; 
         Polynomiald den1, den2;
-        butterworth(ButterworthType::HIGH_PASS, degree, {omegas.at(0)}, num1, den1);
-        butterworth(ButterworthType::LOW_PASS , degree, {omegas.at(1)}, num2, den2);
+        butterworth(ButterworthType::HIGH_PASS, order, {omegas.at(0)}, num1, den1);
+        butterworth(ButterworthType::LOW_PASS , order, {omegas.at(1)}, num2, den2);
         num = num1 * num2;
         den = den1 * den2;
       } 
       else if (type == ButterworthType::NOTCH) {
         double omega = omegas.at(0);
-        butterworth(ButterworthType::LOW_PASS , 2*degree, {omegas.at(0)}, num, den);
+        butterworth(ButterworthType::LOW_PASS , 2*order, {omegas.at(0)}, num, den);
         num.regrade(0);
         num.set(0, 1.0);
         Polynomiald tmp;
         tmp.set(0, 1.0);
         tmp.set(2, omega*omega);
-        for(unsigned k = 0; k < degree; k++) {
+        for(unsigned k = 0; k < order; k++) {
           num *= tmp;
         }
       } 

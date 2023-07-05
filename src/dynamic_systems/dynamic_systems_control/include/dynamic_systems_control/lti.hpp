@@ -59,10 +59,10 @@ namespace DynamicSystems
         static void make_butterworth(
           LTISystem & lti,
           double time_sampling, unsigned int zoh_steps, 
-          ButterworthType type, unsigned int degree, std::vector<double> omegas);
+          ButterworthType type, unsigned int order, std::vector<double> omegas);
         void make_butterworth(
           double time_sampling, unsigned int zoh_steps, 
-          ButterworthType type, unsigned int degree, std::vector<double> omegas);
+          ButterworthType type, unsigned int order, std::vector<double> omegas);
 
       protected:
         void DYNAMIC_SYSTEMS_CONTROL_LOCAL init_parse(const InitParams<double>& initParams) override;

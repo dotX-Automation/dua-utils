@@ -58,7 +58,7 @@ namespace DynamicSystems
 
       private:
         /* init members */
-        double kt_;
+        double ts_;
 
         /* setup members */
         double mul_;
