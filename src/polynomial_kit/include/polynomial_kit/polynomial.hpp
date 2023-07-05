@@ -43,6 +43,8 @@ namespace PolynomialKit
       T coeff(unsigned int degree) const;
       T eval(const T& value) const;
       
+      Polynomial diff(unsigned int degree);
+      
       VectorX<T> row_vector(unsigned int mindegree = 0);
       VectorX<T> col_vector(unsigned int mindegree = 0);
       MatrixX<T> row_matrix(unsigned int mindegree = 0);

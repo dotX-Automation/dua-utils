@@ -154,6 +154,31 @@ namespace PolynomialKit
   }
 
   template <typename T>
+  Polynomial<T> Polynomial<T>::diff(unsigned int degree) {
+    Polynomial res;
+    if(degree == 0) {
+      res = *this;
+    } if(degree <= this->degree()) {
+      res.reserve(this->size() - degree);
+      res.size_ = res.capacity_;
+      res.poly_(0, seq(0, res.size_-1)) = this->poly_(0, seq(degree, this->degree()));
+      for(unsigned int i = 0; i < res.size_; i++) {
+        unsigned int j = i + degree;
+        unsigned int m = j;
+        while(true) {
+          if(j == i) {
+            break;
+          } else {
+            res.poly_(0, i) *= m;
+            m = (--j);
+          } 
+        }
+      }
+    }
+    return res;
+  }
+
+  template <typename T>
   VectorX<T> Polynomial<T>::row_vector(unsigned int mindegree) {
     return row_matrix(mindegree);
   }
