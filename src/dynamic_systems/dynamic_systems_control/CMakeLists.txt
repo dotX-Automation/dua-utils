@@ -27,7 +27,8 @@ find_package(Eigen3 3.4 REQUIRED NO_MODULE)
 add_library(dynamic_systems_control SHARED
   src/dynamic_systems_control/control_lib.cpp
   src/dynamic_systems_control/integrator.cpp
-  src/dynamic_systems_control/lti.cpp)
+  src/dynamic_systems_control/lti.cpp
+  src/dynamic_systems_control/pid.cpp)
 target_compile_features(dynamic_systems_control PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
 target_compile_definitions(dynamic_systems_control PRIVATE "DYNAMIC_SYSTEMS_CONTROL_BUILDING_LIBRARY")
 target_include_directories(dynamic_systems_control PUBLIC
