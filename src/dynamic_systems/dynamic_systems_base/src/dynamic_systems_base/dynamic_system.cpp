@@ -14,58 +14,70 @@ namespace DynamicSystems
 {
   /* InitParams */
 
-  InitParams::~InitParams() {}
+  template <typename T>
+  InitParams<T>::~InitParams() {}
 
-  std::unique_ptr<InitParams> InitParams::clone() const {
-    return std::make_unique<InitParams>();
+  template <typename T>
+  std::unique_ptr<InitParams<T>> InitParams<T>::clone() const {
+    return std::make_unique<InitParams<T>>();
   }
 
-  void InitParams::copy(const InitParams &other) {
+  template <typename T>
+  void InitParams<T>::copy(const InitParams<T> &other) {
     UNUSED(other);
   }
 
 
   /* SetupParams */
+  
+  template <typename T>
+  SetupParams<T>::~SetupParams() {}
 
-  SetupParams::~SetupParams() {}
-
-  std::unique_ptr<SetupParams> SetupParams::clone() const {
-    return std::make_unique<SetupParams>();
+  template <typename T>
+  std::unique_ptr<SetupParams<T>> SetupParams<T>::clone() const {
+    return std::make_unique<SetupParams<T>>();
   }
 
-  void SetupParams::copy(const SetupParams &other) {
+  template <typename T>
+  void SetupParams<T>::copy(const SetupParams<T> &other) {
     UNUSED(other);
   }
 
 
   /* State */
 
-  State::~State() {}
+  template <typename T>
+  State<T>::~State() {}
 
-  std::unique_ptr<State> State::clone() const {
-    return std::make_unique<State>();
+  template <typename T>
+  std::unique_ptr<State<T>> State<T>::clone() const {
+    return std::make_unique<State<T>>();
   }
 
-  void State::copy(const State &other) {
+  template <typename T>
+  void State<T>::copy(const State<T> &other) {
     UNUSED(other);
   }
 
 
   /* System */
 
-  System::System() {
-    reset_ = std::make_unique<State>();
-    state_ = std::make_unique<State>();
+  template <typename T>
+  System<T>::System() {
+    reset_ = std::make_unique<State<T>>();
+    state_ = std::make_unique<State<T>>();
     setup_default();
   }
 
-  System::~System(){
+  template <typename T>
+  System<T>::~System(){
     if(inited_) {
       fini();
     }
   }
 
-  void System::init(std::shared_ptr<InitParams> initParams) {
+  template <typename T>
+  void System<T>::init(std::shared_ptr<InitParams<T>> initParams) {
     if(initParams == nullptr) {
       throw std::invalid_argument("Null init parameters.");
     }
@@ -74,7 +86,8 @@ namespace DynamicSystems
     dirty_ = true;
   }
 
-  void System::setup(std::shared_ptr<SetupParams> setupParams) {
+  template <typename T>
+  void System<T>::setup(std::shared_ptr<SetupParams<T>> setupParams) {
     if(setupParams == nullptr) {
       setup_default();
     } else {
@@ -83,7 +96,8 @@ namespace DynamicSystems
     dirty_ = true;
   }
 
-  void System::fini() {
+  template <typename T>
+  void System<T>::fini() {
     if(inited_) {
       deinit();
       inited_ = false;
@@ -91,16 +105,18 @@ namespace DynamicSystems
     }
   }
 
-  
-  bool System::initialized() {
+  template <typename T>
+  bool System<T>::initialized() {
     return inited_;
   }
 
-  bool System::dirty() {
+  template <typename T>
+  bool System<T>::dirty() {
     return dirty_;
   }
 
-  void System::reset(std::shared_ptr<State> state) {
+  template <typename T>
+  void System<T>::reset(std::shared_ptr<State<T>> state) {
     if(state) {
       reset_ = state->clone();
     }
@@ -109,98 +125,180 @@ namespace DynamicSystems
     dirty_ = true;
   }
 
-  void System::input(double in) {
-    MatrixXd m_in(1,1);
+  template <typename T>
+  void System<T>::input(const T& in) {
+    MatrixX<T> m_in(1,1);
     m_in(0,0) = in;
     input(m_in);
   }
 
-  void System::input(MatrixXd in){
+  template <typename T>
+  void System<T>::input(const MatrixX<T>& in){
     input_ = in;
     input_validator(*state_.get(), input_);
     dirty_ = true;
   }
 
-  MatrixXd System::output(){
+  template <typename T>
+  MatrixX<T> System<T>::output(){
     update();
     return output_;
   }
 
-  void System::step() {
-    std::unique_ptr<State> next = state_->clone();
+  template <typename T>
+  void System<T>::step() {
+    std::unique_ptr<State<T>> next = state_->clone();
     dynamic_map(*state_.get(), input_, *next.get());
     state_ = std::move(next);
     state_validator(*state_.get());
     dirty_ = true;
   }
 
-  void System::update() {
+  template <typename T>
+  void System<T>::update() {
     if(dirty_) {
       output_map(*state_.get(), input_, output_);
       dirty_ = false;
     }
   }
 
-  MatrixXd System::evolve(double in) {
-    MatrixXd m_in(1,1);
+  template <typename T>
+  MatrixX<T> System<T>::evolve(const T& in) {
+    MatrixX<T> m_in(1,1);
     m_in(0,0) = in;
     return evolve(m_in);
   }
 
-  MatrixXd System::evolve(MatrixXd in){
+  template <typename T>
+  MatrixX<T> System<T>::evolve(const MatrixX<T>& in){
     input(in);
-    MatrixXd res = output();
+    MatrixX<T> res = output();
     step();
     return res;
   }
 
-  std::shared_ptr<State> System::state() {
+  template <typename T>
+  std::shared_ptr<State<T>> System<T>::state() {
     return state_->clone();
   }
 
-  std::array<unsigned int, 2u> System::input_size(){
+  template <typename T>
+  std::array<unsigned int, 2u> System<T>::input_size(){
     std::array<unsigned int, 2u> size;
     size[0] = input_.rows();
     size[1] = input_.cols();
     return size;
   }
 
-  std::array<unsigned int, 2u> System::output_size(){
+  template <typename T>
+  std::array<unsigned int, 2u> System<T>::output_size(){
     std::array<unsigned int, 2u> size;
-    MatrixXd output_ = output();
+    MatrixX<T> output_ = output();
     size[0] = output_.rows();
     size[1] = output_.cols();
     return size;
   }
 
-  void System::init_parse(const InitParams& initParams) {
+  template <typename T>
+  void System<T>::init_parse(const InitParams<T>& initParams) {
     UNUSED(initParams);
   }
 
-  void System::setup_parse(const SetupParams& setupParams) {
+  template <typename T>
+  void System<T>::setup_parse(const SetupParams<T>& setupParams) {
     UNUSED(setupParams);
   }
 
-  void System::setup_default() {}
+  template <typename T>
+  void System<T>::setup_default() {}
 
-  void System::deinit() {}
+  template <typename T>
+  void System<T>::deinit() {}
 
-  void System::state_validator(State &state) {
+  template <typename T>
+  void System<T>::state_validator(State<T> &state) {
     UNUSED(state);
   }
   
-  void System::input_validator(const State &state, MatrixXd &input) {
+  template <typename T>
+  void System<T>::input_validator(const State<T> &state, MatrixX<T> &input) {
     UNUSED(state);
     UNUSED(input);
   }
 
-  void System::dynamic_map(const State &state, const MatrixXd &input, State &next) {
+  template <typename T>
+  void System<T>::dynamic_map(const State<T> &state, const MatrixX<T> &input, State<T> &next) {
     UNUSED(input);
     next.copy(state);
   }
 
-  void System::output_map(const State &state, const MatrixXd &input, MatrixXd& output) {
+  template <typename T>
+  void System<T>::output_map(const State<T> &state, const MatrixX<T> &input, MatrixX<T>& output) {
     UNUSED(state);
     output = input;
   }
+
+  template class InitParams<double>;
+  template class InitParams<float>;
+  template class InitParams<long>;
+  template class InitParams<int>;
+  template class InitParams<short>;
+  template class InitParams<char>;
+  template class InitParams<bool>;
+
+  template class SetupParams<double>;
+  template class SetupParams<float>;
+  template class SetupParams<long>;
+  template class SetupParams<int>;
+  template class SetupParams<short>;
+  template class SetupParams<char>;
+  template class SetupParams<bool>;
+
+  template class State<double>;
+  template class State<float>;
+  template class State<long>;
+  template class State<int>;
+  template class State<short>;
+  template class State<char>;
+  template class State<bool>;
+
+  template class System<double>;
+  template class System<float>;
+  template class System<long>;
+  template class System<int>;
+  template class System<short>;
+  template class System<char>;
+  template class System<bool>;
+
+  template class InitParams<std::complex<double>>;
+  template class InitParams<std::complex<float>>;
+  template class InitParams<std::complex<long>>;
+  template class InitParams<std::complex<int>>;
+  template class InitParams<std::complex<short>>;
+  template class InitParams<std::complex<char>>;
+  template class InitParams<std::complex<bool>>;
+
+  template class SetupParams<std::complex<double>>;
+  template class SetupParams<std::complex<float>>;
+  template class SetupParams<std::complex<long>>;
+  template class SetupParams<std::complex<int>>;
+  template class SetupParams<std::complex<short>>;
+  template class SetupParams<std::complex<char>>;
+  template class SetupParams<std::complex<bool>>;
+
+  template class State<std::complex<double>>;
+  template class State<std::complex<float>>;
+  template class State<std::complex<long>>;
+  template class State<std::complex<int>>;
+  template class State<std::complex<short>>;
+  template class State<std::complex<char>>;
+  template class State<std::complex<bool>>;
+
+  template class System<std::complex<double>>;
+  template class System<std::complex<float>>;
+  template class System<std::complex<long>>;
+  template class System<std::complex<int>>;
+  template class System<std::complex<short>>;
+  template class System<std::complex<char>>;
+  template class System<std::complex<bool>>;
 }

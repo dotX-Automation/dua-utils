@@ -19,34 +19,34 @@ namespace DynamicSystems
 {
   namespace Control 
   {
-    struct DYNAMIC_SYSTEMS_CONTROL_PUBLIC LTIInitParams : public InitParams {
+    struct DYNAMIC_SYSTEMS_CONTROL_PUBLIC LTIInitParams : public InitParams<double> {
       ~LTIInitParams() override;
-      std::unique_ptr<InitParams> clone() const override;
-      void copy(const InitParams &other) override;
+      std::unique_ptr<InitParams<double>> clone() const override;
+      void copy(const InitParams<double> &other) override;
 
       double time_sampling;
       unsigned int zoh_steps;
-      MatrixXd matrixA;
-      MatrixXd matrixB;
-      MatrixXd matrixC;
-      MatrixXd matrixD;
+      MatrixX<double> matrixA;
+      MatrixX<double> matrixB;
+      MatrixX<double> matrixC;
+      MatrixX<double> matrixD;
     };
 
-    struct DYNAMIC_SYSTEMS_CONTROL_PUBLIC LTISetupParams : public SetupParams {
+    struct DYNAMIC_SYSTEMS_CONTROL_PUBLIC LTISetupParams : public SetupParams<double> {
       ~LTISetupParams() override;
-      std::unique_ptr<SetupParams> clone() const override;
-      void copy(const SetupParams &other) override;
+      std::unique_ptr<SetupParams<double>> clone() const override;
+      void copy(const SetupParams<double> &other) override;
     };
 
-    struct DYNAMIC_SYSTEMS_CONTROL_PUBLIC LTIState : public State {
+    struct DYNAMIC_SYSTEMS_CONTROL_PUBLIC LTIState : public State<double> {
       ~LTIState() override;
-      std::unique_ptr<State> clone() const override;
-      void copy(const State &other) override;
+      std::unique_ptr<State<double>> clone() const override;
+      void copy(const State<double> &other) override;
 
       MatrixXd value;
     };
     
-    class DYNAMIC_SYSTEMS_CONTROL_PUBLIC LTISystem : public System {
+    class DYNAMIC_SYSTEMS_CONTROL_PUBLIC LTISystem : public System<double> {
       public:
         static void make_common_lti(
           LTISystem & lti,
@@ -65,14 +65,14 @@ namespace DynamicSystems
           ButterworthType type, unsigned int degree, std::vector<double> omegas);
 
       protected:
-        void DYNAMIC_SYSTEMS_CONTROL_LOCAL init_parse(const InitParams& initParams) override;
-        void DYNAMIC_SYSTEMS_CONTROL_LOCAL setup_parse(const SetupParams& setupParams) override;
+        void DYNAMIC_SYSTEMS_CONTROL_LOCAL init_parse(const InitParams<double>& initParams) override;
+        void DYNAMIC_SYSTEMS_CONTROL_LOCAL setup_parse(const SetupParams<double>& setupParams) override;
         void DYNAMIC_SYSTEMS_CONTROL_LOCAL setup_default() override;
         void DYNAMIC_SYSTEMS_CONTROL_LOCAL deinit() override;
-        void DYNAMIC_SYSTEMS_CONTROL_LOCAL state_validator(State &state) override;
-        void DYNAMIC_SYSTEMS_CONTROL_LOCAL input_validator(const State &state, MatrixXd &input) override;
-        void DYNAMIC_SYSTEMS_CONTROL_LOCAL dynamic_map(const State &state, const MatrixXd &input, State &next) override;
-        void DYNAMIC_SYSTEMS_CONTROL_LOCAL output_map(const State &state, const MatrixXd &input, MatrixXd& output) override;
+        void DYNAMIC_SYSTEMS_CONTROL_LOCAL state_validator(State<double> &state) override;
+        void DYNAMIC_SYSTEMS_CONTROL_LOCAL input_validator(const State<double> &state, MatrixX<double> &input) override;
+        void DYNAMIC_SYSTEMS_CONTROL_LOCAL dynamic_map(const State<double> &state, const MatrixX<double> &input, State<double> &next) override;
+        void DYNAMIC_SYSTEMS_CONTROL_LOCAL output_map(const State<double> &state, const MatrixX<double> &input, MatrixX<double>& output) override;
 
       private:
         /* init members */
