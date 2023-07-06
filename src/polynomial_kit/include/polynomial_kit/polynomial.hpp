@@ -97,9 +97,9 @@ namespace PolynomialKit
       }
 
     private:
+      T zero_ = T();
       MatrixX<T> poly_ = MatrixX<T>(1,1);
       unsigned int size_ = 1;
-      unsigned int capacity_ = 1;
   };
 
   using Polynomiald = Polynomial<double>;
