@@ -373,6 +373,11 @@ namespace PolynomialKit
     return res;
   }
 
+  template <typename T>
+  T Polynomial<T>::operator()(const T& point) const {
+    return this->eval(point);
+  }
+
   template class Polynomial<double>;
   template class Polynomial<float>;
   template class Polynomial<long>;

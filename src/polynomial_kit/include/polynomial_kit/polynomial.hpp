@@ -71,8 +71,10 @@ namespace PolynomialKit
       Polynomial operator<<(unsigned int s) const;
       Polynomial operator>>(unsigned int s) const;
 
+      T operator()(const T& point) const;
+
       template <typename U>
-      inline explicit operator Polynomial<U>() const {
+      explicit operator Polynomial<U>() const {
         Polynomial<U> res;
         res.capacity_ = this->capacity_;
         res.size_ = this->size_;
