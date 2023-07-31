@@ -63,7 +63,7 @@ rclcpp::QoS get_scan_qos(uint depth)
 rclcpp::QoS get_image_qos(uint depth)
 {
   rclcpp::QoS qos = rclcpp::QoS(rclcpp::KeepLast(depth));
-  qos.best_effort();
+  qos.reliable();
   qos.durability_volatile();
   return qos;
 }
