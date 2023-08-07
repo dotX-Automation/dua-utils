@@ -15,6 +15,9 @@ Refer to the individual interface files for more information.
 - [x] [`PositionSetpoint`](msg/PositionSetpoint.msg): Setpoint for a position controller.
 - [x] [`RatesSetpoint`](msg/RatesSetpoint.msg): Setpoint for a roll-pitch-yaw rates controller.
 - [x] [`RegionOfInterest`](msg/RegionOfInterest.msg): Region of interest, useful for image processing and spatial mapping.
+- [x] [`Target`](msg/Target.msg): Target, useful for target detection and tracking using a variety of sensors.
+- [x] [`TargetArray`](msg/TargetArray.msg): Array of Target messages, useful when a sensor can detect multiple targets at once.
+- [x] [`TargetID`](msg/TargetID.msg): Target ID, part of the `Target` message.
 - [x] [`VelocitySetpoint`](msg/VelocitySetpoint.msg): Setpoint for a velocity controller.
 
 ## Requirements
