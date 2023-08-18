@@ -32,7 +32,6 @@ target_include_directories(dynamic_systems_base PUBLIC
   $<INSTALL_INTERFACE:include>)
 target_link_libraries(dynamic_systems_base
   Eigen3::Eigen)
-# ament_target_dependencies(dynamic_systems_base)
 
 # Libraries installation
 install(

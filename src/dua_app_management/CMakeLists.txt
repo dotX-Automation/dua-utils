@@ -53,5 +53,8 @@ install(
   DIRECTORY include/
   DESTINATION include)
 ament_export_include_directories(include)
+ament_export_dependencies(
+  rclcpp
+  rclcpp_components)
 
 ament_package()

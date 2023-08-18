@@ -62,6 +62,8 @@ endif()
 
 # Export all dependencies and library targets for this package
 ament_export_targets(dua_qosTargets HAS_LIBRARY_TARGET)
-ament_export_dependencies(rcl_action rclcpp)
+ament_export_dependencies(
+  rcl_action
+  rclcpp)
 
 ament_package()

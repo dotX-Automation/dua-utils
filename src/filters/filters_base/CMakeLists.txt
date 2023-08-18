@@ -30,5 +30,6 @@ endif()
 
 # Export headers for downstream packages
 ament_export_include_directories(include)
+ament_export_dependencies(pluginlib)
 
 ament_package()

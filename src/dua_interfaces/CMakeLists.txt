@@ -24,4 +24,10 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   ${MSG_FILES}
   DEPENDENCIES geometry_msgs sensor_msgs std_msgs)
 
+ament_export_dependencies(
+  action_msgs
+  geometry_msgs
+  sensor_msgs
+  std_msgs)
+
 ament_package()

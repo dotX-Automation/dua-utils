@@ -20,8 +20,8 @@ endif()
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(dynamic_systems_base REQUIRED)
-find_package(polynomial_kit REQUIRED)
 find_package(Eigen3 3.4 REQUIRED NO_MODULE)
+find_package(polynomial_kit REQUIRED)
 
 # Dynamic systems control library configuration
 add_library(dynamic_systems_control SHARED
@@ -64,5 +64,9 @@ endif()
 
 # Export all dependencies and library targets for this package
 ament_export_targets(dynamic_systems_controlTargets HAS_LIBRARY_TARGET)
+ament_export_dependencies(
+  Eigen3
+  dynamic_systems_base
+  polynomial_kit)
 
 ament_package()

@@ -32,7 +32,6 @@ target_include_directories(polynomial_kit PUBLIC
   $<INSTALL_INTERFACE:include>)
 target_link_libraries(polynomial_kit
   Eigen3::Eigen)
-# ament_target_dependencies(polynomial_kit)
 
 # Libraries installation
 install(
