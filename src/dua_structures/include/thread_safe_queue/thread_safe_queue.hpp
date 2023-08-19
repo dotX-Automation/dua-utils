@@ -57,7 +57,7 @@ public:
    */
   void clear()
   {
-    std::unique_lock(std::mutex) lock(mutex_);
+    std::unique_lock<std::mutex> lock(mutex_);
 
     while (!queue_.empty()) {
       DataT element = queue_.front();
@@ -80,7 +80,7 @@ public:
 
       queue_.push(item);
     }
-    cv_.notify_one();
+    cond_.notify_one();
   }
 
   /**
@@ -132,7 +132,7 @@ public:
 
       alarm_.store(true, std::memory_order_release);
     }
-    cv_.notify_one();
+    cond_.notify_one();
   }
 
 private:
