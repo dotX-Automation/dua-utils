@@ -46,6 +46,12 @@ public:
     clear();
   }
 
+  /* This class is non-copyable and non-moveable. */
+  ThreadSafeQueue(const ThreadSafeQueue &) = delete;
+  ThreadSafeQueue(ThreadSafeQueue &&) = delete;
+  ThreadSafeQueue & operator=(const ThreadSafeQueue &) = delete;
+  ThreadSafeQueue & operator=(ThreadSafeQueue &&) = delete;
+
   /**
    * @brief Clears the queue, cleaning up elements as instructed.
    */
