@@ -297,7 +297,9 @@ void Pose::track_parent(const geometry_msgs::msg::TransformStamped & tf)
 {
   // Check that coordinate frames are coherent
   if (this->get_frame_id() != tf.child_frame_id) {
-    throw std::invalid_argument("Pose::track_parent: Incoherent coordinate frames");
+    throw std::invalid_argument(
+            "Pose::track_parent: Incoherent coordinate frames: [" +
+            this->get_frame_id() + "]p != [" + tf.child_frame_id + "]tf.child");
   }
 
   // Get isometries and tf representations
