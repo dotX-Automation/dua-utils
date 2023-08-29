@@ -287,16 +287,17 @@ const
 }
 
 /**
- * @brief Applies a tf to make this track a parent frame w.r.t. a parent fixed frame.
+ * @brief Applies a rigid transformation to the pose.
  *
- * @param tf ROS transformation to apply, from the parent frame to this.
- *
- * @throws InvalidArgument if coordinate frames are not coherent.
+ * @param tf ROS transformation to apply.
+ * @param new_frame_id New frame ID to set (optional).
  */
-void KinematicPose::track_parent(const geometry_msgs::msg::TransformStamped & tf)
+void KinematicPose::rigid_transform(
+  const geometry_msgs::msg::TransformStamped & tf,
+  const std::string & new_frame_id)
 {
-  // Transform the pose (this checks that the frames are coherent)
-  Pose::track_parent(tf);
+  // Transform the pose
+  Pose::rigid_transform(tf, new_frame_id);
 
   // Build twist
   Eigen::Matrix<double, 6, 1> twist = Eigen::Matrix<double, 6, 1>::Zero();

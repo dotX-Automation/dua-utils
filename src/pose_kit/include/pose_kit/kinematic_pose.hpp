@@ -13,7 +13,6 @@
 #include "visibility_control.h"
 
 #include <array>
-#include <stdexcept>
 
 #include <Eigen/Geometry>
 #include <unsupported/Eigen/EulerAngles>
@@ -118,7 +117,9 @@ public:
   }
 
   /* Geometric operations. */
-  void track_parent(const geometry_msgs::msg::TransformStamped & tf) override;
+  void rigid_transform(
+    const geometry_msgs::msg::TransformStamped & tf,
+    const std::string & new_frame_id = "") override;
 
   /* Assignment operators. */
   KinematicPose & operator=(const KinematicPose & kp);

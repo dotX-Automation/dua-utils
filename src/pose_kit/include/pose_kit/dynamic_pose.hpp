@@ -13,7 +13,6 @@
 #include "visibility_control.h"
 
 #include <array>
-#include <stdexcept>
 
 #include <Eigen/Geometry>
 #include <unsupported/Eigen/EulerAngles>

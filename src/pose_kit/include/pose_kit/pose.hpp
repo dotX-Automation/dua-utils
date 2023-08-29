@@ -180,7 +180,9 @@ public:
   }
 
   /* Geometric operations. */
-  virtual void track_parent(const geometry_msgs::msg::TransformStamped & tf);
+  virtual void rigid_transform(
+    const geometry_msgs::msg::TransformStamped & tf,
+    const std::string & new_frame_id = "");
 
   /* Assignment operators. */
   Pose & operator=(const Pose & p);

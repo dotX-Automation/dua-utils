@@ -287,21 +287,15 @@ geometry_msgs::msg::PoseWithCovarianceStamped Pose::to_pose_with_covariance_stam
 }
 
 /**
- * @brief Applies a tf to make this track a parent frame w.r.t. a parent fixed frame.
+ * @brief Applies a rigid transformation to the pose.
  *
- * @param tf ROS transformation to apply, from the parent frame to this.
- *
- * @throws InvalidArgument if coordinate frames are not coherent.
+ * @param tf ROS transformation to apply.
+ * @param new_frame_id New frame ID to set (optional).
  */
-void Pose::track_parent(const geometry_msgs::msg::TransformStamped & tf)
+void Pose::rigid_transform(
+  const geometry_msgs::msg::TransformStamped & tf,
+  const std::string & new_frame_id)
 {
-  // Check that coordinate frames are coherent
-  if (this->get_frame_id() != tf.child_frame_id) {
-    throw std::invalid_argument(
-            "Pose::track_parent: Incoherent coordinate frames: [" +
-            this->get_frame_id() + "]p != [" + tf.child_frame_id + "]tf.child");
-  }
-
   // Get isometries and tf representations
   Eigen::Isometry3d pose = this->get_isometry();
   Eigen::Isometry3d iso_from_to = tf2::transformToEigen(tf.transform);
@@ -315,11 +309,15 @@ void Pose::track_parent(const geometry_msgs::msg::TransformStamped & tf)
   Eigen::Map<Eigen::Matrix<double, 6, 6, Eigen::RowMajor>> cov_out(pose_covariance_.data());
 
   // Apply the transformation
-  Eigen::Isometry3d parent_pose = iso_from_to * pose * iso_from_to.inverse();
+  Eigen::Isometry3d new_pose = iso_from_to * pose * iso_from_to.inverse();
   cov_out = R * cov_in * R.transpose();
-  this->set_position(parent_pose.translation());
-  this->set_attitude(Eigen::Quaterniond(parent_pose.rotation()));
-  this->set_frame_id(tf.header.frame_id);
+  this->set_position(new_pose.translation());
+  this->set_attitude(Eigen::Quaterniond(new_pose.rotation()));
+
+  // Change the frame_id
+  if (!new_frame_id.empty()) {
+    this->set_frame_id(new_frame_id);
+  }
 }
 
 } // namespace PoseKit
