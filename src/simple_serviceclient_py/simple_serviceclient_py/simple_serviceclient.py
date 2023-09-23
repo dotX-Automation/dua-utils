@@ -61,12 +61,16 @@ class SimpleServiceClient():
 
         # Wait for the server to come up
         while wait and not self._client.wait_for_service(timeout_sec=1.0):
+            if not rclpy.ok():
+                self._node.get_logger().fatal(
+                    "Middleware crashed while waiting for service {}".format(self._client.srv_name))
+                raise RuntimeError(
+                    "Middleware crashed while waiting for service {}".format(self._client.srv_name))
             self._node.get_logger().warn(
                 "Service {} not available...".format(self._client.srv_name))
 
         self._node.get_logger().info(
-            "Initialized client for service {}".format(
-                self._client.srv_name))
+            "Initialized client for service {}".format(self._client.srv_name))
 
     def call_sync(self, request: ReqType) -> RespType:
         """
