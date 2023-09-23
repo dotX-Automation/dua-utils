@@ -22,6 +22,7 @@
         "${workspaceFolder}/src/polynomial_kit/include/**",
         "${workspaceFolder}/src/pose_kit/include/**",
         "${workspaceFolder}/src/dua_qos/include/**",
+        "${workspaceFolder}/src/simple_serviceclient/include/**",
         "/usr/local/**",
         "/usr/local/include"
       ],
