@@ -62,10 +62,8 @@ class SimpleServiceClient():
         # Wait for the server to come up
         while wait and not self._client.wait_for_service(timeout_sec=1.0):
             if not rclpy.ok():
-                self._node.get_logger().fatal(
-                    "Middleware crashed while waiting for service {}".format(self._client.srv_name))
                 raise RuntimeError(
-                    "Middleware crashed while waiting for service {}".format(self._client.srv_name))
+                    "Interrupted while waiting for service {}".format(self._client.srv_name))
             self._node.get_logger().warn(
                 "Service {} not available...".format(self._client.srv_name))
 
@@ -82,6 +80,9 @@ class SimpleServiceClient():
         """
         resp_future = self._client.call_async(request)
         rclpy.spin_until_future_complete(self._node, resp_future)
+        if not rclpy.ok():
+            raise RuntimeError(
+                "Interrupted while waiting for response from service {}".format(self._client.srv_name))
         return resp_future.result()
 
     def call_async(self, request: ReqType) -> Future:
