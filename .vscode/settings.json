@@ -103,12 +103,16 @@
   // Use Pylance as language server
   "python.languageServer": "Pylance",
   "python.analysis.extraPaths": [
-    "/opt/ros/humble/lib/python3.10/site-packages/"
+    "/opt/ros/humble/lib/python3.10/site-packages/",
+    "/opt/ros/humble/local/lib/python3.10/dist-packages/",
+    "${workspaceFolder}/install/simple_serviceclient_py/share/"
     // Add your own paths here!
   ],
   // Autocomplete from ros python packages
   "python.autoComplete.extraPaths": [
-    "/opt/ros/humble/lib/python3.10/site-packages/"
+    "/opt/ros/humble/lib/python3.10/site-packages/",
+    "/opt/ros/humble/local/lib/python3.10/dist-packages/",
+    "${workspaceFolder}/install/simple_serviceclient_py/share/"
     // Add your own paths here!
   ],
   // Environment file lets vscode find python files within workspace
