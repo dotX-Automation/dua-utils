@@ -20,6 +20,7 @@ This repository contains the following ROS 2 utilities:
 - [x] [`simple_serviceclient`](src/simple_serviceclient/README.md): C++ library that wraps the `rclcpp` service client providing a simpler interface.
 - [x] [`simple_serviceclient_py`](src/simple_serviceclient_py/README.md): Python library that wraps the `rclpy` service client providing a simpler interface.
 - [x] [`theora_wrappers`](src/theora_wrappers/README.md): C++ library to implement auto-resetting `image_transport` publishers and subscribers for Theora-encoded image streams.
+- [x] [`transitions_ros`](src/transitions_ros/README.md): Python library that extends the `transitions` library to implement finite-state machines with ROS 2 capabilities.
 
 ## Usage
 
@@ -27,7 +28,7 @@ This repository is organized as a ROS 2 workspace for development, and can be bu
 
 **The supported ROS 2 distribution is currently Humble Hawksbill.**
 
-It is cloned and built as part of the build process of every base unit of [`dua-foundation`](https://github.com/IntelligentSystemsLabUTV/dua-foundation).
+It is cloned and built as part of the build process of every base unit of [`dua-foundation`](https://github.com/IntelligentSystemsLabUTV/dua-foundation). This implies that only the base units of `dua-foundation` automatically offer an environment to build the packages in this repository; everywhere else, dependencies must be manually installed.
 
 ---
 
