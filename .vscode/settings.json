@@ -106,6 +106,7 @@
     "/opt/ros/humble/lib/python3.10/site-packages/",
     "/opt/ros/humble/local/lib/python3.10/dist-packages/",
     "${workspaceFolder}/install/simple_serviceclient_py/share/",
+    "${workspaceFolder}/install/simple_actionclient_py/share/",
     "${workspaceFolder}/install/dua_qos_py/share/",
     "${workspaceFolder}/install/transitions_ros/share/"
     // Add your own paths here!
@@ -115,6 +116,7 @@
     "/opt/ros/humble/lib/python3.10/site-packages/",
     "/opt/ros/humble/local/lib/python3.10/dist-packages/",
     "${workspaceFolder}/install/simple_serviceclient_py/share/",
+    "${workspaceFolder}/install/simple_actionclient_py/share/",
     "${workspaceFolder}/install/dua_qos_py/share/",
     "${workspaceFolder}/install/transitions_ros/share/"
     // Add your own paths here!

@@ -4,7 +4,7 @@ Python library that wraps the `rclpy` service client providing a simpler interfa
 
 ## Contents
 
-This package offers the `SimpleServiceClient` class, that can be used to create a ROS 2 service client just by passing the node and the service type.
+This package offers the `SimpleServiceClient` class, that can be used to create a ROS 2 service client just by passing the node, the service type, and the service name.
 
 ### Features
 
@@ -12,6 +12,10 @@ The service can be called in two different fashions:
 
 - `call_sync`: synchronous call, that blocks until the service response is received but spins the node in the meantime, returning the response.
 - `call_async`: asynchronous call, that returns a `Future` object that can be used to retrieve the response when it is received.
+
+## Usage
+
+See code documentation for a quick overview.
 
 ---
 
