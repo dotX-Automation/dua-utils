@@ -27,10 +27,13 @@ namespace SimpleServiceClient
  * result, but internally runs the back-end by spinning the node when
  * necessary, or in an asynchronous way, returning a Future object.
  */
-template<typename ServiceT, typename RequestT, typename ResponseT>
+template<typename ServiceT>
 class SIMPLE_SERVICECLIENT_PUBLIC Client final
 {
 public:
+  using RequestT = typename ServiceT::Request;
+  using ResponseT = typename ServiceT::Response;
+
   /**
    * @brief Constructor, can wait for the server to become active.
    *
