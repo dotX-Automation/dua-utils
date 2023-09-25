@@ -38,7 +38,6 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 endif()
 
-# Export headers for downstream packages
 ament_export_include_directories(include)
 ament_export_dependencies(rclcpp)
 
