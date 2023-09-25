@@ -110,8 +110,6 @@ public:
     return client_->async_send_request(request);
   }
 
-  typedef std::shared_ptr<Client<ServiceT, RequestT, ResponseT>> SharedPtr;
-
 private:
   rclcpp::Node * node_;
   std::shared_ptr<rclcpp::Client<ServiceT>> client_;
