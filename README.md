@@ -13,7 +13,6 @@ This repository contains the following ROS 2 utilities:
 - [x] [`dua_qos_py`](src/dua_qos_py/README.md): Python library to implement common ROS 2 Quality of Service (QoS) profiles for DUA modules.
 - [x] [`dua_structures`](src/dua_structures/README.md): C++ library to implement common data structures.
 - [x] [`dynamic_systems`](src/dynamic_systems/README.md): C++ library to implement modular dynamic systems.
-- [x] [`filters`](src/filters/README.md): C++ library to implement dynamic, discrete-time scalar filters as ROS 2 plugins. Requires `pluginlib`.
 - [x] [`params_manager`](src/params_manager/README.md): C++ library to easily manage ROS 2 node parameters with the `rclcpp` API.
 - [x] [`polynomial_kit`](src/polynomial_kit/README.md): C++ library based on `Eigen` to represent polynomial function.
 - [x] [`pose_kit`](src/pose_kit/README.md): Collection of C++ libraries to store and manipulate the state of a rigid body in 2D/3D space.

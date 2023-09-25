@@ -1,8 +1,0 @@
-<library path="medianfilter">
-  <class type="Filters::MedianFilterParams" base_class_type="Filters::FilterParams">
-    <description>Median filter parameters.</description>
-  </class>
-  <class type="Filters::MedianFilter" base_class_type="Filters::Filter">
-    <description>Median filter.</description>
-  </class>
-</library>
