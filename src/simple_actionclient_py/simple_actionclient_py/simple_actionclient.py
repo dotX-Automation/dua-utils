@@ -243,7 +243,7 @@ class SimpleActionClient():
                         else:
                             return (True, GoalStatus.STATUS_UNKNOWN, None)
                     else:
-                        # Timeout expired before a cancellation result was received
+                        # Timeout expired before a cancellation response was received
                         self._node.get_logger.warn("{}: goal cancellation timed out".format(self._client._action_name))
                         return (True, GoalStatus.STATUS_CANCELING, None)
 
