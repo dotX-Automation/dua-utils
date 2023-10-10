@@ -140,6 +140,7 @@ namespace DynamicSystems
       std::shared_ptr<PIDState> state = std::make_shared<PIDState>();
       state->x_i = 0.0;
       state->x_d = 0.0;
+
       reset(state);
       input(0.0);
       update();

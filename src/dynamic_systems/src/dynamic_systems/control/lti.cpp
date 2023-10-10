@@ -151,7 +151,8 @@ namespace DynamicSystems
       }
       
       std::shared_ptr<LTIState> state = std::make_shared<LTIState>();
-      state->value = MatrixXd(n_, 1);
+      state->value = MatrixX<double>::Zero(n_, 1);
+
       reset(state);
       input(MatrixXd(m_, 1));
       update();

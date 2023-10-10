@@ -9,6 +9,8 @@
 
 #include <dynamic_systems/filters/jump_filter.hpp>
 
+#include <iostream>
+
 namespace DynamicSystems
 {
   namespace Filters 
@@ -45,7 +47,8 @@ namespace DynamicSystems
     void JumpFilterSetupParams::copy(const SetupParams<double> &other) {
       SetupParams<double>::copy(other);
       auto casted = dynamic_cast<const JumpFilterSetupParams&>(other);
-      this->slope = casted.slope;
+      this->evol_diff = casted.evol_diff;
+      this->jump_diff = casted.jump_diff;
     }
 
 
@@ -63,6 +66,7 @@ namespace DynamicSystems
       State<double>::copy(other);
       auto casted = dynamic_cast<const JumpFilterState&>(other);
       this->value = casted.value;
+      this->jumping = casted.jumping;
     }
     
 
@@ -71,39 +75,65 @@ namespace DynamicSystems
     void JumpFilterSystem::init_parse(const InitParams<double>& initParams) {
       auto casted = dynamic_cast<const JumpFilterInitParams&>(initParams);
 
-      this->elemwise_ = casted.element_wise;
+      this->elem_wise_ = casted.element_wise;
 
       std::shared_ptr<JumpFilterState> state = std::make_shared<JumpFilterState>();
-      state->value = MatrixXd(casted.rows, casted.cols);
+      state->value = MatrixX<double>::Zero(casted.rows, casted.cols);
+      if(this->elem_wise_) {
+        state->jumping = MatrixX<bool>::Zero(casted.rows, casted.cols);
+      } else {
+        state->jumping = MatrixX<bool>::Zero(1, 1);
+      }
+
       reset(state);
-      input(MatrixXd(casted.rows, casted.cols));
+      input(MatrixX<double>(casted.rows, casted.cols));
       update();
     }
 
     void JumpFilterSystem::setup_parse(const SetupParams<double>& setupParams) {
       auto casted = dynamic_cast<const JumpFilterSetupParams&>(setupParams);
 
-      if(casted.slope < 0.0) {
-        throw std::invalid_argument("Invalid saturation for integrator system.");
+      if(casted.evol_diff < 0.0) {
+        throw std::invalid_argument("Invalid evolution difference for jump filter system.");
       }
-      
-      this->slope_ = casted.slope;
+
+      if(casted.jump_diff < 0.0) {
+        throw std::invalid_argument("Invalid jumping difference for jump filter system.");
+      }
+
+      this->evol_diff_ = casted.evol_diff;
+      this->jump_diff_ = casted.jump_diff;
     }
 
     void JumpFilterSystem::setup_default() {
-      this->slope_ = 0.0;
+      this->evol_diff_ = 0.0;
+      this->jump_diff_ = 0.0;
     }
 
     void JumpFilterSystem::deinit(){}
 
     void JumpFilterSystem::state_validator(State<double> &state) {
-      //JumpFilterState &state_casted = static_cast<JumpFilterState&>(state);
-      UNUSED(state);
+      JumpFilterState &state_casted = static_cast<JumpFilterState&>(state);
+      if(this->elem_wise_) {
+        if(state_casted.value.rows() != state_casted.jumping.rows() ||
+           state_casted.value.cols() != state_casted.jumping.cols()) 
+        {
+          throw std::invalid_argument("Invalid state size.");
+        }
+      } else {
+        if(state_casted.jumping.rows() != 1 || 
+           state_casted.jumping.cols() != 1) 
+        {
+          throw std::invalid_argument("Invalid state size.");
+        }
+      }
     }
 
     void JumpFilterSystem::input_validator(const State<double> &state, MatrixX<double> &input) {
       const JumpFilterState &state_casted = static_cast<const JumpFilterState&>(state);
-      if(input.rows() != state_casted.value.rows() || input.cols() != state_casted.value.cols()) {
+      if(input.rows() != state_casted.value.rows() || 
+         input.cols() != state_casted.value.cols()) 
+      {
         throw std::invalid_argument("Invalid input size.");
       }
     }
@@ -113,21 +143,35 @@ namespace DynamicSystems
       JumpFilterState &next_casted = static_cast<JumpFilterState&>(next);
       
       MatrixX<double> diff = input - state_casted.value;
-      
-      if(this->elemwise_) {
+      MatrixX<bool> jumping = state_casted.jumping;
+
+      if(this->elem_wise_) {
         for(unsigned int r = 0; r < diff.rows(); r++) {
           for(unsigned int c = 0; c < diff.rows(); c++) {
-            double sign = ((diff(r, c) < 0.0) ? -1.0 : 1.0);
-            diff(r, c) = sign * std::min(std::abs(diff(r, c)), slope_);
+            double s = ((diff(r, c) < 0.0) ? -1.0 : 1.0);
+            double d = std::abs(diff(r, c));
+            if(jumping(r,c)) {
+              jumping(r,c) = diff(r,c) > this->evol_diff_;
+              diff(r,c) = s * std::min(d, evol_diff_);
+            } else if(diff(r,c) >= this->jump_diff_) {
+              jumping(r,c) = true;
+              diff(r,c) = s * std::min(d, evol_diff_);
+            }
           }
         }
       } else {
-        if(diff.norm() > this->slope_) {
-          diff *= (this->slope_ / diff.norm());
+        double nrm = diff.norm();
+        if(jumping(0,0)) {
+          jumping(0,0) = nrm > this->evol_diff_;
+          if(nrm > this->evol_diff_) diff *= (this->evol_diff_ / nrm);
+        } else if (nrm >= jump_diff_) {
+          jumping(0,0) = true;
+          if(nrm > this->evol_diff_) diff *= (this->evol_diff_ / nrm);
         }
       }
 
       next_casted.value = state_casted.value + diff;
+      next_casted.jumping = jumping; 
     }
 
     void JumpFilterSystem::output_map(const State<double> &state, const MatrixX<double> &input, MatrixX<double>& output) {

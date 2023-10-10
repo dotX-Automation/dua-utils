@@ -83,9 +83,10 @@ namespace DynamicSystems
       }
 
       std::shared_ptr<IntegratorState> state = std::make_shared<IntegratorState>();
-      state->value = MatrixXd(casted.rows, casted.cols);
+      state->value = MatrixX<double>::Zero(casted.rows, casted.cols);
+
       reset(state);
-      input(MatrixXd(casted.rows, casted.cols));
+      input(MatrixX<double>(casted.rows, casted.cols));
       update();
     }
 
