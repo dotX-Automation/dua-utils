@@ -7,7 +7,7 @@
  * June 29, 2023
  */
 
-#include <dynamic_systems_control/control_lib.hpp>
+#include <dynamic_systems/control/utils.hpp>
 
 namespace DynamicSystems
 {

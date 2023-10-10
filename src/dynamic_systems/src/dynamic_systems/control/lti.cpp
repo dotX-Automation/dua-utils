@@ -7,7 +7,7 @@
  * June 29, 2023
  */
 
-#include <dynamic_systems_control/lti.hpp>
+#include <dynamic_systems/control/lti.hpp>
 
 namespace DynamicSystems
 {

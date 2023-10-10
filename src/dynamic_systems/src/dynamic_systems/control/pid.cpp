@@ -7,7 +7,7 @@
  * July 5, 2023
  */
 
-#include <dynamic_systems_control/pid.hpp>
+#include <dynamic_systems/control/pid.hpp>
 
 namespace DynamicSystems
 {

@@ -7,7 +7,7 @@
  * June 29, 2023
  */
 
-#include <dynamic_systems_control/integrator.hpp>
+#include <dynamic_systems/control/integrator.hpp>
 
 namespace DynamicSystems
 {

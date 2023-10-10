@@ -10,16 +10,18 @@
 #ifndef DYNAMIC_SYSTEMS_CONTROL__PID_HPP_
 #define DYNAMIC_SYSTEMS_CONTROL__PID_HPP_
 
-#include "visibility_control.h"
+#include <dynamic_systems/visibility_control.h>
 
-#include <dynamic_systems_base/dynamic_system.hpp>
-#include <dynamic_systems_control/control_lib.hpp>
+#include <dynamic_systems/base/system.hpp>
+#include <dynamic_systems/control/utils.hpp>
+
+using namespace DynamicSystems::Base;
 
 namespace DynamicSystems
 {
   namespace Control 
   {
-    struct DYNAMIC_SYSTEMS_CONTROL_PUBLIC PIDInitParams : public InitParams<double> {
+    struct DYNAMIC_SYSTEMS_PUBLIC PIDInitParams : public InitParams<double> {
       ~PIDInitParams() override;
       std::unique_ptr<InitParams<double>> clone() const override;
       void copy(const InitParams<double> &other) override;
@@ -34,7 +36,7 @@ namespace DynamicSystems
       bool bumpless;
     };
 
-    struct DYNAMIC_SYSTEMS_CONTROL_PUBLIC PIDSetupParams : public SetupParams<double> {
+    struct DYNAMIC_SYSTEMS_PUBLIC PIDSetupParams : public SetupParams<double> {
       ~PIDSetupParams() override;
       std::unique_ptr<SetupParams<double>> clone() const override;
       void copy(const SetupParams<double> &other) override;
@@ -44,7 +46,7 @@ namespace DynamicSystems
       double k_d;
     };
 
-    struct DYNAMIC_SYSTEMS_CONTROL_PUBLIC PIDState : public State<double> {
+    struct DYNAMIC_SYSTEMS_PUBLIC PIDState : public State<double> {
       ~PIDState() override;
       std::unique_ptr<State<double>> clone() const override;
       void copy(const State<double> &other) override;
@@ -53,16 +55,16 @@ namespace DynamicSystems
       double x_d;
     };
     
-    class DYNAMIC_SYSTEMS_CONTROL_PUBLIC PIDSystem : public System<double> {
+    class DYNAMIC_SYSTEMS_PUBLIC PIDSystem : public System<double> {
       protected:
-        void DYNAMIC_SYSTEMS_CONTROL_LOCAL init_parse(const InitParams<double>& initParams) override;
-        void DYNAMIC_SYSTEMS_CONTROL_LOCAL setup_parse(const SetupParams<double>& setupParams) override;
-        void DYNAMIC_SYSTEMS_CONTROL_LOCAL setup_default() override;
-        void DYNAMIC_SYSTEMS_CONTROL_LOCAL deinit() override;
-        void DYNAMIC_SYSTEMS_CONTROL_LOCAL state_validator(State<double> &state) override;
-        void DYNAMIC_SYSTEMS_CONTROL_LOCAL input_validator(const State<double> &state, MatrixX<double> &input) override;
-        void DYNAMIC_SYSTEMS_CONTROL_LOCAL dynamic_map(const State<double> &state, const MatrixX<double> &input, State<double> &next) override;
-        void DYNAMIC_SYSTEMS_CONTROL_LOCAL output_map(const State<double> &state, const MatrixX<double> &input, MatrixX<double>& output) override;
+        void DYNAMIC_SYSTEMS_LOCAL init_parse(const InitParams<double>& initParams) override;
+        void DYNAMIC_SYSTEMS_LOCAL setup_parse(const SetupParams<double>& setupParams) override;
+        void DYNAMIC_SYSTEMS_LOCAL setup_default() override;
+        void DYNAMIC_SYSTEMS_LOCAL deinit() override;
+        void DYNAMIC_SYSTEMS_LOCAL state_validator(State<double> &state) override;
+        void DYNAMIC_SYSTEMS_LOCAL input_validator(const State<double> &state, MatrixX<double> &input) override;
+        void DYNAMIC_SYSTEMS_LOCAL dynamic_map(const State<double> &state, const MatrixX<double> &input, State<double> &next) override;
+        void DYNAMIC_SYSTEMS_LOCAL output_map(const State<double> &state, const MatrixX<double> &input, MatrixX<double>& output) override;
 
       private:
         /* init members */

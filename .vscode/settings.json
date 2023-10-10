@@ -98,7 +98,8 @@
     "stop_token": "cpp",
     "ranges": "cpp",
     "geometry": "cpp",
-    "cfloat": "cpp"
+    "cfloat": "cpp",
+    "core": "cpp"
   },
   // Use Pylance as language server
   "python.languageServer": "Pylance",
