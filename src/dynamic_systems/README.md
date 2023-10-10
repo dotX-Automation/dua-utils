@@ -53,9 +53,13 @@ Currently, the following dynamic systems are available:
 
 - [x] `DynamicSystems::Control::IntegratorSystem`: implements a matricial integrator.
 - [x] `DynamicSystems::Control::LTISystem`: implements a LTI MIMO system.
+- [x] `DynamicSystems::Control::PIDSystem`: implements a PID controller system.
 
 It offer the following functions:
 
+- [x] `DynamicSystems::Control::common_lti`: produce transfer function for zero, first and second order common linear systems.
+- [x] `DynamicSystems::Control::butterworth`: compute butterworth filter transfer function from desired cutting frequencies.
+- [x] `DynamicSystems::Control::realization`: compute state space realization from laplace transfer function.
 - [x] `DynamicSystems::Control::distretization_zoh`: compute state space ZOH discretization.
 
 ---
