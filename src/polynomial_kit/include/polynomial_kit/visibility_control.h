@@ -1,5 +1,5 @@
-#ifndef POLYNOMIAL_KIT__VISIBILITY_CONTROL_H_
-#define POLYNOMIAL_KIT__VISIBILITY_CONTROL_H_
+#ifndef POLYNOMIAL_KIT__VISIBILITY_H_
+#define POLYNOMIAL_KIT__VISIBILITY_H_
 
 // This logic was borrowed (then namespaced) from the examples on the gcc wiki:
 //     https://gcc.gnu.org/wiki/Visibility
@@ -32,4 +32,4 @@
   #define POLYNOMIAL_KIT_PUBLIC_TYPE
 #endif
 
-#endif  // POLYNOMIAL_KIT__VISIBILITY_CONTROL_H_
+#endif  // POLYNOMIAL_KIT__VISIBILITY_H_
