@@ -4,11 +4,11 @@ C++ library to implement modular dynamic systems. Requires `eigen 3.4`.
 
 ## Contents
 
-This is a collection made of the following ROS 2 packages.
+This is a C++ ROS2 package that contains a modular dynamic systems library.
 
 ### `base`
 
-This is the base package for all dynamic systems.
+This is the base library for all dynamic systems.
 
 `DynamicSystems::Base::InitParams` is a struct that contains the initialization parameters of the dynamic systems. It is used to initialize the dynamic systems, and should be derived to contain the parameters of the specific dynamic systems. By default, it is empty.
 
@@ -16,7 +16,7 @@ This is the base package for all dynamic systems.
 
 `DynamicSystems::Base::State` is a struct that contains the state of the dynamic systems. It is used to retain the whole state of the dynamic systems, and should be derived to contain the internal variables of the specific dynamic systems. By default, it is empty.
 
-`DynamicSystems::Base::System` is an virtual class that follows the requirements of the `pluginlib` library, so it can only be used to derive new dynamic systems.
+`DynamicSystems::Base::System` is a virtual class that implements the core logic of a dynamic system. Its public methods call the internal protected methods, which should be implemented to obtain the desired behaviour.
 
 The specialization of the structures `InitParams`, `SetupParams`, and `State` shall provide deep copy functionality throught `copy` and `clone` methods.
 
@@ -47,28 +47,28 @@ This class also offers the following protected interface (to be specialized by d
 
 ### `control`
 
-This package contains implementations of dynamic systems and control functions.
+This library contains implementations of dynamic systems and control functions.
 
 Currently, the following dynamic systems are available:
 
-- [x] `DynamicSystems::Control::IntegratorSystem`: implements a matricial integrator.
-- [x] `DynamicSystems::Control::LTISystem`: implements a LTI MIMO system.
-- [x] `DynamicSystems::Control::PIDSystem`: implements a PID controller system.
+- `DynamicSystems::Control::IntegratorSystem`: implements a matricial integrator.
+- `DynamicSystems::Control::LTISystem`: implements a LTI MIMO system.
+- `DynamicSystems::Control::PIDSystem`: implements a PID controller system.
 
 It offer the following functions:
 
-- [x] `DynamicSystems::Control::common_lti`: produces transfer function for zero, first and second order common linear systems.
-- [x] `DynamicSystems::Control::butterworth`: computes butterworth filter transfer function from desired cutting frequencies.
-- [x] `DynamicSystems::Control::realization`: computes state space realization from laplace transfer function.
-- [x] `DynamicSystems::Control::distretization_zoh`: computes state space ZOH discretization.
+- `DynamicSystems::Control::common_lti`: produces transfer function for zero, first and second order common linear systems.
+- `DynamicSystems::Control::butterworth`: computes butterworth filter transfer function from desired cutting frequencies.
+- `DynamicSystems::Control::realization`: computes state space realization from laplace transfer function.
+- `DynamicSystems::Control::distretization_zoh`: computes state space ZOH discretization.
 
 ### `filters`
 
-This package contains implementations of filters.
+This library contains implementations of filters.
 
 Currently, the following dynamic systems are available:
 
-- [x] `DynamicSystems::Filters::JumpFilter`: implements a jump filter to limit signal's slope.
+- `DynamicSystems::Filters::JumpFilter`: implements a jump filter to limit signal's slope.
 
 ---
 
