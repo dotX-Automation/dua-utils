@@ -25,7 +25,6 @@ namespace DynamicSystems
       std::unique_ptr<InitParams<double>> clone() const override;
       void copy(const InitParams<double> &other) override;
 
-      bool element_wise;
       unsigned int rows;
       unsigned int cols;
     };
@@ -35,8 +34,10 @@ namespace DynamicSystems
       std::unique_ptr<SetupParams<double>> clone() const override;
       void copy(const SetupParams<double> &other) override;
 
-      double evol_diff;
-      double jump_diff;
+      double update_lambda;
+      double jump_threshold;
+      double recovery_initial;
+      double recovery_increase;
     };
 
     struct DYNAMIC_SYSTEMS_PUBLIC JumpFilterState : public State<double> {
@@ -45,7 +46,10 @@ namespace DynamicSystems
       void copy(const State<double> &other) override;
 
       MatrixX<double> value;
-      MatrixX<bool> jumping;
+      MatrixX<double> target;
+      MatrixX<double> history;
+      bool jumping;
+      double recovery;
     };
     
     class DYNAMIC_SYSTEMS_PUBLIC JumpFilterSystem : public System<double> {
@@ -61,11 +65,12 @@ namespace DynamicSystems
 
       private:
         /* init members */
-        bool elem_wise_;
 
         /* setup members */
-        double evol_diff_;
-        double jump_diff_;
+        double lambda_;
+        double jump_thr_;
+        double rec_init_;
+        double rec_incr_;
     };
   }
 }
