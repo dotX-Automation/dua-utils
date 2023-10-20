@@ -16,9 +16,21 @@ Refer to the individual interface files for more information.
 - [x] [`RatesSetpoint`](msg/RatesSetpoint.msg): Setpoint for a roll-pitch-yaw rates controller.
 - [x] [`RegionOfInterest`](msg/RegionOfInterest.msg): Region of interest, useful for image processing and spatial mapping.
 - [x] [`Target`](msg/Target.msg): Target, useful for target detection and tracking using a variety of sensors.
-- [x] [`TargetArray`](msg/TargetArray.msg): Array of Target messages, useful when a sensor can detect multiple targets at once.
+- [x] [`TargetArray`](msg/TargetArray.msg): Array of `Target` messages, useful when a sensor can detect multiple targets at once.
 - [x] [`TargetID`](msg/TargetID.msg): Target ID, part of the `Target` message.
+- [x] [`TargetIDArray`](msg/TargetIDArray.msg): Array of `TargetID` messages.
 - [x] [`VelocitySetpoint`](msg/VelocitySetpoint.msg): Setpoint for a velocity controller.
+- [x] [`VisualTargets`](msg/VisualTargets.msg): Array of `Target` messages paired with a `sensor_msgs/Image` that shows them.
+
+### Actions
+
+- [x] [`Arm`](action/Arm.action): Arms a component.
+- [x] [`Disarm`](action/Disarm.action): Disarm a component.
+- [x] [`Landing`](action/Landing.action): Performs a landing operation on a flying robot.
+- [x] [`Navigate`](action/Navigate.action): Navigates a robot to a target position.
+- [x] [`Reach`](action/Reach.action): Reaches a target pose in 3D space with a robot.
+- [x] [`Takeoff`](action/Takeoff.action): Performs a takeoff operation on a flying robot.
+- [x] [`Turn`](action/Turn.action): Turns a robot to a target yaw angle.
 
 ## Requirements
 
