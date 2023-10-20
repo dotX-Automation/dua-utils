@@ -6,7 +6,7 @@
 #
 # August 7, 2023
 
-# Contains the detection timestamp and frame ID of the sensor/subsystem that detected the target
+# Contains the detection timestamp and frame ID of the sensor/subsystem that is sending the message
 std_msgs/Header header
 
 # Identifier of the target
