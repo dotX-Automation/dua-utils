@@ -180,7 +180,7 @@ class SimpleActionClient():
             cancel_on_timeout: bool = False,
             send_goal_timeout: float = None,
             get_result_timeout: float = None,
-            cancel_timeout_sec: float = None) -> tuple[bool, GoalStatus, ResultType]:
+            cancel_timeout_sec: float = None) -> tuple:
         """
         Calls the action, returns only when it has been completed or canceled.
         Can cancel the action automatically if the timeout expires while waiting
