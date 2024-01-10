@@ -7,12 +7,14 @@
  * June 30, 2023
  */
 
-#ifndef POLYNOMIAL_KIT__DYNAMIC_SYSTEM_HPP_
-#define POLYNOMIAL_KIT__DYNAMIC_SYSTEM_HPP_
+#ifndef POLYNOMIAL_KIT__POLYNOMIAL_HPP_
+#define POLYNOMIAL_KIT__POLYNOMIAL_HPP_
 
 #include "visibility_control.h"
 
 #include <cmath>
+#include <iostream>
+
 #include <Eigen/Core>
 
 using namespace Eigen;
@@ -115,4 +117,4 @@ namespace PolynomialKit
   using Polynomialcs = Polynomial<std::complex<short>>;
 }
 
-#endif  //POLYNOMIAL_KIT__DYNAMIC_SYSTEM_HPP_
+#endif  //POLYNOMIAL_KIT__POLYNOMIAL_HPP_

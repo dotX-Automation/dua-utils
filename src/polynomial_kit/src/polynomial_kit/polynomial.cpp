@@ -8,7 +8,6 @@
  */
 
 #include <polynomial_kit/polynomial.hpp>
-#include <iostream>
 
 namespace PolynomialKit 
 {
