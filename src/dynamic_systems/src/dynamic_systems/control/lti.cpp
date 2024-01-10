@@ -25,7 +25,7 @@ namespace DynamicSystems
 
     void LTIInitParams::copy(const InitParams<double> &other) {
       InitParams<double>::copy(other);
-      auto casted = dynamic_cast<const LTIInitParams&>(other);
+      auto &casted = static_cast<const LTIInitParams&>(other);
       this->time_sampling = casted.time_sampling;
       this->zoh_steps = casted.zoh_steps;
       this->matrixA = casted.matrixA;
@@ -62,7 +62,7 @@ namespace DynamicSystems
 
     void LTIState::copy(const State<double> &other) {
       State<double>::copy(other);
-      auto casted = dynamic_cast<const LTIState&>(other);
+      auto &casted = static_cast<const LTIState&>(other);
       this->value = casted.value;
     }
     
@@ -115,8 +115,30 @@ namespace DynamicSystems
       make_butterworth(*this, time_sampling, zoh_steps, type, order, omegas);
     }
 
+    void LTISystem::make_realization(
+      LTISystem & lti,
+      double time_sampling, unsigned int zoh_steps, 
+      const Polynomiald & num, const Polynomiald & den)
+    {
+      MatrixXd A, B, C, D, Az, Bz, Cz, Dz;
+      std::shared_ptr<LTIInitParams> initParams = std::make_shared<LTIInitParams>();
+
+      initParams->time_sampling = time_sampling;
+      initParams->zoh_steps = zoh_steps;
+      realization(num, den, initParams->matrixA, initParams->matrixB, initParams->matrixC, initParams->matrixD);
+
+      lti.init(initParams);
+    }
+
+    void LTISystem::make_realization(
+      double time_sampling, unsigned int zoh_steps, 
+      const Polynomiald & num, const Polynomiald & den)
+    {
+      make_realization(*this, time_sampling, zoh_steps, num, den);
+    }
+
     void LTISystem::init_parse(const InitParams<double>& initParams) {
-      auto casted = dynamic_cast<const LTIInitParams&>(initParams);
+      auto &casted = static_cast<const LTIInitParams&>(initParams);
 
       if(casted.time_sampling < 0.0) {
         throw std::invalid_argument("Invalid time sampling for lti system.");
@@ -154,7 +176,7 @@ namespace DynamicSystems
       state->value = MatrixX<double>::Zero(n_, 1);
 
       reset(state);
-      input(MatrixXd(m_, 1));
+      input(MatrixX<double>::Zero(m_, 1));
       update();
     }
 
@@ -167,7 +189,7 @@ namespace DynamicSystems
     void LTISystem::deinit(){}
 
     void LTISystem::state_validator(State<double> &state) {
-      LTIState &state_casted = static_cast<LTIState&>(state);
+      auto &state_casted = static_cast<LTIState&>(state);
       if(state_casted.value.rows() != n_ || state_casted.value.cols() != 1) {
         throw std::invalid_argument("Invalid state size.");
       }
@@ -181,13 +203,13 @@ namespace DynamicSystems
     }
 
     void LTISystem::dynamic_map(const State<double> &state, const MatrixX<double> &input, State<double> &next) {
-      const LTIState &state_casted = static_cast<const LTIState&>(state);
-      LTIState &next_casted = static_cast<LTIState&>(next);
+      auto &state_casted = static_cast<const LTIState&>(state);
+      auto &next_casted = static_cast<LTIState&>(next);
       next_casted.value = A_ * state_casted.value + B_ * input;
     }
 
     void LTISystem::output_map(const State<double> &state, const MatrixX<double> &input, MatrixX<double>& output) {
-      const LTIState &state_casted = static_cast<const LTIState&>(state);
+      auto &state_casted = static_cast<const LTIState&>(state);
       output = C_ * state_casted.value + D_ * input;
     }
   }

@@ -48,23 +48,23 @@ namespace DynamicSystems
     };
     
     class DYNAMIC_SYSTEMS_PUBLIC IntegratorSystem : public System<double> {
-      protected:
-        void DYNAMIC_SYSTEMS_LOCAL init_parse(const InitParams<double>& initParams) override;
-        void DYNAMIC_SYSTEMS_LOCAL setup_parse(const SetupParams<double>& setupParams) override;
-        void DYNAMIC_SYSTEMS_LOCAL setup_default() override;
-        void DYNAMIC_SYSTEMS_LOCAL deinit() override;
-        void DYNAMIC_SYSTEMS_LOCAL state_validator(State<double> &state) override;
-        void DYNAMIC_SYSTEMS_LOCAL input_validator(const State<double> &state, MatrixX<double> &input) override;
-        void DYNAMIC_SYSTEMS_LOCAL dynamic_map(const State<double> &state, const MatrixX<double> &input, State<double> &next) override;
-        void DYNAMIC_SYSTEMS_LOCAL output_map(const State<double> &state, const MatrixX<double> &input, MatrixX<double>& output) override;
+    protected:
+      void DYNAMIC_SYSTEMS_LOCAL init_parse(const InitParams<double>& initParams) override;
+      void DYNAMIC_SYSTEMS_LOCAL setup_parse(const SetupParams<double>& setupParams) override;
+      void DYNAMIC_SYSTEMS_LOCAL setup_default() override;
+      void DYNAMIC_SYSTEMS_LOCAL deinit() override;
+      void DYNAMIC_SYSTEMS_LOCAL state_validator(State<double> &state) override;
+      void DYNAMIC_SYSTEMS_LOCAL input_validator(const State<double> &state, MatrixX<double> &input) override;
+      void DYNAMIC_SYSTEMS_LOCAL dynamic_map(const State<double> &state, const MatrixX<double> &input, State<double> &next) override;
+      void DYNAMIC_SYSTEMS_LOCAL output_map(const State<double> &state, const MatrixX<double> &input, MatrixX<double>& output) override;
 
-      private:
-        /* init members */
-        double ts_;
+    private:
+      /* init members */
+      double ts_;
 
-        /* setup members */
-        double mul_;
-        double sat_;
+      /* setup members */
+      double mul_;
+      double sat_;
     };
   }
 }

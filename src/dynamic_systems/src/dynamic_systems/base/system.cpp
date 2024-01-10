@@ -149,6 +149,9 @@ namespace DynamicSystems
     template <typename T>
     void System<T>::step() {
       std::unique_ptr<State<T>> next = state_->clone();
+      if(dirty_) {
+        input_validator(*state_.get(), input_);
+      }
       dynamic_map(*state_.get(), input_, *next.get());
       state_ = std::move(next);
       state_validator(*state_.get());
@@ -158,6 +161,7 @@ namespace DynamicSystems
     template <typename T>
     void System<T>::update() {
       if(dirty_) {
+        input_validator(*state_.get(), input_);
         output_map(*state_.get(), input_, output_);
         dirty_ = false;
       }

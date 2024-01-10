@@ -25,7 +25,7 @@ namespace DynamicSystems
 
     void IntegratorInitParams::copy(const InitParams<double> &other) {
       InitParams<double>::copy(other);
-      auto casted = dynamic_cast<const IntegratorInitParams&>(other);
+      auto &casted = static_cast<const IntegratorInitParams&>(other);
       this->time_sampling = casted.time_sampling;
       this->rows = casted.rows;
       this->cols = casted.cols;
@@ -44,7 +44,7 @@ namespace DynamicSystems
 
     void IntegratorSetupParams::copy(const SetupParams<double> &other) {
       SetupParams<double>::copy(other);
-      auto casted = dynamic_cast<const IntegratorSetupParams&>(other);
+      auto &casted = static_cast<const IntegratorSetupParams&>(other);
       this->multiplier = casted.multiplier;
       this->saturation = casted.saturation;
     }
@@ -62,7 +62,7 @@ namespace DynamicSystems
 
     void IntegratorState::copy(const State<double> &other) {
       State<double>::copy(other);
-      auto casted = dynamic_cast<const IntegratorState&>(other);
+      auto &casted = static_cast<const IntegratorState&>(other);
       this->value = casted.value;
     }
     
@@ -70,7 +70,7 @@ namespace DynamicSystems
     /* System */
 
     void IntegratorSystem::init_parse(const InitParams<double>& initParams) {
-      auto casted = dynamic_cast<const IntegratorInitParams&>(initParams);
+      auto &casted = static_cast<const IntegratorInitParams&>(initParams);
 
       if(casted.time_sampling < 0.0) {
         throw std::invalid_argument("Invalid sampling time for integrator system.");
@@ -86,12 +86,12 @@ namespace DynamicSystems
       state->value = MatrixX<double>::Zero(casted.rows, casted.cols);
 
       reset(state);
-      input(MatrixX<double>(casted.rows, casted.cols));
+      input(MatrixX<double>::Zero(casted.rows, casted.cols));
       update();
     }
 
     void IntegratorSystem::setup_parse(const SetupParams<double>& setupParams) {
-      auto casted = dynamic_cast<const IntegratorSetupParams&>(setupParams);
+      auto &casted = static_cast<const IntegratorSetupParams&>(setupParams);
 
       if(casted.saturation < 0.0) {
         throw std::invalid_argument("Invalid saturation for integrator system.");
@@ -109,28 +109,28 @@ namespace DynamicSystems
     void IntegratorSystem::deinit(){}
 
     void IntegratorSystem::state_validator(State<double> &state) {
-      IntegratorState &state_casted = static_cast<IntegratorState&>(state);
+      auto &state_casted = static_cast<IntegratorState&>(state);
       if(this->sat_ > 0.0) {
         state_casted.value = state_casted.value.cwiseMax(-this->sat_).cwiseMin(this->sat_);
       }
     }
 
     void IntegratorSystem::input_validator(const State<double> &state, MatrixX<double> &input) {
-      const IntegratorState &state_casted = static_cast<const IntegratorState&>(state);
+      auto &state_casted = static_cast<const IntegratorState&>(state);
       if(input.rows() != state_casted.value.rows() || input.cols() != state_casted.value.cols()) {
         throw std::invalid_argument("Invalid input size.");
       }
     }
 
     void IntegratorSystem::dynamic_map(const State<double> &state, const MatrixX<double> &input, State<double> &next) {
-      const IntegratorState &state_casted = static_cast<const IntegratorState&>(state);
-      IntegratorState &next_casted = static_cast<IntegratorState&>(next);
+      auto &state_casted = static_cast<const IntegratorState&>(state);
+      auto &next_casted = static_cast<IntegratorState&>(next);
       next_casted.value = state_casted.value + this->mul_ * this->ts_ * input;
     }
 
     void IntegratorSystem::output_map(const State<double> &state, const MatrixX<double> &input, MatrixX<double>& output) {
       UNUSED(input);
-      const IntegratorState &state_casted = static_cast<const IntegratorState&>(state);
+      auto &state_casted = static_cast<const IntegratorState&>(state);
       output = state_casted.value;
     }
   }

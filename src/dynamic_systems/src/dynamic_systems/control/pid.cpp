@@ -25,7 +25,7 @@ namespace DynamicSystems
 
     void PIDInitParams::copy(const InitParams<double> &other) {
       InitParams<double>::copy(other);
-      auto casted = dynamic_cast<const PIDInitParams&>(other);
+      auto &casted = static_cast<const PIDInitParams&>(other);
       this->time_sampling = casted.time_sampling;
       this->error_deadzone = casted.error_deadzone;
       this->integral_saturation = casted.integral_saturation;
@@ -49,7 +49,7 @@ namespace DynamicSystems
 
     void PIDSetupParams::copy(const SetupParams<double> &other) {
       SetupParams<double>::copy(other);
-      auto casted = dynamic_cast<const PIDSetupParams&>(other);
+      auto &casted = static_cast<const PIDSetupParams&>(other);
       this->k_p = casted.k_p;
       this->k_i = casted.k_i;
       this->k_d = casted.k_d;
@@ -68,7 +68,7 @@ namespace DynamicSystems
 
     void PIDState::copy(const State<double> &other) {
       State<double>::copy(other);
-      auto casted = dynamic_cast<const PIDState&>(other);
+      auto &casted = static_cast<const PIDState&>(other);
       this->x_i = casted.x_i;
       this->x_d = casted.x_d;
     }
@@ -77,7 +77,7 @@ namespace DynamicSystems
     /* System */
 
     void PIDSystem::init_parse(const InitParams<double>& initParams) {
-      auto casted = dynamic_cast<const PIDInitParams&>(initParams);
+      auto &casted = static_cast<const PIDInitParams&>(initParams);
 
       if(casted.time_sampling < 0.0) {
         throw std::invalid_argument("Invalid time sampling for pid system.");
@@ -147,7 +147,7 @@ namespace DynamicSystems
     }
 
     void PIDSystem::setup_parse(const SetupParams<double>& setupParams) {
-      auto casted = dynamic_cast<const PIDSetupParams&>(setupParams);
+      auto &casted = static_cast<const PIDSetupParams&>(setupParams);
       kp_ = casted.k_p;
       ki_ = casted.k_i;
       kd_ = casted.k_d;
@@ -162,7 +162,7 @@ namespace DynamicSystems
     void PIDSystem::deinit(){}
 
     void PIDSystem::state_validator(State<double> &state) {
-      PIDState &state_casted = static_cast<PIDState&>(state);
+      auto &state_casted = static_cast<PIDState&>(state);
       if(int_sat_ > 0.0 && std::abs(state_casted.x_i) > int_sat_) {
         state_casted.x_i = (state_casted.x_i < 0.0) ? -int_sat_ : int_sat_;
       }
@@ -176,8 +176,8 @@ namespace DynamicSystems
     }
 
     void PIDSystem::dynamic_map(const State<double> &state, const MatrixX<double> &input, State<double> &next) {
-      const PIDState &state_casted = static_cast<const PIDState&>(state);
-      PIDState &next_casted = static_cast<PIDState&>(next);
+      auto &state_casted = static_cast<const PIDState&>(state);
+      auto &next_casted = static_cast<PIDState&>(next);
 
       double e = (std::abs(input(0,0)) < err_deadzone_) ? 0.0 : input(0,0);
 
@@ -193,7 +193,7 @@ namespace DynamicSystems
     }
 
     void PIDSystem::output_map(const State<double> &state, const MatrixX<double> &input, MatrixX<double>& output) {
-      const PIDState &state_casted = static_cast<const PIDState&>(state);
+      auto &state_casted = static_cast<const PIDState&>(state);
       output = MatrixX<double>(1,1);
 
       double e = (std::abs(input(0,0)) < err_deadzone_) ? 0.0 : input(0,0);

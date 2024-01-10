@@ -56,35 +56,35 @@ namespace DynamicSystems
     };
     
     class DYNAMIC_SYSTEMS_PUBLIC PIDSystem : public System<double> {
-      protected:
-        void DYNAMIC_SYSTEMS_LOCAL init_parse(const InitParams<double>& initParams) override;
-        void DYNAMIC_SYSTEMS_LOCAL setup_parse(const SetupParams<double>& setupParams) override;
-        void DYNAMIC_SYSTEMS_LOCAL setup_default() override;
-        void DYNAMIC_SYSTEMS_LOCAL deinit() override;
-        void DYNAMIC_SYSTEMS_LOCAL state_validator(State<double> &state) override;
-        void DYNAMIC_SYSTEMS_LOCAL input_validator(const State<double> &state, MatrixX<double> &input) override;
-        void DYNAMIC_SYSTEMS_LOCAL dynamic_map(const State<double> &state, const MatrixX<double> &input, State<double> &next) override;
-        void DYNAMIC_SYSTEMS_LOCAL output_map(const State<double> &state, const MatrixX<double> &input, MatrixX<double>& output) override;
+    protected:
+      void DYNAMIC_SYSTEMS_LOCAL init_parse(const InitParams<double>& initParams) override;
+      void DYNAMIC_SYSTEMS_LOCAL setup_parse(const SetupParams<double>& setupParams) override;
+      void DYNAMIC_SYSTEMS_LOCAL setup_default() override;
+      void DYNAMIC_SYSTEMS_LOCAL deinit() override;
+      void DYNAMIC_SYSTEMS_LOCAL state_validator(State<double> &state) override;
+      void DYNAMIC_SYSTEMS_LOCAL input_validator(const State<double> &state, MatrixX<double> &input) override;
+      void DYNAMIC_SYSTEMS_LOCAL dynamic_map(const State<double> &state, const MatrixX<double> &input, State<double> &next) override;
+      void DYNAMIC_SYSTEMS_LOCAL output_map(const State<double> &state, const MatrixX<double> &input, MatrixX<double>& output) override;
 
-      private:
-        /* init members */
-        double ts_;
-        double err_deadzone_;
-        double int_sat_;
-        double int_reset_thr_;
-        double int_reset_div_;
-        double int_reset_val_;
-        double der_pole_;
-        bool bumpless_;
-        double A_;
-        double B_;
-        double C_;
-        double D_;
+    private:
+      /* init members */
+      double ts_;
+      double err_deadzone_;
+      double int_sat_;
+      double int_reset_thr_;
+      double int_reset_div_;
+      double int_reset_val_;
+      double der_pole_;
+      bool bumpless_;
+      double A_;
+      double B_;
+      double C_;
+      double D_;
 
-        /* setup members */
-        double kp_;
-        double ki_;
-        double kd_;
+      /* setup members */
+      double kp_;
+      double ki_;
+      double kd_;
     };
   }
 }

@@ -49,44 +49,52 @@ namespace DynamicSystems
     };
     
     class DYNAMIC_SYSTEMS_PUBLIC LTISystem : public System<double> {
-      public:
-        static void make_common_lti(
-          LTISystem & lti,
-          double time_sampling, unsigned int zoh_steps, 
-          CommonLTIType type, std::vector<double> params);
-        void make_common_lti(
-          double time_sampling, unsigned int zoh_steps, 
-          CommonLTIType type, std::vector<double> params);
+    public:
+      static void make_common_lti(
+        LTISystem & lti,
+        double time_sampling, unsigned int zoh_steps, 
+        CommonLTIType type, std::vector<double> params);
+      void make_common_lti(
+        double time_sampling, unsigned int zoh_steps, 
+        CommonLTIType type, std::vector<double> params);
 
-        static void make_butterworth(
-          LTISystem & lti,
-          double time_sampling, unsigned int zoh_steps, 
-          ButterworthType type, unsigned int order, std::vector<double> omegas);
-        void make_butterworth(
-          double time_sampling, unsigned int zoh_steps, 
-          ButterworthType type, unsigned int order, std::vector<double> omegas);
+      static void make_butterworth(
+        LTISystem & lti,
+        double time_sampling, unsigned int zoh_steps, 
+        ButterworthType type, unsigned int order, std::vector<double> omegas);
+      void make_butterworth(
+        double time_sampling, unsigned int zoh_steps, 
+        ButterworthType type, unsigned int order, std::vector<double> omegas);
 
-      protected:
-        void DYNAMIC_SYSTEMS_LOCAL init_parse(const InitParams<double>& initParams) override;
-        void DYNAMIC_SYSTEMS_LOCAL setup_parse(const SetupParams<double>& setupParams) override;
-        void DYNAMIC_SYSTEMS_LOCAL setup_default() override;
-        void DYNAMIC_SYSTEMS_LOCAL deinit() override;
-        void DYNAMIC_SYSTEMS_LOCAL state_validator(State<double> &state) override;
-        void DYNAMIC_SYSTEMS_LOCAL input_validator(const State<double> &state, MatrixX<double> &input) override;
-        void DYNAMIC_SYSTEMS_LOCAL dynamic_map(const State<double> &state, const MatrixX<double> &input, State<double> &next) override;
-        void DYNAMIC_SYSTEMS_LOCAL output_map(const State<double> &state, const MatrixX<double> &input, MatrixX<double>& output) override;
+      static void make_realization(
+        LTISystem & lti,
+        double time_sampling, unsigned int zoh_steps, 
+        const Polynomiald & num, const Polynomiald & den);
+      void make_realization(
+        double time_sampling, unsigned int zoh_steps, 
+        const Polynomiald & num, const Polynomiald & den);
 
-      private:
-        /* init members */
-        unsigned int n_;
-        unsigned int m_;
-        unsigned int q_;
-        MatrixXd A_;
-        MatrixXd B_;
-        MatrixXd C_;
-        MatrixXd D_;
+    protected:
+      void DYNAMIC_SYSTEMS_LOCAL init_parse(const InitParams<double>& initParams) override;
+      void DYNAMIC_SYSTEMS_LOCAL setup_parse(const SetupParams<double>& setupParams) override;
+      void DYNAMIC_SYSTEMS_LOCAL setup_default() override;
+      void DYNAMIC_SYSTEMS_LOCAL deinit() override;
+      void DYNAMIC_SYSTEMS_LOCAL state_validator(State<double> &state) override;
+      void DYNAMIC_SYSTEMS_LOCAL input_validator(const State<double> &state, MatrixX<double> &input) override;
+      void DYNAMIC_SYSTEMS_LOCAL dynamic_map(const State<double> &state, const MatrixX<double> &input, State<double> &next) override;
+      void DYNAMIC_SYSTEMS_LOCAL output_map(const State<double> &state, const MatrixX<double> &input, MatrixX<double>& output) override;
 
-        /* setup members */
+    private:
+      /* init members */
+      unsigned int n_;
+      unsigned int m_;
+      unsigned int q_;
+      MatrixXd A_;
+      MatrixXd B_;
+      MatrixXd C_;
+      MatrixXd D_;
+
+      /* setup members */
     };
   }
 }

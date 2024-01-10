@@ -130,7 +130,7 @@ namespace DynamicSystems
       unsigned int na = den.size();
       unsigned int nb = num.size();
       
-      if(nb > na) {
+      if(na < nb) {
         std::invalid_argument("The system is not realizable.");
       }
 
@@ -164,6 +164,26 @@ namespace DynamicSystems
           D(0, 0) = num.get(num.degree()) / den.get(den.degree());
         }
       }
+    }
+
+
+    void feedforward(const double pole,
+      const Polynomiald & p_num, const Polynomiald & p_den,
+      Polynomiald & ff_num, Polynomiald & ff_den)
+    {
+      unsigned int da = p_den.degree();
+      unsigned int db = p_num.degree();
+
+      if(da < db) {
+        std::invalid_argument("The system is not realizable.");
+      }
+
+      Polynomiald poly;
+      poly.set(0, 1);
+      poly.set(1, 1/pole);
+
+      ff_num = p_den;
+      ff_den = p_num * (poly^(da-db));
     }
 
 

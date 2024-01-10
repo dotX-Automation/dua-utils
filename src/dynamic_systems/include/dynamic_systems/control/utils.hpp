@@ -49,10 +49,14 @@ namespace DynamicSystems
       const Polynomiald & num, const Polynomiald & den,
       MatrixXd & A, MatrixXd & B, MatrixXd & C, MatrixXd & D);
 
+    void DYNAMIC_SYSTEMS_PUBLIC feedforward(const double pole,
+      const Polynomiald & p_num, const Polynomiald & p_den,
+      Polynomiald & ff_num, Polynomiald & ff_den);
+
     void DYNAMIC_SYSTEMS_PUBLIC discretization_zoh(
       double ts, unsigned int steps, 
       const MatrixXd & A, const MatrixXd & B, const MatrixXd & C, const MatrixXd & D,
-      MatrixXd & A_zoh, MatrixXd & B_zoh, MatrixXd & C_zoh, MatrixXd & D_zoh);
+      MatrixXd & A_zoh, MatrixXd & B_zoh, MatrixXd & C_zoh, MatrixXd & D_zoh); 
   }
 }
 
