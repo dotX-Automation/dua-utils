@@ -2,3 +2,7 @@
 	path = src/dua_app_management
 	url = git@github.com:dotX-Automation/dua_app_management.git
 	branch = master
+[submodule "src/dua_interfaces"]
+	path = src/dua_interfaces
+	url = git@github.com:dotX-Automation/dua_interfaces.git
+	branch = master
