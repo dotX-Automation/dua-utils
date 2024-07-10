@@ -2,6 +2,8 @@
 
 Common utilities for software packages based on the Distributed Unified Architecture.
 
+This repository is meant as an aggregator for single, independent utilities which should be all together part of a DUA environment, thus built and installed together. The purpose of this repository is then of providing an easy way of installing these packages during the build process of the DUA base units. Submodules are used to keep track of the individual repositories, which can be cloned and used independently if needed, which might be especially true if one wants to avoid using DUA containers, but still use the software that runs within them.
+
 ## Contents
 
 This repository contains the following ROS 2 utilities:
