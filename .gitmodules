@@ -6,3 +6,7 @@
 	path = src/dua_interfaces
 	url = git@github.com:dotX-Automation/dua_interfaces.git
 	branch = master
+[submodule "src/dua_node"]
+	path = src/dua_node
+	url = git@github.com:dotX-Automation/dua_node.git
+	branch = master
