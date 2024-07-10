@@ -1,0 +1,4 @@
+[submodule "src/dua_app_management"]
+	path = src/dua_app_management
+	url = git@github.com:dotX-Automation/dua_app_management.git
+	branch = master
