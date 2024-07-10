@@ -18,3 +18,7 @@
 	path = src/dua_structures
 	url = git@github.com:dotX-Automation/dua_structures.git
 	branch = master
+[submodule "src/dynamic_systems"]
+	path = src/dynamic_systems
+	url = git@github.com:dotX-Automation/dynamic_systems.git
+	branch = master
