@@ -15,7 +15,7 @@ This repository contains the following ROS 2 utilities:
 - [x] [`dua_structures`](src/dua_structures/README.md): Collection of libraries to implement common data structures.
 - [x] [`dynamic_systems`](src/dynamic_systems/README.md): C++ library to implement modular dynamic systems.
 - [x] [`params_manager`](src/params_manager/README.md): C++ library to easily manage ROS 2 node parameters with the `rclcpp` API.
-- [x] [`polynomial_kit`](src/polynomial_kit/README.md): C++ library based on `Eigen` to represent polynomial function.
+- [x] [`polynomial_kit`](src/polynomial_kit/README.md): C++ library based on `Eigen` to represent polynomial functions.
 - [x] [`pose_kit`](src/pose_kit/README.md): Collection of C++ libraries to store and manipulate the state of a rigid body in 2D/3D space.
 - [x] [`simple_actionclient`](src/simple_actionclient/README.md): C++ library that wraps the `rclcpp` action client providing a simpler interface.
 - [x] [`simple_actionclient_py`](src/simple_actionclient_py/README.md): Python library that wraps the `rclpy` action client providing a simpler interface.

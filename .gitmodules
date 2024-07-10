@@ -22,3 +22,7 @@
 	path = src/dynamic_systems
 	url = git@github.com:dotX-Automation/dynamic_systems.git
 	branch = master
+[submodule "src/polynomial_kit"]
+	path = src/polynomial_kit
+	url = git@github.com:dotX-Automation/polynomial_kit.git
+	branch = master
