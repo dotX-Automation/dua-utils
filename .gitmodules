@@ -30,3 +30,7 @@
 	path = src/params_manager
 	url = git@github.com:dotX-Automation/params_manager.git
 	branch = master
+[submodule "src/theora_wrappers"]
+	path = src/theora_wrappers
+	url = git@github.com:dotX-Automation/theora_wrappers.git
+	branch = master
