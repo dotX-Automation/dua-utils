@@ -26,3 +26,7 @@
 	path = src/polynomial_kit
 	url = git@github.com:dotX-Automation/polynomial_kit.git
 	branch = master
+[submodule "src/params_manager"]
+	path = src/params_manager
+	url = git@github.com:dotX-Automation/params_manager.git
+	branch = master
