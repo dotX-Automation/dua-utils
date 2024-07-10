@@ -34,3 +34,7 @@
 	path = src/theora_wrappers
 	url = git@github.com:dotX-Automation/theora_wrappers.git
 	branch = master
+[submodule "src/transitions_ros"]
+	path = src/transitions_ros
+	url = git@github.com:dotX-Automation/transitions_ros.git
+	branch = master
