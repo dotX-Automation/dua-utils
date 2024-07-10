@@ -14,3 +14,7 @@
 	path = src/dua_qos
 	url = git@github.com:dotX-Automation/dua_qos.git
 	branch = master
+[submodule "src/dua_structures"]
+	path = src/dua_structures
+	url = git@github.com:dotX-Automation/dua_structures.git
+	branch = master
