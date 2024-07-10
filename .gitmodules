@@ -10,3 +10,7 @@
 	path = src/dua_node
 	url = git@github.com:dotX-Automation/dua_node.git
 	branch = master
+[submodule "src/dua_qos"]
+	path = src/dua_qos
+	url = git@github.com:dotX-Automation/dua_qos.git
+	branch = master
