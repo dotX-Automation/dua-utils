@@ -46,3 +46,7 @@
 	path = src/simple_serviceclient
 	url = git@github.com:dotX-Automation/simple_serviceclient.git
 	branch = master
+[submodule "src/simple_actionclient"]
+	path = src/simple_actionclient
+	url = git@github.com:dotX-Automation/simple_actionclient.git
+	branch = master
