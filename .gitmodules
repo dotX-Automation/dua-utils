@@ -42,3 +42,7 @@
 	path = src/pose_kit
 	url = git@github.com:dotX-Automation/pose_kit.git
 	branch = master
+[submodule "src/simple_serviceclient"]
+	path = src/simple_serviceclient
+	url = git@github.com:dotX-Automation/simple_serviceclient.git
+	branch = master

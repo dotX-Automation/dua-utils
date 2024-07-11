@@ -19,8 +19,7 @@ This repository contains the following ROS 2 utilities:
 - [x] [`pose_kit`](src/pose_kit/README.md): Collection of C++ libraries to store and manipulate the state of a rigid body in 2D/3D space.
 - [x] [`simple_actionclient`](src/simple_actionclient/README.md): C++ library that wraps the `rclcpp` action client providing a simpler interface.
 - [x] [`simple_actionclient_py`](src/simple_actionclient_py/README.md): Python library that wraps the `rclpy` action client providing a simpler interface.
-- [x] [`simple_serviceclient`](src/simple_serviceclient/README.md): C++ library that wraps the `rclcpp` service client providing a simpler interface.
-- [x] [`simple_serviceclient_py`](src/simple_serviceclient_py/README.md): Python library that wraps the `rclpy` service client providing a simpler interface.
+- [x] [`simple_serviceclient`](src/simple_serviceclient/README.md): Libraries that wrap the ROS service clients providing a simpler interface.
 - [x] [`theora_wrappers`](src/theora_wrappers/README.md): C++ library to implement auto-resetting `image_transport` publishers and subscribers for Theora-encoded image streams.
 - [x] [`transitions_ros`](src/transitions_ros/README.md): Python library that extends the `transitions` library to implement finite-state machines with ROS 2 capabilities.
 
