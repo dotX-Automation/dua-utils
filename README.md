@@ -17,8 +17,7 @@ This repository contains the following ROS 2 utilities:
 - [x] [`params_manager`](src/params_manager/README.md): C++ library to easily manage ROS 2 node parameters with the `rclcpp` API.
 - [x] [`polynomial_kit`](src/polynomial_kit/README.md): C++ library based on `Eigen` to represent polynomial functions.
 - [x] [`pose_kit`](src/pose_kit/README.md): Collection of C++ libraries to store and manipulate the state of a rigid body in 2D/3D space.
-- [x] [`simple_actionclient`](src/simple_actionclient/README.md): C++ library that wraps the `rclcpp` action client providing a simpler interface.
-- [x] [`simple_actionclient_py`](src/simple_actionclient_py/README.md): Python library that wraps the `rclpy` action client providing a simpler interface.
+- [x] [`simple_actionclient`](src/simple_actionclient/README.md): Libraries that wrap the ROS action clients providing a simpler interface.
 - [x] [`simple_serviceclient`](src/simple_serviceclient/README.md): Libraries that wrap the ROS service clients providing a simpler interface.
 - [x] [`theora_wrappers`](src/theora_wrappers/README.md): C++ library to implement auto-resetting `image_transport` publishers and subscribers for Theora-encoded image streams.
 - [x] [`transitions_ros`](src/transitions_ros/README.md): Python library that extends the `transitions` library to implement finite-state machines with ROS 2 capabilities.
@@ -29,7 +28,7 @@ This repository is organized as a ROS 2 workspace for development, and can be bu
 
 **The supported ROS 2 distribution is currently Humble Hawksbill.**
 
-It is cloned and built as part of the build process of every base unit of [`dua-foundation`](https://github.com/IntelligentSystemsLabUTV/dua-foundation). This implies that only the base units of `dua-foundation` automatically offer an environment to build the packages in this repository; everywhere else, dependencies must be manually installed.
+It is cloned and built as part of the build process of every base unit of [`dua-foundation`](https://github.com/dotX-Automation/dua-foundation). This implies that only the base units of `dua-foundation` automatically offer an environment to build the packages in this repository; everywhere else, dependencies must be manually installed.
 
 ---
 
