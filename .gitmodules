@@ -38,3 +38,7 @@
 	path = src/transitions_ros
 	url = git@github.com:dotX-Automation/transitions_ros.git
 	branch = master
+[submodule "src/pose_kit"]
+	path = src/pose_kit
+	url = git@github.com:dotX-Automation/pose_kit.git
+	branch = master
