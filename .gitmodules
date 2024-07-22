@@ -1,52 +1,52 @@
 [submodule "src/dua_app_management"]
 	path = src/dua_app_management
-	url = git@github.com:dotX-Automation/dua_app_management.git
+	url = https://github.com/dotX-Automation/dua_app_management.git
 	branch = master
 [submodule "src/dua_interfaces"]
 	path = src/dua_interfaces
-	url = git@github.com:dotX-Automation/dua_interfaces.git
+	url = https://github.com/dotX-Automation/dua_interfaces.git
 	branch = master
 [submodule "src/dua_node"]
 	path = src/dua_node
-	url = git@github.com:dotX-Automation/dua_node.git
+	url = https://github.com/dotX-Automation/dua_node.git
 	branch = master
 [submodule "src/dua_qos"]
 	path = src/dua_qos
-	url = git@github.com:dotX-Automation/dua_qos.git
+	url = https://github.com/dotX-Automation/dua_qos.git
 	branch = master
 [submodule "src/dua_structures"]
 	path = src/dua_structures
-	url = git@github.com:dotX-Automation/dua_structures.git
+	url = https://github.com/dotX-Automation/dua_structures.git
 	branch = master
 [submodule "src/dynamic_systems"]
 	path = src/dynamic_systems
-	url = git@github.com:dotX-Automation/dynamic_systems.git
+	url = https://github.com/dotX-Automation/dynamic_systems.git
 	branch = master
 [submodule "src/polynomial_kit"]
 	path = src/polynomial_kit
-	url = git@github.com:dotX-Automation/polynomial_kit.git
+	url = https://github.com/dotX-Automation/polynomial_kit.git
 	branch = master
 [submodule "src/params_manager"]
 	path = src/params_manager
-	url = git@github.com:dotX-Automation/params_manager.git
+	url = https://github.com/dotX-Automation/params_manager.git
 	branch = master
 [submodule "src/theora_wrappers"]
 	path = src/theora_wrappers
-	url = git@github.com:dotX-Automation/theora_wrappers.git
+	url = https://github.com/dotX-Automation/theora_wrappers.git
 	branch = master
 [submodule "src/transitions_ros"]
 	path = src/transitions_ros
-	url = git@github.com:dotX-Automation/transitions_ros.git
+	url = https://github.com/dotX-Automation/transitions_ros.git
 	branch = master
 [submodule "src/pose_kit"]
 	path = src/pose_kit
-	url = git@github.com:dotX-Automation/pose_kit.git
+	url = https://github.com/dotX-Automation/pose_kit.git
 	branch = master
 [submodule "src/simple_serviceclient"]
 	path = src/simple_serviceclient
-	url = git@github.com:dotX-Automation/simple_serviceclient.git
+	url = https://github.com/dotX-Automation/simple_serviceclient.git
 	branch = master
 [submodule "src/simple_actionclient"]
 	path = src/simple_actionclient
-	url = git@github.com:dotX-Automation/simple_actionclient.git
+	url = https://github.com/dotX-Automation/simple_actionclient.git
 	branch = master
