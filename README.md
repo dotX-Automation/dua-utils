@@ -17,7 +17,7 @@ This repository contains the following ROS 2 utilities:
 - [x] [`params_manager`](src/params_manager/README.md): C++ library to easily manage ROS 2 node parameters with the `rclcpp` API.
 - [x] [`polynomial_kit`](src/polynomial_kit/README.md): C++ library based on `Eigen` to represent polynomial functions.
 - [x] [`pose_kit`](src/pose_kit/README.md): Collection of C++ libraries to store and manipulate the state of a rigid body in 2D/3D space.
-- [x] [`simple_actionclient`](src/simple_actionclient/README.md): Libraries that wrap the ROS action clients providing a simpler interface.
+- [x] [`simple_actionclient`](https://github.com/dotX-Automation/simple_actionclient/blob/c04b2a24a3bb5845f628421e8fa7a33d86f2e015/README.md): Libraries that wrap the ROS action clients providing a simpler interface.
 - [x] [`simple_serviceclient`](src/simple_serviceclient/README.md): Libraries that wrap the ROS service clients providing a simpler interface.
 - [x] [`theora_wrappers`](src/theora_wrappers/README.md): C++ library to implement auto-resetting `image_transport` publishers and subscribers for Theora-encoded image streams.
 - [x] [`transitions_ros`](src/transitions_ros/README.md): Python library that extends the `transitions` library to implement finite-state machines with ROS 2 capabilities.
